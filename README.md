@@ -76,47 +76,40 @@ ansible-playbook playbooks/fullnode/01-golang.yml --extra-vars "hosts=validator-
 
 ```
 ansible-playbook playbooks/fullnode/02-install-fullnode-binary.yml --extra-vars "hosts=validator-1"
-
 ```
 
 3. Init a fullnode and set up its config. WARNING: This will erase the fullnode's config and replace it with a brand new one, so any changes you will do there will be discarded:
 
 ```
 ansible-playbook playbooks/fullnode/03-setup-fullnode.yml --extra-vars "hosts=validator-1"
-
 ```
 
 4. Download Cosmovisor, set up its folder layout and setup a systemd service for it:
 
 ```
 ansible-playbook playbooks/fullnode/04-install-cosmovisor.yml --extra-vars "hosts=validator-1"
-
 ```
 
 5. Set up statesync:
 
 ```
 ansible-playbook playbooks/fullnode/05-statesync.yml --extra-vars "hosts=validator-1"
-
 ```
 
 6. Download, build and install [tendermint-exporter](https://github.com/solarlabsteam/tendermint-exporter):
 
 ```
 ansible-playbook playbooks/fullnode/06-tendermint-exporter.yml --extra-vars "hosts=validator-1"
-
 ```
 
 7. Restarts the full node or starts it if it was stopped.
 
 ```
 ansible-playbook playbooks/fullnode/07-start-node.yml --extra-vars "hosts=validator-1"
-
 ```
 
 7. Get node status (useful to see the info from multiple servers)
 
 ```
 ansible-playbook playbooks/fullnode/08-node-stattus.yml --extra-vars "hosts=fullnodes"
-
 ```
