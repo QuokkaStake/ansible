@@ -1,0 +1,14 @@
+binary-path = "{{ ansible_user_dir }}/go/bin/cosmovisor"
+{% if github_repo_org is defined and github_repo_name is defined %}
+github-org = "{{ github_repo_org }}"
+github-repo = "{{ github_repo_name }}"
+{% endif %}
+{% if remote_tendermint_rpc is defined %}
+remote-tendermint-rpc = "{{ remote_tendermint_rpc }}"
+{% endif %}
+{% if github_token is defined %}
+github-token = "{{ github_token }}"
+{% endif %}
+{% if use_json_output is defined and use_json_output == true %}
+json = true
+{% endif %}

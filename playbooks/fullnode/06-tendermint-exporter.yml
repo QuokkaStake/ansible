@@ -1,0 +1,47 @@
+---
+- name: Install tendermint-exporter
+  hosts: "{{ hosts }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  tasks:
+
+  - name: Clone the repo
+    ansible.builtin.git:
+      repo: "https://github.com/solarlabsteam/tendermint-exporter"
+      dest: "{{ ansible_user_dir }}/tendermint-exporter"
+      version: "master"
+      update: true
+
+  - name: Install binary
+    become: yes
+    ansible.builtin.shell: "cd {{ ansible_user_dir }}/tendermint-exporter && go build -buildvcs=false && cp ./main /usr/bin/tendermint-exporter"
+    args:
+      executable: /bin/bash
+
+  - name: Create config directory
+    file:
+      path: "{{ ansible_user_dir }}/config"
+      state: directory
+
+  - name: Generate config
+    ansible.builtin.template:
+      src: ../../templates/fullnode/tendermint-exporter.toml.j2
+      dest: "{{ ansible_user_dir }}/config/tendermint-exporter.toml"
+
+  - name: Generate systemd file
+    become: yes
+    ansible.builtin.template:
+      src: ../../templates/fullnode/tendermint-exporter.service.j2
+      dest: /etc/systemd/system/tendermint-exporter.service
+
+  - name: Start the service
+    become: yes
+    ansible.builtin.systemd:
+      state: started
+      name: tendermint-exporter
+      enabled: yes

@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Install required packages
+    become: yes
+    apt:
+      name:
+        - software-properties-common
+        - dirmngr
+      state: latest
+      update_cache: yes
+
+  - name: Install Docker
+    become: yes
+    shell: "curl get.docker.com | bash"

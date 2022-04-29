@@ -1,0 +1,18 @@
+[Unit]
+Description=Cosmovisor
+After=network-online.target
+
+[Service]
+User={{ ansible_user }}
+ExecStart={{ ansible_user_dir }}/go/bin/cosmovisor start
+LimitNOFILE=infinity
+
+Environment="DAEMON_HOME={{ fullnode_folder }}"
+Environment="DAEMON_NAME={{ binary_name }}"
+Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
+Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
+Environment="UNSAFE_SKIP_BACKUP=true"
+
+[Install]
+WantedBy=multi-user.target
+EOF

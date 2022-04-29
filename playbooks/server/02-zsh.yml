@@ -1,0 +1,45 @@
+---
+- hosts: "{{ hosts }}"
+
+  vars:
+    user: "{{ ansible_user }}"
+
+  tasks:
+  - name: Update package cache
+    package:
+      update_cache: yes
+    become: yes
+
+  - name: Install zsh, git, wget, curl, fzf
+    package:
+      name:
+        - zsh
+        - git
+        - wget
+        - curl
+        - fzf
+      state: present
+    become: yes
+
+  - name: Change user shell to zsh
+    become: yes
+    user:
+      name: "{{ user }}"
+      shell: /bin/zsh
+
+  - name: Install antigen
+    ansible.builtin.shell: "curl -L git.io/antigen > {{ ansible_user_dir }}/antigen.zsh"
+
+  - name: Set up .zshrc
+    ansible.builtin.template:
+      src: ../../templates/server/.zshrc.j2
+      dest: "{{ ansible_user_dir }}/.zshrc"
+
+  - name: Set up powerlevel10k config
+    ansible.builtin.copy:
+      src: ../../templates/server/.p10k.zsh
+      dest: "{{ ansible_user_dir }}/.p10k.zsh"
+
+  - name: Reboot server
+    become: yes
+    reboot:

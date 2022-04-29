@@ -1,0 +1,17 @@
+---
+- name: Start a node
+  hosts: "{{ hosts }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  tasks:
+  - name: (Re)start the service
+    become: yes
+    ansible.builtin.systemd:
+      state: restarted
+      name: cosmovisor
+
