@@ -1,0 +1,29 @@
+---
+- hosts: "{{ hosts }}"
+
+  tasks:
+  - name: Install required packages
+    become: yes
+    apt:
+      name:
+        - git
+      state: latest
+      update_cache: yes
+
+  - name: Clone the repo and checkout to the latest version
+    ansible.builtin.git:
+      repo: "https://github.com/sentinel-official/dvpn-node.git"
+      dest: "{{ ansible_user_dir }}/dvpn-node"
+      update: true
+
+  - name: Get latest dvpn-node tag
+    ansible.builtin.shell:
+      chdir: "{{ ansible_user_dir }}/dvpn-node"
+      cmd: git describe --tags $(git rev-list --tags --max-count=1)
+    register: dvpn_version
+
+  - name: Git checkout to latest tag tag
+    ansible.builtin.git:
+      repo: "https://github.com/sentinel-official/dvpn-node.git"
+      dest: "{{ ansible_user_dir }}/dvpn-node"
+      version: "{{ dvpn_version.stdout }}"

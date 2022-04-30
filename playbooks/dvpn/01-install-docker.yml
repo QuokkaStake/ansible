@@ -1,0 +1,69 @@
+---
+- hosts: "{{ hosts }}"
+
+  vars:
+    user: "{{ ansible_user }}"
+
+  tasks:
+  - name: Install required packages
+    become: yes
+    apt:
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - gnupg
+      state: latest
+      update_cache: yes
+
+  - name: Add Docker GPG apt Key
+    become: yes
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Get Ubuntu release
+    ansible.builtin.shell: "lsb_release -cs"
+    register: release
+
+  - name: Add Docker Repository
+    become: yes
+    apt_repository:
+      repo: "deb https://download.docker.com/linux/ubuntu {{ release.stdout }} stable"
+      state: present
+
+  - name: Install Docker
+    become: yes
+    apt:
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-compose-plugin
+      state: latest
+      update_cache: yes
+
+  - name: Create docker group
+    become: yes
+    ansible.builtin.group:
+      name: docker
+      state: present
+
+  - name: Add user to docker group
+    become: yes
+    user:
+      name: "{{ user }}"
+      group: "{{ user }}"
+      groups: docker
+      append: yes
+
+  - name: Set up Docker config
+    become: yes
+    ansible.builtin.copy:
+      src: ../../templates/dvpn/docker.json
+      dest: "/etc/docker/docker.json"
+
+  - name: Reboot server
+    become: yes
+    reboot:

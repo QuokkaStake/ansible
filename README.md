@@ -111,5 +111,5 @@ ansible-playbook playbooks/fullnode/07-start-node.yml --extra-vars "hosts=valida
 7. Get node status (useful to see the info from multiple servers)
 
 ```
-ansible-playbook playbooks/fullnode/08-node-stattus.yml --extra-vars "hosts=fullnodes"
+ansible-playbook playbooks/fullnode/08-node-status.yml --extra-vars "hosts=fullnodes"
 ```
