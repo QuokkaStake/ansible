@@ -1,0 +1,12 @@
+---
+github_repo_remote: https://github.com/provenance-io/provenance
+github_repo_org: provenance-io
+github_repo_name: provenance
+github_repo_local: "{{ ansible_user_dir }}/provenance"
+github_version: v1.8.2
+binary_name: provenanced
+fullnode_folder: "{{ ansible_user_dir }}/.provenanced"
+seeds: "4bd2fb0ae5a123f1db325960836004f980ee09b4@seed-0.provenance.io:26656,048b991204d7aac7209229cbe457f622eed96e5d@seed-1.provenance.io:26656,46475356d37ad59aa06de06c5fa60d1c5f2d1b59@167.235.26.146:26656"
+minimum_gas_prices: 1905nhash
+statesync_node: http://167.235.26.146:26657
+genesis_path: https://raw.githubusercontent.com/provenance-io/mainnet/main/pio-mainnet-1/genesis.json
