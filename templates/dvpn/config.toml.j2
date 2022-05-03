@@ -1,0 +1,25 @@
+[chain]
+gas_adjustment = 1.05
+gas = 200000
+gas_prices = "0.1udvpn"
+id = "sentinelhub-2"
+rpc_address = "https://rpc.sentinel.co:443"
+simulate_and_execute = true
+
+[handshake]
+enable = true
+peers = 8
+
+[keyring]
+backend = "test"
+from = "{{ key_name }}"
+
+[node]
+interval_set_sessions = "2m0s"
+interval_update_sessions = "1h55m0s"
+interval_update_status = "55m0s"
+listen_on = "0.0.0.0:{{ api_port }}"
+moniker = "{{ moniker }}"
+price = "{{ price }}"
+provider = ""
+remote_url = "https://{{ ip }}:{{ api_port }}"

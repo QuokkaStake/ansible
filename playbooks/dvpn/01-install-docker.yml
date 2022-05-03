@@ -1,5 +1,6 @@
 ---
-- hosts: "{{ hosts }}"
+- name: Install Docker
+  hosts: "{{ hosts }}"
 
   vars:
     user: "{{ ansible_user }}"
@@ -41,6 +42,7 @@
         - docker-ce-cli
         - containerd.io
         - docker-compose-plugin
+        - python3-docker
       state: latest
       update_cache: yes
 
@@ -61,8 +63,8 @@
   - name: Set up Docker config
     become: yes
     ansible.builtin.copy:
-      src: ../../templates/dvpn/docker.json
-      dest: "/etc/docker/docker.json"
+      src: ../../templates/dvpn/daemon.json
+      dest: "/etc/docker/daemon.json"
 
   - name: Reboot server
     become: yes

@@ -1,5 +1,11 @@
 ---
-- hosts: "{{ hosts }}"
+- name: Install/update and setup fullnode
+  hosts: "{{ hosts }}"
+
+  vars:
+    git_folder: "{{ ansible_user_dir }}/dvpn-node"
+    node_folder: "{{ ansible_user_dir }}/.sentinelnode"
+    user: "{{ ansible_user_dir }}"
 
   tasks:
   - name: Install required packages
@@ -7,23 +13,166 @@
     apt:
       name:
         - git
+        - openssl
       state: latest
       update_cache: yes
 
   - name: Clone the repo and checkout to the latest version
     ansible.builtin.git:
       repo: "https://github.com/sentinel-official/dvpn-node.git"
-      dest: "{{ ansible_user_dir }}/dvpn-node"
+      dest: "{{ git_folder }}"
       update: true
 
   - name: Get latest dvpn-node tag
     ansible.builtin.shell:
-      chdir: "{{ ansible_user_dir }}/dvpn-node"
+      chdir: "{{ git_folder }}"
       cmd: git describe --tags $(git rev-list --tags --max-count=1)
-    register: dvpn_version
+    register: git_version
 
   - name: Git checkout to latest tag tag
     ansible.builtin.git:
       repo: "https://github.com/sentinel-official/dvpn-node.git"
-      dest: "{{ ansible_user_dir }}/dvpn-node"
-      version: "{{ dvpn_version.stdout }}"
+      dest: "{{ git_folder }}"
+      version: "{{ git_version.stdout }}"
+
+  - name: Check if container exists
+    community.docker.docker_container_info:
+      name: sentinel-dvpn-node
+    register: docker_container_result
+
+  - name: Stop a container
+    docker_container:
+      name: sentinel-dvpn-node
+      state: stopped
+    when: docker_container_result.exists
+
+  - name: Check if image exists
+    docker_image_info:
+      name: sentinel-dvpn-node
+    register: docker_image_result
+
+  - name: Check dvpn-node container version
+    ansible.builtin.shell: docker run --rm sentinel-dvpn-node process version
+    when: docker_image_result.images | length > 0
+    register: docker_version_raw
+
+  - name: Set version vars
+    set_fact:
+      docker_version: "{{ docker_version_raw.stderr }}"
+      git_version: "{{ git_version.stdout[1:] }}" # removing the first "v" character
+    when: docker_version_raw.changed
+
+  - name: Print dvpn-node version
+    when: docker_version_raw.changed
+    debug:
+      msg:
+        - "Node version:     {{ docker_version }}"
+        - "Git version:      {{ git_version }}"
+        - "Latest version?:  {{ docker_version == git_version }}"
+
+  - name: Build dvpn-node image
+    community.docker.docker_image:
+      source: build
+      build:
+        path: "{{ git_folder }}"
+        rm: yes
+      name: sentinel-dvpn-node
+    when: docker_image_result.images | length == 0 or docker_version != git_version
+
+  - name: Check if a dvpn node folder exists
+    stat:
+      path: "{{ node_folder }}"
+    register: dvpn_node_stat
+
+  - name: Init Sentinel node config
+    ansible.builtin.shell: docker run --rm --volume {{ node_folder }}:/root/.sentinelnode sentinel-dvpn-node process config init
+    when: not dvpn_node_stat.stat.exists
+
+  - name: Check if a wireguard config exists
+    stat:
+      path: "{{ node_folder }}/wireguard.toml"
+    register: wireguard_stat
+
+  - name: Init Sentinel Wireguard config
+    ansible.builtin.shell: docker run --rm --volume {{ node_folder }}:/root/.sentinelnode sentinel-dvpn-node process wireguard config init
+    when: not wireguard_stat.stat.exists
+
+  - name: Get the API port
+    become: yes
+    ansible.builtin.shell: cat {{ node_folder }}/config.toml | grep listen_on | cut -d':' -f2 | cut -d'"' -f1
+    register: api_port_raw
+
+  - name: Get the node IP
+    ansible.builtin.shell: curl -4 icanhazip.com
+    register: ip_raw
+
+  - name: Get the Wireguard port
+    become: yes
+    ansible.builtin.shell: cat {{ node_folder }}/wireguard.toml | grep listen_port | cut -d' ' -f3
+    register: wireguard_port_raw
+
+  - name: Set node vars
+    set_fact:
+      api_port: "{{ api_port_raw.stdout }}"
+      wireguard_port: "{{ wireguard_port_raw.stdout }}"
+      ip: "{{ ip_raw.stdout }}"
+
+  - name: Update dvpn node config
+    become: yes
+    ansible.builtin.template:
+      src: ../../templates/dvpn/config.toml.j2
+      dest: "{{ node_folder }}/config.toml"
+
+  - name: Check if the key is there already
+    ansible.builtin.shell: "docker run --rm --volume {{ node_folder }}:/root/.sentinelnode sentinel-dvpn-node process keys list | grep {{ key_name }}"
+    register: keys_output
+    ignore_errors: true
+
+  - name: Add a key to a keyring
+    ansible.builtin.shell: "echo '{{ mnemonic }}' | docker run --rm --volume {{ node_folder }}:/root/.sentinelnode --interactive sentinel-dvpn-node process keys add {{ key_name }} --recover"
+    register: add_key_output
+    when: keys_output.failed
+    failed_when: "'Error' in add_key_output.stderr"
+
+  - name: Check if SSL key exists
+    stat:
+      path: "{{ node_folder }}/tls.crt"
+    register: tls_key_stat
+
+  - name: Generate SSL keys
+    become: yes
+    ansible.builtin.shell: |
+      openssl req -new \
+      -newkey ec \
+      -pkeyopt ec_paramgen_curve:prime256v1 \
+      -x509 \
+      -sha256 \
+      -days 365 \
+      -nodes \
+      -out {{ node_folder }}/tls.crt \
+      -keyout {{ node_folder }}/tls.key \
+      -batch
+    when: not tls_key_stat.stat.exists
+
+  - name: Start a container
+    community.docker.docker_container:
+      name: sentinel-dvpn-node
+      image: sentinel-dvpn-node
+      state: started
+      command: process start
+      volumes:
+        - "{{ node_folder }}:/root/.sentinelnode"
+        - /lib/modules:/lib/modules
+      ports:
+        - "{{ api_port }}:{{ api_port }}/tcp"
+        - "{{ wireguard_port }}:{{ wireguard_port }}/udp"
+      sysctls:
+        net.ipv4.ip_forward: 1
+        net.ipv6.conf.all.disable_ipv6: 0
+        net.ipv6.conf.all.forwarding: 1
+        net.ipv6.conf.default.forwarding: 1
+      capabilities:
+        - "NET_ADMIN"
+        - "NET_BIND_SERVICE"
+        - "NET_RAW"
+        - "SYS_MODULE"
