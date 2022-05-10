@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 User={{ ansible_user }}
-ExecStart={{ ansible_user_dir }}/go/bin/cosmovisor start
+ExecStart={{ ansible_user_dir }}/go/bin/cosmovisor run start
 LimitNOFILE=infinity
 
 Environment="DAEMON_HOME={{ fullnode_folder }}"
