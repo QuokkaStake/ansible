@@ -1,0 +1,26 @@
+filebeat.inputs:
+- type: journald
+  id: everything
+- type: filestream
+  enabled: false
+  paths:
+    - /var/log/*.log
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+  reload.period: 10s
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+output.logstash:
+  # The Logstash hosts
+  hosts: ["{{ logstash_host }}"]
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~

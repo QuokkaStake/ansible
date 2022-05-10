@@ -1,0 +1,44 @@
+---
+- name: Install Filebeat
+  hosts: "{{ hosts }}"
+
+  tasks:
+  - name: Ensure required dependencies are present
+    become: true
+    apt:
+      name:
+        - apt-transport-https
+        - gnupg2
+      state: present
+
+  - name: Add Elasticsearch apt key
+    become: true
+    apt_key:
+      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      id: 46095ACC8548582C1A2699A9D27D666CD88E42B4
+      state: present
+
+  - name: Add Filebeat repository
+    become: true
+    apt_repository:
+      repo: 'deb https://artifacts.elastic.co/packages/8.x/apt stable main'
+      state: present
+      update_cache: true
+
+  - name: Install Filebeat package
+    become: true
+    package:
+      name: filebeat
+      state: present
+
+  - name: Generate Filebeat config
+    become: true
+    ansible.builtin.template:
+      src: ../../templates/server/filebeat.yml.j2
+      dest: /etc/filebeat/filebeat.yml
+
+  - name: Start Filebeat and enable it on autostart
+    service:
+      name: filebeat
+      state: started
+      enabled: true
