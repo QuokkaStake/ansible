@@ -14,8 +14,19 @@
     ansible.builtin.git:
       repo: "https://github.com/solarlabsteam/tendermint-exporter"
       dest: "{{ ansible_user_dir }}/tendermint-exporter"
-      version: "master"
+      version: master
       update: true
+
+  - name: Get services list
+    service_facts:
+    register: services
+
+  - name: Stop service
+    become: yes
+    systemd:
+      name: tendermint-exporter
+      state: stopped
+    when: "'tendermint-exporter.service' in services.ansible_facts.services"
 
   - name: Install binary
     become: yes
