@@ -1,4 +1,5 @@
 binary-path = "{{ ansible_user_dir }}/go/bin/cosmovisor"
+binary-args = "run version --long --output json" # for latest cosmovisor compatibility
 {% if github_repo_org is defined and github_repo_name is defined %}
 github-org = "{{ github_repo_org }}"
 github-repo = "{{ github_repo_name }}"
