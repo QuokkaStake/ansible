@@ -9,30 +9,29 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
+    - name: Check if a fullnode folder exists
+      stat:
+        path: "{{ fullnode_folder }}"
+      register: stat_result
 
-  - name: Check if a fullnode folder exists
-    stat:
-      path: "{{ fullnode_folder }}"
-    register: stat_result
+    - name: Init a fullnode
+      ansible.builtin.shell: "{{ binary_name }} init {{ moniker }}"
+      args:
+        executable: /bin/bash
+      when: not stat_result.stat.exists
 
-  - name: Init a fullnode
-    ansible.builtin.shell: "{{ binary_name }} init {{ moniker }}"
-    args:
-      executable: /bin/bash
-    when: not stat_result.stat.exists
+    - name: Generate node config
+      ansible.builtin.template:
+        src: ../../templates/fullnode/config.toml.j2
+        dest: "{{ fullnode_folder }}/config/config.toml"
 
-  - name: Generate node config
-    ansible.builtin.template:
-      src: ../../templates/fullnode/config.toml.j2
-      dest: "{{ fullnode_folder }}/config/config.toml"
+    - name: Generate app config
+      ansible.builtin.template:
+        src: ../../templates/fullnode/app.toml.j2
+        dest: "{{ fullnode_folder }}/config/app.toml"
 
-  - name: Generate app config
-    ansible.builtin.template:
-      src: ../../templates/fullnode/app.toml.j2
-      dest: "{{ fullnode_folder }}/config/app.toml"
-
-  - name: Fetch genesis
-    when: genesis_path is defined
-    get_url:
-      url: "{{ genesis_path }}"
-      dest: "{{ fullnode_folder }}/config/genesis.json"
+    - name: Fetch genesis
+      when: genesis_path is defined
+      get_url:
+        url: "{{ genesis_path }}"
+        dest: "{{ fullnode_folder }}/config/genesis.json"

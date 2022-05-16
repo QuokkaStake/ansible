@@ -1,13 +1,12 @@
 ---
 - hosts: "{{ hosts }}"
   pre_tasks:
-
-  - name: Install dependencies
-    become: yes
-    apt:
-      name: unzip
-      state: latest
-      update_cache: yes
+    - name: Install dependencies
+      become: true
+      apt:
+        name: unzip
+        state: latest
+        update_cache: true
 
   roles:
     - cloudalchemy.node_exporter

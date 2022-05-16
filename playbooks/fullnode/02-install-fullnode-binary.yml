@@ -9,34 +9,33 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
+    - name: Install required packages
+      become: true
+      apt:
+        name:
+          - git
+          - build-essential
+        state: latest
+        update_cache: true
 
-  - name: Install required packages
-    become: yes
-    apt:
-      name:
-        - git
-        - build-essential
-      state: latest
-      update_cache: yes
+    - name: Clone the repo and checkout to the latest version
+      ansible.builtin.git:
+        repo: "{{ github_repo_remote }}"
+        dest: "{{ github_repo_local }}"
+        version: "{{ github_version }}"
+        update: true
 
-  - name: Clone the repo and checkout to the latest version
-    ansible.builtin.git:
-      repo: "{{ github_repo_remote }}"
-      dest: "{{ github_repo_local }}"
-      version: "{{ github_version }}"
-      update: true
+    - name: Install binary
+      make:
+        chdir: "{{ github_repo_local }}"
+        target: install
 
-  - name: Install binary
-    make:
-      chdir: "{{ github_repo_local }}"
-      target: install
+    - name: Check version
+      ansible.builtin.shell: "{{ binary_name }} version"
+      args:
+        executable: /bin/bash
+      register: result
 
-  - name: Check version
-    ansible.builtin.shell: "{{ binary_name }} version"
-    args:
-      executable: /bin/bash
-    register: result
-
-  - name: Display version
-    debug:
-      msg: "{{ result.stderr }}{{ result.stdout }}"
+    - name: Display version
+      debug:
+        msg: "{{ result.stderr }}{{ result.stdout }}"

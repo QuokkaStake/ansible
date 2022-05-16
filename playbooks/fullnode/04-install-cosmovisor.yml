@@ -9,78 +9,77 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
+    - name: Clone cosmos-sdk repo
+      ansible.builtin.git:
+        repo: "https://github.com/cosmos/cosmos-sdk"
+        dest: "{{ ansible_user_dir }}/cosmos-sdk"
+        update: true
 
-  - name: Clone cosmos-sdk repo
-    ansible.builtin.git:
-      repo: "https://github.com/cosmos/cosmos-sdk"
-      dest: "{{ ansible_user_dir }}/cosmos-sdk"
-      update: true
+    # returns v1.1.0 if the latest cosmovisor tag is cosmovisor/v1.1.0
+    - name: Get the latest cosmovisor version
+      ansible.builtin.shell: "git describe --match 'cosmovisor*' --abbrev=0 HEAD | cut -f2 -d'/'"
+      args:
+        executable: /bin/bash
+      register: result
+      when: cosmovisor_version == 'latest'
 
-  # returns v1.1.0 if the latest cosmovisor tag is cosmovisor/v1.1.0
-  - name: Get the latest cosmovisor version
-    ansible.builtin.shell: "git describe --match 'cosmovisor*' --abbrev=0 HEAD | cut -f2 -d'/'" 
-    args:
-      executable: /bin/bash
-    register: result
-    when: cosmovisor_version == 'latest'
+    - name: Set the latest cosmovisor version
+      set_fact:
+        cosmovisor_version: "{{ result.stdout }}"
 
-  - name: Set the latest cosmovisor version
-    set_fact:
-      cosmovisor_version: "{{ result.stdout }}"
+    - name: Git checkout to Cosmovisor tag
+      ansible.builtin.git:
+        repo: "https://github.com/cosmos/cosmos-sdk"
+        dest: "{{ ansible_user_dir }}/cosmos-sdk"
+        version: "cosmovisor/{{ cosmovisor_version }}"
 
-  - name: Git checkout to Cosmovisor tag
-    ansible.builtin.git:
-      repo: "https://github.com/cosmos/cosmos-sdk"
-      dest: "{{ ansible_user_dir }}/cosmos-sdk"
-      version: "cosmovisor/{{ cosmovisor_version }}"
+    - name: Build Cosmovisor
+      make:
+        chdir: "{{ ansible_user_dir }}/cosmos-sdk"
+        target: cosmovisor
 
-  - name: Build Cosmovisor
-    make:
-      chdir: "{{ ansible_user_dir }}/cosmos-sdk"
-      target: cosmovisor
+    - name: Copy Cosmovisor binary to the correct folder
+      ansible.builtin.copy:
+        src: "{{ ansible_user_dir }}/cosmos-sdk/cosmovisor/cosmovisor"
+        dest: "{{ ansible_user_dir }}/go/bin/cosmovisor"
+        remote_src: true
 
-  - name: Copy Cosmovisor binary to the correct folder
-    ansible.builtin.copy:
-      src: "{{ ansible_user_dir }}/cosmos-sdk/cosmovisor/cosmovisor"
-      dest: "{{ ansible_user_dir }}/go/bin/cosmovisor"
-      remote_src: yes
+    - name: Make Cosmovisor binary executable
+      ansible.builtin.copy:
+        src: "{{ ansible_user_dir }}/cosmos-sdk/cosmovisor/cosmovisor"
+        dest: "{{ ansible_user_dir }}/go/bin/cosmovisor"
+        mode: +x
+        remote_src: true
 
-  - name: Make Cosmovisor binary executable
-    ansible.builtin.copy:
-      src: "{{ ansible_user_dir }}/cosmos-sdk/cosmovisor/cosmovisor"
-      dest: "{{ ansible_user_dir }}/go/bin/cosmovisor"
-      mode: +x
-      remote_src: yes
+    - name: Create Cosmovisor folder layout
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ fullnode_folder }}"
+        - "{{ fullnode_folder }}/cosmovisor"
+        - "{{ fullnode_folder }}/cosmovisor/genesis"
+        - "{{ fullnode_folder }}/cosmovisor/genesis/bin"
+        - "{{ fullnode_folder }}/upgrades"
 
-  - name: Create Cosmovisor folder layout
-    file:
-      path: "{{ item }}"
-      state: directory
-    loop:
-      - "{{ fullnode_folder }}"
-      - "{{ fullnode_folder }}/cosmovisor"
-      - "{{ fullnode_folder }}/cosmovisor/genesis"
-      - "{{ fullnode_folder }}/cosmovisor/genesis/bin"
-      - "{{ fullnode_folder }}/upgrades"
+    - name: Add ~/.zshrc aliases for Cosmovisor
+      blockinfile:
+        path: ~/.zshrc
+        marker: "## {mark} added by ansible via playbook - Cosmovisor env vars"
+        block: |
+          export DAEMON_NAME={{ binary_name }}
+          export DAEMON_HOME={{ fullnode_folder }}
+          export PATH="$DAEMON_HOME/cosmovisor/current/bin:$PATH"
 
-  - name: Add ~/.zshrc aliases for Cosmovisor
-    blockinfile:
-      path: ~/.zshrc
-      marker: "## {mark} added by ansible via playbook - Cosmovisor env vars"
-      block: |
-        export DAEMON_NAME={{ binary_name }}
-        export DAEMON_HOME={{ fullnode_folder }}
-        export PATH="$DAEMON_HOME/cosmovisor/current/bin:$PATH"
+    - name: Copy binary to Cosmovisor folder
+      ansible.builtin.copy:
+        src: "{{ ansible_env.HOME }}/go/bin/{{ binary_name }}"
+        dest: "{{ fullnode_folder }}/cosmovisor/genesis/bin"
+        mode: +x
+        remote_src: true
 
-  - name: Copy binary to Cosmovisor folder
-    ansible.builtin.copy:
-      src: "{{ ansible_env.HOME }}/go/bin/{{ binary_name }}"
-      dest: "{{ fullnode_folder }}/cosmovisor/genesis/bin"
-      mode: +x
-      remote_src: yes
-
-  - name: Generate systemd file
-    become: yes
-    ansible.builtin.template:
-      src: ../../templates/fullnode/cosmovisor.service.j2
-      dest: /etc/systemd/system/cosmovisor.service
+    - name: Generate systemd file
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/fullnode/cosmovisor.service.j2
+        dest: /etc/systemd/system/cosmovisor.service

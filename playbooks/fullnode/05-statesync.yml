@@ -9,48 +9,47 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
+    - name: Install required packages
+      become: true
+      apt:
+        name:
+          - jq
+          - curl
+        state: latest
+        update_cache: true
 
-  - name: Install required packages
-    become: yes
-    apt:
-      name:
-        - jq
-        - curl
-      state: latest
-      update_cache: yes
+    - name: Enable statesync
+      ansible.builtin.lineinfile:
+        path: "{{ fullnode_folder }}/config/config.toml"
+        regexp: '^enable = '
+        line: "enable = true"
 
-  - name: Enable statesync
-    ansible.builtin.lineinfile:
-      path: "{{ fullnode_folder }}/config/config.toml"
-      regexp: '^enable = '
-      line: "enable = true"
+    - name: Fetch latest block
+      ansible.builtin.shell: "curl -s {{ statesync_node }}/block | jq -r .result.block.header.height"
+      args:
+        executable: /bin/bash
+      register: latest_block
 
-  - name: Fetch latest block
-    ansible.builtin.shell: "curl -s {{ statesync_node }}/block | jq -r .result.block.header.height"
-    args:
-      executable: /bin/bash
-    register: latest_block
+    - name: Fetch statesync block
+      ansible.builtin.shell: "curl -s '{{ statesync_node }}/block?height={{ latest_block.stdout | int - 1000 }}' | jq -r .result.block_id.hash"
+      args:
+        executable: /bin/bash
+      register: statesync_block_hash
 
-  - name: Fetch statesync block
-    ansible.builtin.shell: "curl -s '{{ statesync_node }}/block?height={{ latest_block.stdout | int - 1000 }}' | jq -r .result.block_id.hash"
-    args:
-      executable: /bin/bash
-    register: statesync_block_hash
+    - name: Set up statesync nodes in config
+      ansible.builtin.lineinfile:
+        path: "{{ fullnode_folder }}/config/config.toml"
+        regexp: '^rpc_servers = '
+        line: "rpc_servers = \"{{ statesync_node }},{{ statesync_node }}\""
 
-  - name: Set up statesync nodes in config
-    ansible.builtin.lineinfile:
-      path: "{{ fullnode_folder }}/config/config.toml"
-      regexp: '^rpc_servers = '
-      line: "rpc_servers = \"{{ statesync_node }},{{ statesync_node }}\""
+    - name: Set up statesync trust height in config
+      ansible.builtin.lineinfile:
+        path: "{{ fullnode_folder }}/config/config.toml"
+        regexp: '^trust_height = '
+        line: "trust_height = \"{{ latest_block.stdout | int - 1000 }}\""
 
-  - name: Set up statesync trust height in config
-    ansible.builtin.lineinfile:
-      path: "{{ fullnode_folder }}/config/config.toml"
-      regexp: '^trust_height = '
-      line: "trust_height = \"{{ latest_block.stdout | int - 1000 }}\""
-
-  - name: Set up statesync trust hash in config
-    ansible.builtin.lineinfile:
-      path: "{{ fullnode_folder }}/config/config.toml"
-      regexp: '^trust_hash = '
-      line: "trust_hash = \"{{ statesync_block_hash.stdout }}\""
+    - name: Set up statesync trust hash in config
+      ansible.builtin.lineinfile:
+        path: "{{ fullnode_folder }}/config/config.toml"
+        regexp: '^trust_hash = '
+        line: "trust_hash = \"{{ statesync_block_hash.stdout }}\""

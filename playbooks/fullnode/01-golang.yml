@@ -3,37 +3,36 @@
   hosts: "{{ hosts }}"
 
   tasks:
+    - name: Install required packages
+      become: true
+      apt:
+        name:
+          - software-properties-common
+          - dirmngr
+        state: latest
+        update_cache: true
 
-  - name: Install required packages
-    become: yes
-    apt:
-      name:
-        - software-properties-common
-        - dirmngr
-      state: latest
-      update_cache: yes
+    - name: Install Golang package
+      become: true
+      apt:
+        name: golang-go
+        state: latest
+        update_cache: true
 
-  - name: Install Golang package
-    become: yes
-    apt:
-      name: golang-go
-      state: latest
-      update_cache: yes
+    - name: Add ~/.zshrc aliases for Golang folders
+      blockinfile:
+        path: ~/.zshrc
+        marker: "## {mark} added by ansible via playbook - Golang aliases"
+        block: |
+          export GOROOT=/usr/lib/go
+          export GOPATH=${HOME}/go
+          export GOBIN=$GOPATH/bin
+          export PATH=${PATH}:${GOROOT}/bin:${GOBIN}
 
-  - name: Add ~/.zshrc aliases for Golang folders
-    blockinfile:
-      path: ~/.zshrc
-      marker: "## {mark} added by ansible via playbook - Golang aliases"
-      block: |
-        export GOROOT=/usr/lib/go
-        export GOPATH=${HOME}/go
-        export GOBIN=$GOPATH/bin
-        export PATH=${PATH}:${GOROOT}/bin:${GOBIN}
+    - name: Check version
+      ansible.builtin.shell: "go version"
+      register: result
 
-  - name: Check version
-    ansible.builtin.shell: "go version"
-    register: result
-
-  - name: Display version
-    debug:
-      msg: "{{ result.stderr }}{{ result.stdout }}"
+    - name: Display version
+      debug:
+        msg: "{{ result.stderr }}{{ result.stdout }}"

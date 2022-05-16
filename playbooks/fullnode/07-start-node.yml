@@ -9,9 +9,8 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
-  - name: (Re)start the service
-    become: yes
-    ansible.builtin.systemd:
-      state: restarted
-      name: cosmovisor
-
+    - name: (Re)start the service
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: cosmovisor

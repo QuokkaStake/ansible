@@ -3,22 +3,21 @@
   hosts: "{{ hosts }}"
 
   tasks:
+    - name: Fetch status
+      ansible.builtin.shell: "curl localhost:26657/status"
+      args:
+        executable: /bin/bash
+      register: result_raw
 
-  - name: Fetch statesync block
-    ansible.builtin.shell: "curl localhost:26657/status"
-    args:
-      executable: /bin/bash
-    register: result_raw
+    - name: Set vars
+      set_fact:
+        result: "{{ result_raw.stdout | from_json }}"
 
-  - name: Set vars
-    set_fact:
-      result: "{{ result_raw.stdout | from_json }}"
-
-  - name: Print info
-    debug:
-      msg:
-        - "Moniker: {{ result.result.node_info.moniker }}"
-        - "Catching up: {{ result.result.sync_info.catching_up }}"
-        - "Voting power: {{ result.result.validator_info.voting_power }}"
-        - "Latest block height: {{ result.result.sync_info.latest_block_height }}"
-        - "Latest block time: {{ result.result.sync_info.latest_block_time }}"
+    - name: Print info
+      debug:
+        msg:
+          - "Moniker: {{ result.result.node_info.moniker }}"
+          - "Catching up: {{ result.result.sync_info.catching_up }}"
+          - "Voting power: {{ result.result.validator_info.voting_power }}"
+          - "Latest block height: {{ result.result.sync_info.latest_block_height }}"
+          - "Latest block time: {{ result.result.sync_info.latest_block_time }}"
