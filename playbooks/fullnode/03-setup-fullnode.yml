@@ -22,13 +22,11 @@
     when: not stat_result.stat.exists
 
   - name: Generate node config
-    become: yes
     ansible.builtin.template:
       src: ../../templates/fullnode/config.toml.j2
       dest: "{{ fullnode_folder }}/config/config.toml"
 
   - name: Generate app config
-    become: yes
     ansible.builtin.template:
       src: ../../templates/fullnode/app.toml.j2
       dest: "{{ fullnode_folder }}/config/app.toml"
