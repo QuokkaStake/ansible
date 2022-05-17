@@ -6,6 +6,7 @@
     git_folder: "{{ ansible_user_dir }}/dvpn-node"
     node_folder: "{{ ansible_user_dir }}/.sentinelnode"
     user: "{{ ansible_user_dir }}"
+    volumes: "--volume {{ node_folder }}:/root/.sentinelnode"
 
   tasks:
     - name: Install required packages
@@ -85,7 +86,7 @@
       register: dvpn_node_stat
 
     - name: Init Sentinel node config
-      ansible.builtin.shell: docker run --rm --volume {{ node_folder }}:/root/.sentinelnode sentinel-dvpn-node process config init
+      ansible.builtin.shell: docker run --rm {{ volumes }} sentinel-dvpn-node process config init
       when: not dvpn_node_stat.stat.exists
 
     - name: Check if a wireguard config exists
@@ -94,7 +95,7 @@
       register: wireguard_stat
 
     - name: Init Sentinel Wireguard config
-      ansible.builtin.shell: docker run --rm --volume {{ node_folder }}:/root/.sentinelnode sentinel-dvpn-node process wireguard config init
+      ansible.builtin.shell: docker run --rm {{ volumes }} sentinel-dvpn-node process wireguard config init
       when: not wireguard_stat.stat.exists
 
     - name: Get the API port
@@ -124,12 +125,12 @@
         dest: "{{ node_folder }}/config.toml"
 
     - name: Check if the key is there already
-      ansible.builtin.shell: "docker run --rm --volume {{ node_folder }}:/root/.sentinelnode sentinel-dvpn-node process keys list | grep {{ key_name }}"
+      ansible.builtin.shell: "docker run --rm {{ volumes }} sentinel-dvpn-node process keys list | grep {{ key_name }}"
       register: keys_output
       ignore_errors: true
 
     - name: Add a key to a keyring
-      ansible.builtin.shell: "echo '{{ mnemonic }}' | docker run --rm --volume {{ node_folder }}:/root/.sentinelnode --interactive sentinel-dvpn-node process keys add {{ key_name }} --recover"
+      ansible.builtin.shell: "echo '{{ mnemonic }}' | docker run --rm {{ volumes }} --interactive sentinel-dvpn-node process keys add {{ key_name }} --recover"
       register: add_key_output
       when: keys_output.failed
       failed_when: "'Error' in add_key_output.stderr"
