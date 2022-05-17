@@ -12,6 +12,12 @@
         state: latest
         update_cache: true
 
+    - name: Add Golang repository
+      when: use_golang_backports is defined and use_golang_backports == true
+      become: true
+      ansible.builtin.apt_repository:
+        repo: 'ppa:longsleep/golang-backports'
+
     - name: Install Golang package
       become: true
       apt:

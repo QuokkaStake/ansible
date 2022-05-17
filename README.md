@@ -78,7 +78,7 @@ ansible-playbook playbooks/fullnode/01-golang.yml --extra-vars "hosts=validator-
 ansible-playbook playbooks/fullnode/02-install-fullnode-binary.yml --extra-vars "hosts=validator-1"
 ```
 
-3. Init a fullnode and set up its config. WARNING: This will erase the fullnode's config and replace it with a brand new one, so any changes you will do there will be discarded:
+3. Init a fullnode and set up its config.
 
 ```
 ansible-playbook playbooks/fullnode/03-setup-fullnode.yml --extra-vars "hosts=validator-1"

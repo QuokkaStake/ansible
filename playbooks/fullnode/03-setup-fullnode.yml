@@ -8,6 +8,10 @@
     GOBIN: "{{ ansible_env.HOME }}/go/bin"
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
+  vars:
+    config_path: "{{ fullnode_folder }}/config/config.toml"
+    app_path: "{{ fullnode_folder }}/config/app.toml"
+
   tasks:
     - name: Check if a fullnode folder exists
       stat:
@@ -20,15 +24,44 @@
         executable: /bin/bash
       when: not stat_result.stat.exists
 
-    - name: Generate node config
-      ansible.builtin.template:
-        src: ../../templates/fullnode/config.toml.j2
-        dest: "{{ fullnode_folder }}/config/config.toml"
+    - name: Set minimum gas prices
+      when: minimum_gas_prices is defined
+      community.general.ini_file:
+        path: "{{ app_path }}"
+        section: null
+        option: "minimum-gas-prices"
+        value: "\"{{ minimum_gas_prices }}\""
 
-    - name: Generate app config
-      ansible.builtin.template:
-        src: ../../templates/fullnode/app.toml.j2
-        dest: "{{ fullnode_folder }}/config/app.toml"
+    - name: Set moniker
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: null
+        option: moniker
+        value: "\"{{ moniker }}\""
+
+    - name: Set persistent peers
+      when: persistent_peers is defined
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: p2p
+        option: persistent_peers
+        value: "\"{{ persistent_peers }}\""
+
+    - name: Set seeds
+      when: seeds is defined
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: p2p
+        option: "seeds"
+        value: "\"{{ seeds }}\""
+
+    - name: Enable Prometheus config
+      when: enable_prometheus is defined and enable_prometheus == true
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: instrumentation
+        option: prometheus
+        value: "true"
 
     - name: Fetch genesis
       when: genesis_path is defined
