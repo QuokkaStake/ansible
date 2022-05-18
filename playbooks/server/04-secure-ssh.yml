@@ -1,0 +1,55 @@
+---
+- name: Secure SSH
+  hosts: "{{ hosts }}"
+
+  vars:
+    sshd_config: /etc/ssh/sshd_config
+
+  tasks:
+    - name: Add identity key to authorized keys on host
+      authorized_key:
+        user: "{{ ansible_ssh_user }}"
+        key: "{{ lookup('file', ansible_ssh_public_key_file) }}"
+      register: add_identity_key
+
+    - name: Disable empty password login
+      become: true
+      lineinfile:
+        dest: "{{ sshd_config }}"
+        regexp: '^#?PermitEmptyPasswords'
+        line: 'PermitEmptyPasswords no'
+      notify: Restart sshd
+
+    - name: Disable remote root login
+      become: true
+      lineinfile:
+        dest: "{{ sshd_config }}"
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+      notify: Restart sshd
+
+    - name: Disable password login
+      become: true
+      lineinfile:
+        dest: "{{ sshd_config }}"
+        regexp: '^(#\s*)?PasswordAuthentication '
+        line: 'PasswordAuthentication no'
+      when:
+        - add_identity_key is succeeded
+        - not add_identity_key is skipped
+      notify: Restart sshd
+
+    - name: Enable PAM
+      become: true
+      lineinfile:
+        dest: "{{ sshd_config }}"
+        regexp: '^#?UsePAM'
+        line: 'UsePAM yes'
+      notify: Restart sshd
+
+  handlers:
+    - name: Restart sshd
+      become: true
+      service:
+        name: sshd
+        state: restarted
