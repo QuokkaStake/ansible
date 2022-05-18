@@ -26,6 +26,12 @@
         src: "{{ monitoring_host_ip }}"
       with_items: "{{ ufw_allow_monitoring_ports }}"
 
+    - name: Reject all incoming traffic
+      become: true
+      ufw:
+        policy: reject
+        direction: incoming
+
     - name: Allow everything and enable UFW
       become: true
       ufw:
