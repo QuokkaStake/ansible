@@ -1,0 +1,32 @@
+---
+- name: Secure SSH
+  hosts: "{{ hosts }}"
+
+  tasks:
+    - name: Install required packages
+      become: true
+      apt:
+        name:
+          - ufw
+        state: latest
+        update_cache: true
+
+    - name: Allow all required ports from everywhere
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+      with_items: "{{ ufw_allow_ports }}"
+
+    - name: Allow all required ports from monitoring host
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+        src: "{{ monitoring_host_ip }}"
+      with_items: "{{ ufw_allow_monitoring_ports }}"
+
+    - name: Allow everything and enable UFW
+      become: true
+      ufw:
+        state: enabled
