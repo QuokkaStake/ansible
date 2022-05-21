@@ -28,6 +28,15 @@
         line: 'PermitRootLogin no'
       notify: Restart sshd
 
+    - name: Set custom SSH port
+      become: true
+      when: ssh_port is defined
+      lineinfile:
+        dest: "{{ sshd_config }}"
+        regexp: '^#?Port'
+        line: "Port {{ ssh_port }}"
+      notify: Restart sshd
+
     - name: Disable password login
       become: true
       lineinfile:
