@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+
+  vars:
+    ssh_config: "{{ ansible_user_dir }}/.ssh/config"
+    jinja_config: "{{ lookup('template', '../../templates/misc/ssh-config.j2') }}"
+
+  tasks:
+    - name: Add hosts aliases to SSH config
+      blockinfile:
+        path: "{{ ssh_config }}"
+        marker: "## {mark} added by ansible via playbook - SSH config aliases"
+        block: "{{ jinja_config }}"

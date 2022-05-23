@@ -1,0 +1,13 @@
+{% for name, host in hostvars.items() %}
+Host {{ name }}
+HostName {{ host['ansible_host'] }}
+{% if 'port' in host %}
+Port {{ host['ansible_port'] }}
+{% endif %}
+User {{ host['ansible_user'] }}
+{% if 'ansible_ssh_private_key_file' in host %}
+IdentityFile {{ host['ansible_ssh_private_key_file'] }}
+{% endif %}
+
+{% endfor %}
+
