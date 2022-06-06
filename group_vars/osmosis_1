@@ -1,0 +1,11 @@
+---
+github_repo_remote: https://github.com/osmosis-labs/osmosis
+github_repo_org: osmosis-labs
+github_repo_name: osmosis
+github_repo_local: "{{ ansible_user_dir }}/osmosisd"
+github_version: v8.0.0
+binary_name: osmosisd
+fullnode_folder: "{{ ansible_user_dir }}/.osmosisd"
+persistent_peers: "8f67a2fcdd7ade970b1983bf1697111d35dfdd6f@52.79.199.137:26656,00c328a33578466c711874ec5ee7ada75951f99a@35.82.201.64:26656,cfb6f2d686014135d4a6034aa6645abd0020cac6@52.79.88.57:26656"
+statesync_node: https://osmosis.stakesystems.io:2053
+genesis_path: https://media.githubusercontent.com/media/osmosis-labs/networks/main/osmosis-1/genesis.json
