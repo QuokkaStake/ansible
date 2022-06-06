@@ -39,6 +39,7 @@ ansible_become_pass: testtesttest
 price: 1500000udvpn
 moniker: dVPN node - 
 mnemonic: never gonna give you up never gonna let you down never gonna run around and desert you never gonna make you cry never gonna say
+key_name: validator
 ```
 
 As you see, this holds SSH password (`ansible_become_pass`), node price, moniker and wallet mnemonic.
