@@ -1,7 +1,7 @@
 {% for name, host in hostvars.items() %}
 Host {{ name }}
 HostName {{ host['ansible_host'] }}
-{% if 'port' in host %}
+{% if 'ansible_port' in host %}
 Port {{ host['ansible_port'] }}
 {% endif %}
 User {{ host['ansible_user'] }}
