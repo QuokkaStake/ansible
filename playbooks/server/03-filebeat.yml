@@ -38,6 +38,7 @@
       dest: /etc/filebeat/filebeat.yml
 
   - name: Start Filebeat and enable it on autostart
+    become: true
     service:
       name: filebeat
       state: started
