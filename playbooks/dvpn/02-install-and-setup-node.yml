@@ -15,6 +15,8 @@
         name:
           - git
           - openssl
+          - python3-docker
+          - python3-distutils
         state: latest
         update_cache: true
 
@@ -74,6 +76,7 @@
     - name: Build dvpn-node image
       community.docker.docker_image:
         source: build
+        force_source: true
         build:
           path: "{{ git_folder }}"
           rm: true
@@ -161,6 +164,7 @@
         image: sentinel-dvpn-node
         state: started
         command: process start
+        restart_policy: unless-stopped
         volumes:
           - "{{ node_folder }}:/root/.sentinelnode"
           - /lib/modules:/lib/modules
