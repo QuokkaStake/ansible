@@ -1,4 +1,4 @@
-  ---
+---
   name:  Update and reboot server
   hosts: "{{ hosts }}"
 
