@@ -1,4 +1,5 @@
- name:  Update and reboot server
+  ---
+  name:  Update and reboot server
   hosts: "{{ hosts }}"
 
   tasks:
