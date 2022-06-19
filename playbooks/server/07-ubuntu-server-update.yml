@@ -1,6 +1,56 @@
 ---
-  name:  Update and reboot server
+    - name:  Update and reboot server
+  hosts: "{{ hos---
+2
+    - name:  Update and reboot server
+3
   hosts: "{{ hosts }}"
+4
+​
+5
+  tasks:
+6
+    - name: Update repositories cache
+7
+      apt:
+8
+        update_cache: true
+9
+​
+10
+    - name: Upgrade all packages to their latest version
+11
+      apt:
+12
+        upgrade: 'full'
+13
+​
+14
+    - name: Clean the local repository and remove unused dependency packages
+15
+      apt:
+16
+        autoclean: true
+17
+        autoremove: true
+18
+​
+19
+    - name: Reboot hosts
+20
+      reboot:
+21
+        msg: "Reboot initiated by Ansible"
+22
+        connect_timeout: 5
+23
+        reboot_timeout: 300
+24
+        pre_reboot_delay: 0
+25
+        post_reboot_delay: 30
+26
+        test_command: uptimets }}"
 
   tasks:
     - name: Update repositories cache
