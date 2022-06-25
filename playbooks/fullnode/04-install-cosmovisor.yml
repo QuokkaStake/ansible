@@ -60,7 +60,7 @@
         - "{{ fullnode_folder }}/cosmovisor"
         - "{{ fullnode_folder }}/cosmovisor/genesis"
         - "{{ fullnode_folder }}/cosmovisor/genesis/bin"
-        - "{{ fullnode_folder }}/upgrades"
+        - "{{ fullnode_folder }}/cosmovisor/upgrades"
 
     - name: Add ~/.zshrc aliases for Cosmovisor
       blockinfile:
