@@ -4,19 +4,23 @@
 
   tasks:
     - name: Update repositories cache
+      become: true
       apt:
         update_cache: true
 
     - name: Upgrade all packages to their latest version
+      become: true
       apt:
         upgrade: 'full'
 
     - name: Clean the local repository and remove unused dependency packages
+      become: true
       apt:
         autoclean: true
         autoremove: true
 
     - name: Reboot hosts
+      become: true
       reboot:
         msg: "Reboot initiated by Ansible"
         connect_timeout: 5
