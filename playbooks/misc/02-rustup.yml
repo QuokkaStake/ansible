@@ -1,0 +1,34 @@
+---
+- name: Install Rust
+  hosts: "{{ hosts }}"
+
+  vars:
+    rustup_path: "{{ ansible_user_dir }}/rustup.sh"
+
+  tasks:
+    - name: Fetch rustup installer
+      get_url:
+        url: https://sh.rustup.rs
+        dest: "{{ rustup_path }}"
+
+    - name: Make rustup binary executable
+      file:
+        path: "{{ rustup_path }}"
+        state: file
+        mode: +x
+
+    - name: Install Rust
+      ansible.builtin.shell: "{{ rustup_path }} -y"
+      args:
+        executable: /bin/zsh
+      register: result
+
+    - name: debug
+      debug:
+        var: result
+
+    - name: Add ~/.zshrc aliases for rustup
+      blockinfile:
+        path: ~/.zshrc
+        marker: "## {mark} added by ansible via playbook - rustup aliases"
+        block: . $HOME/.cargo/env
