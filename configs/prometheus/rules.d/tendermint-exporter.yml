@@ -1,0 +1,48 @@
+groups:
+- name: TendermintExporterAlerts
+  rules:
+
+  - alert: TendermintExporterNodeCatchingUp
+    expr: tendermint_node_catching_up == 1
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: Tendermint node not in sync (instance {{ $labels.instance }})
+      description: "Tendermint node not in sync \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: TendermintExporterVersionMismatch
+    expr: tendermint_latest_version_mismatch{network!~"decentr"} == 1
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Tendermint node is not running the latest binary (instance {{ $labels.instance }}: github version {{ $labels.remote_version }}, local version: {{ $labels.local_version }})"
+      description: "Tendermint node is not running the latest binary \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: TendermintExporterVotingPowerValidator
+    expr: tendermint_node_voting_power{type="validator"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Tendermint validator node has 0 voting power (instance {{ $labels.instance }}"
+      description: "Tendermint validator node has 0 voting power \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: TendermintExporterVotingPowerTestnet
+    expr: tendermint_node_voting_power{type="testnet"} == 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Tendermint testnet node has 0 voting power (instance {{ $labels.instance }}"
+      description: "Tendermint testnet node has 0 voting power \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: TendermintExporterTimeSinceLatestBlock
+    expr: tendermint_node_time_since_latest_block > 600
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Tendermint node's latest block was later than 10 minutes ago (instance {{ $labels.instance }}"
+      description: "Tendermint node's latest block was later than 10 minutes ago \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
