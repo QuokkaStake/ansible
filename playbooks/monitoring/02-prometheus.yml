@@ -1,0 +1,105 @@
+---
+- name: Install Prometheus
+  hosts: "{{ hosts }}"
+
+  vars:
+    prometheus_tar_file: /tmp/prometheus.tar.gz
+    prometheus_tmp_path: /tmp/prometheus
+    prometheus_config_path: /etc/prometheus
+
+  tasks:
+    - name: Get latest release
+      uri:
+        url: https://api.github.com/repos/prometheus/prometheus/releases/latest
+        return_content: true
+      register: release_info
+
+    - name: Get latest release JSON
+      set_fact:
+        release_info_json: "{{ release_info.content | from_json }}"
+
+    - name: "Set node_exporter version to {{ release_info_json.tag_name[1:] }}"
+      set_fact:
+        version: "{{ release_info_json.tag_name[1:] }}"
+
+    - name: Download node_exporter binary to local folder
+      get_url:
+        url: "https://github.com/prometheus/prometheus/releases/download/v{{ version }}/prometheus-{{ version }}.linux-amd64.tar.gz"
+        dest: "{{ prometheus_tar_file }}"
+
+    - name: Create Prometheus tmp directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ prometheus_tmp_path }}"
+        state: directory
+
+    - name: Unzip Prometheus
+      ansible.builtin.unarchive:
+        src: "{{ prometheus_tar_file }}"
+        dest: "{{ prometheus_tmp_path }}"
+        remote_src: true
+
+    - name: Copy Prometheus binary
+      become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /usr/bin
+        mode: '0755'
+        remote_src: true
+      loop:
+        - "{{ prometheus_tmp_path }}/prometheus-{{ version }}.linux-amd64/prometheus"
+        - "{{ prometheus_tmp_path }}/prometheus-{{ version }}.linux-amd64/promtool"
+
+    - name: Create prometheus group
+      become: true
+      ansible.builtin.group:
+        name: prometheus
+        state: present
+
+    - name: Add prometheus user
+      user:
+        name: prometheus
+        groups: prometheus
+        shell: /sbin/nologin
+        create_home: false
+        append: true
+        state: present
+      become: true
+
+    - name: Create Prometheus folders
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        group: prometheus
+        owner: prometheus
+      loop:
+        - /etc/prometheus
+        - /var/lib/prometheus
+
+    - name: Set up Prometheus config
+      become: true
+      ansible.builtin.copy:
+        src: ../../configs/prometheus
+        dest: /etc
+        mode: '0755'
+
+    - name: Put basic auth config
+      become: true
+      when: prometheus_username is defined and prometheus_password is defined
+      ansible.builtin.template:
+        src: ../../templates/monitoring/web.yml.j2
+        dest: /etc/prometheus/web.yml
+
+    - name: Set up Prometheus systemd config
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/monitoring/prometheus.service.j2
+        dest: /etc/systemd/system/prometheus.service
+
+    - name: Start Prometheus and enable it on autostart
+      become: true
+      service:
+        name: prometheus
+        state: restarted
+        enabled: true

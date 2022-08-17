@@ -1,20 +1,20 @@
 groups:
-- name: TendermintInternalAlerts
-  rules:
-  - alert: TendermintInternalInsufficientPeersConnected
-    expr: tendermint_p2p_peers < 3
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      summary: Tendermint node not having enough peers connected (instance {{ $labels.instance }})
-      description: "Tendermint node not having enough peers connected (< 3) \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - name: TendermintInternalAlerts
+    rules:
+      - alert: TendermintInternalInsufficientPeersConnected
+        expr: tendermint_p2p_peers < 3
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Tendermint node not having enough peers connected (instance {{ $labels.instance }})
+          description: "Tendermint node not having enough peers connected (< 3) \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: TendermintInternalNoPeersConnected
-    expr: tendermint_p2p_peers == 0
-    for: 1m
-    labels:
-      severity: critical
-    annotations:
-      summary: Tendermint node not connected to any peers (instance {{ $labels.instance }})
-      description: "Tendermint node not connected to any peers \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      - alert: TendermintInternalNoPeersConnected
+        expr: tendermint_p2p_peers == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Tendermint node not connected to any peers (instance {{ $labels.instance }})
+          description: "Tendermint node not connected to any peers \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

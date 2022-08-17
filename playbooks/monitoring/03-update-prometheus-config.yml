@@ -1,0 +1,20 @@
+---
+- name: Update Prometheus config
+  hosts: "{{ hosts }}"
+
+  tasks:
+    - name: Set up Prometheus config
+      become: true
+      ansible.builtin.copy:
+        src: ../../configs/prometheus
+        dest: /etc
+        mode: '0755'
+
+    - name: Reload Prometheus config
+      ansible.builtin.uri:
+        url: http://localhost:9090/-/reload
+        user: "{{ prometheus_username }}"
+        password: "{{ prometheus_password }}"
+        method: POST
+        body: ""
+        force_basic_auth: true
