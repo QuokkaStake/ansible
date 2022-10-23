@@ -7,4 +7,4 @@ github_version: v1.0.0
 binary_name: canined
 fullnode_folder: "{{ ansible_user_dir }}/.canine"
 genesis_path: https://raw.githubusercontent.com/JackalLabs/canine-mainnet-genesis/main/genesis/genesis.json
-
+minimum_gas_prices: "0.002ujkl"
