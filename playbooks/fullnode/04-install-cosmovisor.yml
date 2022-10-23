@@ -19,6 +19,7 @@
     - name: Get the latest cosmovisor version
       ansible.builtin.shell: "git describe --match 'cosmovisor*' --abbrev=0 HEAD | cut -f2 -d'/'"
       args:
+        chdir: "{{ ansible_user_dir }}/cosmos-sdk"
         executable: /bin/bash
       register: result
       when: cosmovisor_version == 'latest'
