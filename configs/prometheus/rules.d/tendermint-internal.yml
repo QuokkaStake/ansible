@@ -18,3 +18,12 @@ groups:
         annotations:
           summary: Tendermint node not connected to any peers (instance {{ $labels.instance }})
           description: "Tendermint node not connected to any peers \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: TendermintInternalMempoolOverflow
+        expr: tendermint_mempool_size > 100
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Tendermint node has too many txs in mempool (instance {{ $labels.instance }})
+          description: "Tendermint node has too many txs in mempool (> 100) \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
