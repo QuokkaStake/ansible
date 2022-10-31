@@ -108,8 +108,16 @@ ansible-playbook playbooks/fullnode/06-tendermint-exporter.yml --extra-vars "hos
 ansible-playbook playbooks/fullnode/07-start-node.yml --extra-vars "hosts=validator-1"
 ```
 
-7. Get node status (useful to see the info from multiple servers)
+8. Get node status (useful to see the info from multiple servers)
 
 ```
 ansible-playbook playbooks/fullnode/08-node-status.yml --extra-vars "hosts=fullnodes"
+```
+
+9. Prepare for a chain upgrade using Cosmovisor
+
+Need to specify upgrade_name (can be taken from the proposal) and upgrade_version (can be taken from the instructions or Github). This will fetch the required binary, build it, create a folder layout for the upgrade, put the binary there and print its version.
+
+```
+ansible-playbook playbooks/fullnode/09-prepare-cosmovisor-upgrade.yml --extra-vars "hosts=validator-1 upgrade_name=v2 upgrade_version=v2.0.0"
 ```
