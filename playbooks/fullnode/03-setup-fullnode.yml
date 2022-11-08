@@ -63,6 +63,30 @@
         option: prometheus
         value: "true"
 
+    - name: Enable API
+      when: enable_api is defined and enable_api == true
+      community.general.ini_file:
+        path: "{{ app_path }}"
+        section: api
+        option: "enable"
+        value: "true"
+
+    - name: Enable Swagger
+      when: enable_api is defined and enable_api == true
+      community.general.ini_file:
+        path: "{{ app_path }}"
+        section: api
+        option: "swagger"
+        value: "true"
+
+    - name: Set API address
+      when: api_address is defined
+      community.general.ini_file:
+        path: "{{ app_path }}"
+        section: api
+        option: "address"
+        value: "\"{{ api_address }}\""
+
     - name: Fetch genesis
       when: genesis_path is defined
       get_url:
