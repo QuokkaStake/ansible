@@ -39,6 +39,7 @@
         src: "{{ ansible_user_dir }}/tendermint-exporter/main"
         dest: /usr/bin/tendermint-exporter
         remote_src: true
+        mode: a+x
 
     - name: Create config directory
       file:
