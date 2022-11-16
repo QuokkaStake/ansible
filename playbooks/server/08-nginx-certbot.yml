@@ -1,0 +1,17 @@
+- name: Install Nginx and Certbot
+  hosts: "{{ hosts }}"
+
+  tasks:
+    - name: Install nginx and snapd
+      become: true
+      package:
+        name:
+          - nginx-full
+          - snapd
+        state: present
+
+    - name: Install certbot
+      become: true
+      community.general.snap:
+        name: certbot
+        classic: true
