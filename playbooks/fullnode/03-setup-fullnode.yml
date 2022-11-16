@@ -92,3 +92,9 @@
       get_url:
         url: "{{ genesis_path }}"
         dest: "{{ fullnode_folder }}/config/genesis.json"
+
+    - name: Fetch addrbook
+      when: addrbook_url is defined
+      get_url:
+        url: "{{ addrbook_url }}"
+        dest: "{{ fullnode_folder }}/config/addrbook.json"
