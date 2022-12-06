@@ -1,5 +1,5 @@
 ---
-- name: Install tendermint-exporter
+- name: Install cosmos-node-exporter
   hosts: "{{ hosts }}"
 
   environment:
@@ -11,9 +11,9 @@
   tasks:
     - name: Clone the repo
       ansible.builtin.git:
-        repo: "https://github.com/solarlabsteam/tendermint-exporter"
-        dest: "{{ ansible_user_dir }}/tendermint-exporter"
-        version: master
+        repo: "https://github.com/freak12techno/cosmos-node-exporter"
+        dest: "{{ ansible_user_dir }}/cosmos-node-exporter"
+        version: main
         update: true
 
     - name: Get services list
@@ -23,21 +23,21 @@
     - name: Stop service
       become: true
       systemd:
-        name: tendermint-exporter
+        name: cosmos-node-exporter
         state: stopped
-      when: "'tendermint-exporter.service' in services.ansible_facts.services"
+      when: "'cosmos-node-exporter.service' in services.ansible_facts.services"
 
     - name: Install binary
       ansible.builtin.shell: go build -buildvcs=false
       args:
         executable: /bin/bash
-        chdir: "{{ ansible_user_dir }}/tendermint-exporter"
+        chdir: "{{ ansible_user_dir }}/cosmos-node-exporter"
 
     - name: Copy binary to the correct folder
       become: true
       ansible.builtin.copy:
-        src: "{{ ansible_user_dir }}/tendermint-exporter/main"
-        dest: /usr/bin/tendermint-exporter
+        src: "{{ ansible_user_dir }}/cosmos-node-exporter/main"
+        dest: /usr/bin/cosmos-node-exporter
         remote_src: true
         mode: a+x
 
@@ -48,18 +48,18 @@
 
     - name: Generate config
       ansible.builtin.template:
-        src: ../../templates/fullnode/tendermint-exporter.toml.j2
-        dest: "{{ ansible_user_dir }}/config/tendermint-exporter.toml"
+        src: ../../templates/fullnode/cosmos-node-exporter.toml.j2
+        dest: "{{ ansible_user_dir }}/config/cosmos-node-exporter.toml"
 
     - name: Generate systemd file
       become: true
       ansible.builtin.template:
-        src: ../../templates/fullnode/tendermint-exporter.service.j2
-        dest: /etc/systemd/system/tendermint-exporter.service
+        src: ../../templates/fullnode/cosmos-node-exporter.service.j2
+        dest: /etc/systemd/system/cosmos-node-exporter.service
 
     - name: Start the service
       become: true
       ansible.builtin.systemd:
         state: started
-        name: tendermint-exporter
+        name: cosmos-node-exporter
         enabled: true

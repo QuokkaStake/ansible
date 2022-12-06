@@ -1,0 +1,32 @@
+[log]
+level = "debug"
+{% if use_json_output is defined and use_json_output == true %}
+json = true
+{% endif %}
+
+[tendermint]
+address = "http://localhost:26657"
+
+{% if disable_grpc is not defined or disable_grpc == false %}
+[grpc]
+address = "localhost:9090"
+{% endif %}
+
+{% if disable_cosmovisor is not defined or disable_cosmovisor == false %}
+[cosmovisor]
+{% if fullnode_folder is defined %}
+chain-folder = "{{ fullnode_folder }}"
+{% endif %}
+{% if binary_name is defined %}
+chain-binary-name = "{{ binary_name }}"
+{% endif %}
+cosmovisor-path = "{{ ansible_user_dir }}/go/bin/cosmovisor"
+{% endif %}
+
+[github]
+{% if github_repo_remote is defined %}
+repository = "{{ github_repo_remote }}"
+{% endif %}
+{% if github_token is defined %}
+token = "{{ github_token }}"
+{% endif %}

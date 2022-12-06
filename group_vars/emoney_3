@@ -1,7 +1,5 @@
 ---
 github_repo_remote: https://github.com/e-money/em-ledger
-github_repo_org: e-money
-github_repo_name: em-ledger
 github_repo_local: "{{ ansible_user_dir }}/emd"
 github_version: v1.2.0
 binary_name: emd

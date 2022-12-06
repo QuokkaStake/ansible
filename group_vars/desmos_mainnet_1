@@ -1,7 +1,5 @@
 ---
 github_repo_remote: https://github.com/desmos-labs/desmos
-github_repo_org: desmos-labs
-github_repo_name: desmos
 github_repo_local: "{{ ansible_user_dir }}/desmos"
 github_version: v2.3.1
 binary_name: desmos

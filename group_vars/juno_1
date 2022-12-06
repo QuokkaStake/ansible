@@ -1,7 +1,5 @@
 ---
 github_repo_remote: https://github.com/CosmosContracts/Juno
-github_repo_org: CosmosContracts
-github_repo_name: Juno
 github_repo_local: "{{ ansible_user_dir }}/juno"
 github_version: v6.0.0
 binary_name: junod

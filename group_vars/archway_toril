@@ -1,6 +1,0 @@
----
-github_repo_remote: https://github.com/archway-network/archway
-github_repo_local: ~/archway
-github_version: main
-binary_name: archwayd
-fullnode_folder: ~/.archway

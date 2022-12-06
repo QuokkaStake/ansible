@@ -1,13 +1,11 @@
 ---
 github_repo_remote: https://github.com/sentinel-official/hub
-github_repo_org: sentinel-official
-github_repo_name: hub
 github_repo_local: "{{ ansible_user_dir }}/hub"
 github_version: v0.9.3
 binary_name: sentinelhub
 fullnode_folder: "{{ ansible_user_dir }}/.sentinelhub"
 seeds: "05fe2a7847fd27345250915fd06752c424f40651@85.222.234.135:26656,387027e3b1180d3a619cbbf3462704a490785963@54.176.90.228:26656,63bd9cfce0f0d274aad5b166dd06d829021aec43@121.78.247.243:56656,855807cc6a919c22ec943050ebb5c80b23724ed0@3.239.11.246:26656,8caefbf8f4318ecc93f2c901cf11470e4a16c818@161.97.135.122:26656,9174af5f16f74660cccf49f893d243949af45f7f@54.177.29.46:26656,9fa528bd2b9e7c80724a1d8a4e1a2a8a83e7d123@142.93.72.221:26656,a77f6a094578dad899e2f40e0626b4c6d4705311@3.36.165.232:26656,bd45a11390d16d128a9eeea3935b53d7a1a3c120@15.236.127.69:26656,cdb8dd7628460a546ce1594ca0bc0c20366514cf@34.72.64.178:26656,d1efceccb04ded9a604e5235f76da86872157d68@161.97.149.223:26656,e00b23444cc8dbb353d5faa765ab36cfc0116b57@83.60.98.134:28685,e5ee89bd4fc371c6a0e66d2b8daefd891b6b87b5@157.90.117.58:26656,f7ceb735606f90df7eb6cd987641876955b6e325@46.4.55.150:36656"
-persistent_peers: "c3aa0ff9b3eb17be1b0a26d7c8a5683e8e528e1a@159.89.192.105:26656,d5cf6a6efd0737f68ec026144cdb653abdd11649@rpc.sentinel.badgerbite.xyz:26656"
+persistent_peers: "c3aa0ff9b3eb17be1b0a26d7c8a5683e8e528e1a@159.89.192.105:26656,d5cf6a6efd0737f68ec026144cdb653abdd11649@rpc.sentinel.badgerbite.xyz:26656,1341da61b96f3a05693378628f960a39958c52d1@sentinel-rpc2.badgerbite.io:26656"
 minimum_gas_prices: "0.01ibc/31FEE1A2A9F9C01113F90BD0BBCCE8FD6BBB8585FAF109A2101827DD1D5B95B8,0.01udvpn,0.01ibc/B1C0DDB14F25279A2026BC8794E12B259F8BDA546A3C5132CCAEE4431CE36783,0.01ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518,0.01ibc/A8C2D23A1E6F95DA4E48BA349667E322BD7A6C996D8A4AAE8BA72E190F3D1477"
-statesync_node: https://rpc.sentinel.chaintools.tech:443
+statesync_node: https://rpc.sentinel.freak12techno.io:443
 genesis_path: https://gist.githubusercontent.com/freak12techno/37587719948100cc7c4f00fde7127d74/raw/e122946b4ec10f05d281a68fdbc9029077810624/sentinelhub-2-genesis.json
