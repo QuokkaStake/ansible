@@ -1,0 +1,16 @@
+[Unit]
+Description=Alertmanager
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=alertmanager
+Group=alertmanager
+Type=simple
+ExecStart=alertmanager --config.file=/etc/alertmanager/alertmanager.yml \
+    --cluster.advertise-address=0.0.0.0:9093 \
+    --storage.path=/etc/alertmanager/data \
+    --web.config.file=/etc/alertmanager/web.yml
+
+[Install]
+WantedBy=multi-user.target

@@ -18,11 +18,11 @@
       set_fact:
         release_info_json: "{{ release_info.content | from_json }}"
 
-    - name: "Set node_exporter version to {{ release_info_json.tag_name[1:] }}"
+    - name: "Set Prometheus version to {{ release_info_json.tag_name[1:] }}"
       set_fact:
         version: "{{ release_info_json.tag_name[1:] }}"
 
-    - name: Download node_exporter binary to local folder
+    - name: Download Prometheus binary to local folder
       get_url:
         url: "https://github.com/prometheus/prometheus/releases/download/v{{ version }}/prometheus-{{ version }}.linux-amd64.tar.gz"
         dest: "{{ prometheus_tar_file }}"
@@ -88,7 +88,7 @@
       become: true
       when: prometheus_username is defined and prometheus_password is defined
       ansible.builtin.template:
-        src: ../../templates/monitoring/web.yml.j2
+        src: ../../templates/monitoring/prometheus.web.yml.j2
         dest: /etc/prometheus/web.yml
 
     - name: Set up Prometheus systemd config

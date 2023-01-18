@@ -1,0 +1,105 @@
+---
+- name: Install Alertmanager
+  hosts: "{{ hosts }}"
+
+  vars:
+    alertmanager_tar_file: /tmp/alertmanager.tar.gz
+    alertmanager_tmp_path: /tmp/alertmanager
+    alertmanager_config_path: /etc/alertmanager
+
+  tasks:
+    - name: Get latest release
+      uri:
+        url: https://api.github.com/repos/prometheus/alertmanager/releases/latest
+        return_content: true
+      register: release_info
+
+    - name: Get latest release JSON
+      set_fact:
+        release_info_json: "{{ release_info.content | from_json }}"
+
+    - name: "Set Alertmanager version to {{ release_info_json.tag_name[1:] }}"
+      set_fact:
+        version: "{{ release_info_json.tag_name[1:] }}"
+
+    - name: Download Alertmanager binary to local folder
+      get_url:
+        url: "https://github.com/prometheus/alertmanager/releases/download/v{{ version }}/alertmanager-{{ version }}.linux-amd64.tar.gz"
+        dest: "{{ alertmanager_tar_file }}"
+
+    - name: Create Alertmanager tmp directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ alertmanager_tmp_path }}"
+        state: directory
+
+    - name: Unzip Alertmanager
+      ansible.builtin.unarchive:
+        src: "{{ alertmanager_tar_file }}"
+        dest: "{{ alertmanager_tmp_path }}"
+        remote_src: true
+
+    - name: Copy Alertmanager binary
+      become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /usr/bin
+        mode: '0755'
+        remote_src: true
+      loop:
+        - "{{ alertmanager_tmp_path }}/alertmanager-{{ version }}.linux-amd64/alertmanager"
+        - "{{ alertmanager_tmp_path }}/alertmanager-{{ version }}.linux-amd64/amtool"
+
+    - name: Create alertmanager group
+      become: true
+      ansible.builtin.group:
+        name: alertmanager
+        state: present
+
+    - name: Add alertmanager user
+      user:
+        name: alertmanager
+        groups: alertmanager
+        shell: /sbin/nologin
+        create_home: false
+        append: true
+        state: present
+      become: true
+
+    - name: Create Alertmanager folders
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        group: alertmanager
+        owner: alertmanager
+      loop:
+        - /etc/alertmanager
+        - /var/lib/alertmanager
+
+    - name: Set up Alertmanager config
+      become: true
+      ansible.builtin.copy:
+        src: ../../configs/alertmanager
+        dest: /etc
+        mode: '0755'
+
+    - name: Put basic auth config
+      become: true
+      when: alertmanager_username is defined and alertmanager_password is defined
+      ansible.builtin.template:
+        src: ../../templates/monitoring/alertmanager.web.yml.j2
+        dest: /etc/alertmanager/web.yml
+
+    - name: Set up Alertmanager systemd config
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/monitoring/alertmanager.service.j2
+        dest: /etc/systemd/system/alertmanager.service
+
+    - name: Start Alertmanager and enable it on autostart
+      become: true
+      service:
+        name: alertmanager
+        state: restarted
+        enabled: true
