@@ -1,0 +1,18 @@
+---
+- name: Update Alertmanager config
+  hosts: "{{ hosts }}"
+
+  tasks:
+    - name: Set up Alertmanager config
+      become: true
+      ansible.builtin.copy:
+        src: ../../configs/alertmanager
+        dest: /etc
+        mode: '0755'
+
+    - name: Restart Alertmanager
+      become: true
+      service:
+        name: alertmanager
+        state: restarted
+        enabled: true
