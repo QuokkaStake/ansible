@@ -1,6 +1,6 @@
-# ansible-cosmos
+# ansible
 
-This is a set of playbooks I use to bootstrap a fullnode.
+This is a set of playbooks we use to bootstrap everything.
 
 ## Things to consider
 
@@ -34,7 +34,7 @@ ansible_user=<your hostname>
 ansible_ssh_private_key_file=<your SSH keyfile>
 ```
 
-Specifically, you need to group all your hosts by chain (put all of the hosts on one chain under a group), and all hosts should be under `fullnodes` groups (either directly or indirectly). I personally use `validators` and `testnets` groups for mainnet and testnet validators, and `monitoring` for fullnodes used not for validators.
+Specifically, you need to group all your hosts by chain (put all of the hosts on one chain under a group), and all hosts should be under `fullnodes` groups (either directly or indirectly). We personally use `validators` and `testnets` groups for mainnet and testnet validators, and `monitoring` for fullnodes used not for validators.
 
 3. You need to specify the variables for each chain which will be later used for bootstrapping a node, such as github repository path, binary version, where to put a binary, minimal gas prices, seeds, peers, genesis path etc. Check out the files in `group_vars/` for reference.
 

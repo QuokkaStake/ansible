@@ -11,7 +11,7 @@
   tasks:
     - name: Clone the repo
       ansible.builtin.git:
-        repo: "https://github.com/freak12techno/cosmos-node-exporter"
+        repo: "https://github.com/QuokkaStake/cosmos-node-exporter"
         dest: "{{ ansible_user_dir }}/cosmos-node-exporter"
         version: main
         update: true
@@ -28,18 +28,9 @@
       when: "'cosmos-node-exporter.service' in services.ansible_facts.services"
 
     - name: Install binary
-      ansible.builtin.shell: go build -buildvcs=false
-      args:
-        executable: /bin/bash
+      make:
         chdir: "{{ ansible_user_dir }}/cosmos-node-exporter"
-
-    - name: Copy binary to the correct folder
-      become: true
-      ansible.builtin.copy:
-        src: "{{ ansible_user_dir }}/cosmos-node-exporter/main"
-        dest: /usr/bin/cosmos-node-exporter
-        remote_src: true
-        mode: a+x
+        target: install
 
     - name: Create config directory
       file:
