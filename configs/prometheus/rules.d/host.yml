@@ -92,7 +92,7 @@ groups:
           description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostHighCpuLoad
-        expr: 100 - (avg by(instance, host) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
+        expr: sum by (instance, host) (avg by (mode, instance, host) (rate(node_cpu_seconds_total{mode!="idle"}[2m]))) > 0.8
         for: 0m
         labels:
           severity: warning
