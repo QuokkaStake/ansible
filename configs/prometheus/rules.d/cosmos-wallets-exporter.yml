@@ -1,0 +1,20 @@
+groups:
+  - name: CosmosWalletsExporterAlerts
+    rules:
+      - alert: CosmosWalletsExporterNodeError
+        expr: cosmos_wallets_exporter_success == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: cosmos-wallets-exporter cannot connect to node to get balances from (instance {{ $labels.instance }}, chain {{ $labels.chain }})
+          description: "cosmos-wallets-exporter cannot connect to node to get balances from \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: CosmosWalletExporterRestakeBalanceTooLow
+        expr: (cosmos_wallets_exporter_balance{group="restake"} / on (chain) group_right cosmos_wallets_exporter_denom_coefficient) < 5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: The balance of ReStake wallet on {{ $labels.chain }} is below threshold (instance {{ $labels.instance }}, chain {{ $labels.chain }})
+          description: "The balance of ReStake wallet on {{ $labels.chain }} is below threshold \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
