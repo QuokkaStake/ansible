@@ -54,3 +54,4 @@
         state: started
         name: cosmos-node-exporter
         enabled: true
+        daemon_reload: true
