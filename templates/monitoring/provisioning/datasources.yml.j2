@@ -1,0 +1,38 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: Prometheus
+    orgId: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    orgId: 1
+    uid: prometheus
+    url: http://localhost:9090
+    user: {{ prometheus_username }}
+    basicAuth: true
+    basicAuthUser: {{ prometheus_username }}
+    isDefault: true
+    secureJsonData:
+      password: {{ prometheus_password }}
+      basicAuthPassword: {{ prometheus_password }}
+    version: 1
+    editable: false
+
+  - name: Loki
+    type: loki
+    access: proxy
+    orgId: 1
+    uid: loki
+    url: http://{{ loki_url }}
+    user: {{ loki_username }}
+    basicAuth: true
+    basicAuthUser: {{ loki_username }}
+    isDefault: false
+    secureJsonData:
+      password: {{ loki_password }}
+      basicAuthPassword: {{ loki_password }}
+    version: 1
+    editable: false

@@ -1,0 +1,35 @@
+---
+- name: Provision Grafana datasources and dashboards
+  hosts: "{{ hosts }}"
+
+  vars:
+    grafana_provision_dir: /etc/grafana/provisioning
+    grafana_datasources_dir: "{{ grafana_provision_dir }}/datasources"
+    grafana_dashboards_dir: "{{ grafana_provision_dir }}/dashboards"
+
+  tasks:
+    - name: Provision datasources
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/monitoring/provisioning/datasources.yml.j2
+        dest: "{{ grafana_datasources_dir }}/datasources.yml"
+
+    - name: Provision dashboards
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/monitoring/provisioning/dashboards.yml.j2
+        dest: "{{ grafana_dashboards_dir }}/dashboards.yml"
+
+    - name: Copy dashboards
+      become: true
+      ansible.builtin.copy:
+        src: ../../configs/grafana/dashboards
+        dest: "{{ grafana_dashboards_dir }}"
+        mode: '0755'
+
+    - name: Restart Grafana
+      become: true
+      service:
+        name: grafana-server
+        state: restarted
+        enabled: true
