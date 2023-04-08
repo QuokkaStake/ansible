@@ -21,22 +21,13 @@ groups:
           description: "Tendermint node is not running the latest binary \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: CosmosNodeVotingPowerValidator
-        expr: cosmos_node_exporter_voting_power{type="validator",network!="cosmos"} == 0
+        expr: cosmos_node_exporter_voting_power{type="validator"} == 0
         for: 1m
         labels:
           severity: critical
         annotations:
           summary: "Tendermint validator node has 0 voting power (instance {{ $labels.instance }}"
           description: "Tendermint validator node has 0 voting power \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-
-      - alert: CosmosNodeVotingPowerValidatorWentLive
-        expr: cosmos_node_exporter_voting_power{type="validator",network="cosmos"} > 0
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Cosmos validator went live (instance {{ $labels.instance }}"
-          description: "Cosmos validator went live \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: CosmosNodeVotingPowerTestnet
         expr: cosmos_node_exporter_voting_power{type="testnet"} == 0
