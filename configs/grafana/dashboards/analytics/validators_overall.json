@@ -49,7 +49,7 @@
         "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [e-Money](https://www.mintscan.io/emoney/validators/emoneyvaloper1jk4n79c5gv36972ptnly3rvx5nvn3hl3hgly9g)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "title": "Info",
       "type": "text"
     },
@@ -116,7 +116,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -183,7 +183,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -250,7 +250,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -317,7 +317,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -380,7 +380,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -443,7 +443,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -523,7 +523,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -683,7 +683,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -747,7 +747,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -851,7 +851,7 @@
           }
         ]
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -1030,7 +1030,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -1139,7 +1139,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -1365,7 +1365,7 @@
           }
         ]
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -1595,7 +1595,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -1768,7 +1768,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -2073,7 +2073,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "cosmos_validators_exporter_wallet_balance{denom!~\"ibc.*\"} / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "cosmos_validators_exporter_wallet_balance{denom=~\"u.*\"} / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
           "hide": false,
           "legendFormat": "{{chain}}",
           "range": true,
@@ -2168,7 +2168,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "(cosmos_validators_exporter_unclaimed_commission{denom!~\"ibc.*\"}\n+ cosmos_validators_exporter_wallet_balance\n+ cosmos_validators_exporter_self_delegation_rewards{denom!~\"ibc.*\"}\n)  / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "(cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}\n+ cosmos_validators_exporter_wallet_balance\n+ cosmos_validators_exporter_self_delegation_rewards{denom=~\"u.*\"}\n)  / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
           "hide": false,
           "legendFormat": "{{chain}}",
           "range": true,
@@ -2228,7 +2228,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -2338,7 +2338,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.4.7",
       "targets": [
         {
           "datasource": {
@@ -2425,7 +2425,8 @@
               "__name__ 2": true,
               "__name__ 3": true,
               "__name__ 4": true,
-              "address 2": true,
+              "address 1": true,
+              "address 2": false,
               "chain 2": true,
               "chain 3": true,
               "chain 4": true,
@@ -2449,30 +2450,28 @@
               "moniker 4": true
             },
             "indexByName": {
-              "Time 1": 2,
-              "Time 2": 3,
-              "Time 3": 11,
+              "Time 1": 3,
+              "Time 2": 4,
+              "Time 3": 12,
               "Time 4": 17,
-              "Value #A": 5,
-              "Value #B": 6,
-              "Value #C": 15,
-              "Value #D": 23,
-              "__name__": 7,
+              "Value #A": 6,
+              "Value #B": 7,
+              "Value #C": 16,
+              "Value #D": 21,
+              "__name__": 8,
               "address 1": 1,
-              "address 2": 18,
+              "address 2": 2,
               "chain": 0,
-              "denom 1": 8,
-              "denom 2": 12,
-              "denom 3": 19,
-              "display_denom": 4,
-              "instance 1": 9,
-              "instance 2": 13,
-              "instance 3": 20,
-              "job 1": 10,
-              "job 2": 14,
-              "job 3": 21,
-              "moniker 1": 16,
-              "moniker 2": 22
+              "denom 1": 9,
+              "denom 2": 13,
+              "denom 3": 18,
+              "display_denom": 5,
+              "instance 1": 10,
+              "instance 2": 14,
+              "instance 3": 19,
+              "job 1": 11,
+              "job 2": 15,
+              "job 3": 20
             },
             "renameByName": {
               "Value #A": "unclaimed commission",
@@ -2481,7 +2480,8 @@
               "Value #D": "wallet balance",
               "Value #E": "",
               "__name__": "",
-              "address 1": "address",
+              "address 1": "",
+              "address 2": "address",
               "chain": "",
               "chain 1": "chain",
               "display_denom": "denom",
@@ -2714,6 +2714,6 @@
   "timezone": "",
   "title": "validators overall",
   "uid": "validators-overall",
-  "version": 12,
+  "version": 15,
   "weekStart": ""
 }
