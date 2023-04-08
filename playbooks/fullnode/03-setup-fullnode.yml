@@ -87,6 +87,14 @@
         option: "address"
         value: "\"{{ api_address }}\""
 
+    - name: Disable snapshots
+      when: disable_snapshots is defined and disable_snapshots == true
+      community.general.ini_file:
+        path: "{{ app_path }}"
+        section: "state-sync"
+        option: "snapshot-interval"
+        value: "0"
+
     - name: Fetch genesis
       when: genesis_path is defined
       get_url:
