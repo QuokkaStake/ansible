@@ -1,0 +1,36 @@
+{{ define "__alertmanager" }}Alertmanager{{ end }}
+{{ define "__alertmanagerURL" }}{{ .ExternalURL }}/#/alerts?receiver={{ .Receiver | urlquery }}{{ end }}
+
+{{ define "__subject" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join " " }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join " " }}{{ end }}){{ end }}{{ end }}
+{{ define "__description" }}{{ end }}
+
+{{ define "alerts_list" }}
+{{ range . }}🖥️ Host: {{ index .Labels "host" }} ({{ index .Labels "instance" }})
+{{ if eq (index .Labels "severity") "critical" }}🔴 Severity: critical {{ else }}🟠 Severity: warning {{ end }}
+📖 Alert: {{ index .Labels "alertname" }}
+ℹ️ Details: {{ index .Annotations "summary" }}
+
+Labels:
+{{ range .Labels.SortedPairs }} - {{ .Name }} = {{ .Value }}
+{{ end }}Annotations:
+{{ range .Annotations.SortedPairs }} - {{ .Name }} = {{ .Value }}
+{{ end }}
+Source: {{ .GeneratorURL }}
+{{ end }}{{ end }}
+
+{{ define "pagerduty.default.description" }}{{ template "__subject" . }}{{ end }}
+{{ define "pagerduty.default.client" }}{{ template "__alertmanager" . }}{{ end }}
+{{ define "pagerduty.default.clientURL" }}{{ template "__alertmanagerURL" . }}{{ end }}
+{{ define "pagerduty.default.instances" }}{{ template "alerts_list" . }}{{ end }}
+
+
+{{ define "telegram.text" }}
+{{ if gt (len .Alerts.Firing) 0 }}
+🔥 Alerts Firing:
+{{ template "alerts_list" .Alerts.Firing }}
+{{ end }}
+{{ if gt (len .Alerts.Resolved) 0 }}
+✅ Alerts Resolved:
+{{ template "alerts_list" .Alerts.Resolved }}
+{{ end }}
+{{ end }}
