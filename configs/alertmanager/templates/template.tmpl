@@ -5,7 +5,7 @@
 {{ define "__description" }}{{ end }}
 
 {{ define "alerts_list" }}
-{{ range . }}🖥️ Host: {{ index .Labels "host" }} ({{ index .Labels "instance" }})
+{{ range . }}{{ if index .Labels "host" }}🖥️ Host: {{ index .Labels "host" }} ({{ index .Labels "instance" }}){{ else }}🖥️ Host: {{ index .Labels "instance" }}{{ end }}
 {{ if eq (index .Labels "severity") "critical" }}🔴 Severity: critical {{ else }}🟠 Severity: warning {{ end }}
 📖 Alert: {{ index .Labels "alertname" }}
 ℹ️ Details: {{ index .Annotations "summary" }}
@@ -15,7 +15,7 @@ Labels:
 {{ end }}Annotations:
 {{ range .Annotations.SortedPairs }} - {{ .Name }} = {{ .Value }}
 {{ end }}
-Source: {{ .GeneratorURL }}
+<a href="{{ .GeneratorURL }}">Source</a>
 {{ end }}{{ end }}
 
 {{ define "pagerduty.default.description" }}{{ template "__subject" . }}{{ end }}
@@ -26,11 +26,11 @@ Source: {{ .GeneratorURL }}
 
 {{ define "telegram.text" }}
 {{ if gt (len .Alerts.Firing) 0 }}
-🔥 Alerts Firing:
+🔥 <strong>Alerts Firing</strong>
 {{ template "alerts_list" .Alerts.Firing }}
 {{ end }}
 {{ if gt (len .Alerts.Resolved) 0 }}
-✅ Alerts Resolved:
+✅ <strong>Alerts Resolved</strong>
 {{ template "alerts_list" .Alerts.Resolved }}
 {{ end }}
 {{ end }}
