@@ -9,11 +9,10 @@
 {{ if eq (index .Labels "severity") "critical" }}🔴 Severity: critical {{ else }}🟠 Severity: warning {{ end }}
 📖 Alert: {{ index .Labels "alertname" }}
 ℹ️ Details: {{ index .Annotations "summary" }}
+📝 Description: {{ index .Annotations "description" }}
 
 Labels:
 {{ range .Labels.SortedPairs }} - {{ .Name }} = {{ .Value }}
-{{ end }}Annotations:
-{{ range .Annotations.SortedPairs }} - {{ .Name }} = {{ .Value }}
 {{ end }}
 <a href="{{ .GeneratorURL }}">Source</a>
 {{ end }}{{ end }}
