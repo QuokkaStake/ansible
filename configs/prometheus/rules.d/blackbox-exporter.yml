@@ -38,7 +38,7 @@ groups:
           description: "HTTP status code is not 200-399\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: BlackboxSslCertificateWillExpireSoon
-        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 30
+        expr: (probe_ssl_earliest_cert_expiry - time()) / 86400 < 30
         for: 0m
         labels:
           severity: warning
@@ -47,7 +47,7 @@ groups:
           description: "SSL certificate expires in 30 days\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: BlackboxSslCertificateWillExpireSoon
-        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 3
+        expr: (probe_ssl_earliest_cert_expiry - time()) / 86400 < 3
         for: 0m
         labels:
           severity: critical

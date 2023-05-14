@@ -39,7 +39,7 @@ groups:
           description: "Tendermint testnet node has 0 voting power \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: CosmosNodeTimeSinceLatestBlock
-        expr: cosmos_node_exporter_time_since_latest_block > 600
+        expr: (cosmos_node_exporter_time_since_latest_block / 60) > 10
         for: 1m
         labels:
           severity: critical
