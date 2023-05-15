@@ -49,7 +49,7 @@
         "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [e-Money](https://www.mintscan.io/emoney/validators/emoneyvaloper1jk4n79c5gv36972ptnly3rvx5nvn3hl3hgly9g)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "title": "Info",
       "type": "text"
     },
@@ -116,7 +116,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -183,7 +183,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -250,7 +250,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -317,7 +317,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -380,7 +380,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -443,7 +443,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -523,7 +523,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -683,7 +683,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -747,7 +747,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -835,6 +835,7 @@
       },
       "id": 13,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -851,7 +852,7 @@
           }
         ]
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -1030,7 +1031,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -1117,6 +1118,40 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active?"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "red",
+                        "index": 0,
+                        "text": "No"
+                      },
+                      "1": {
+                        "color": "green",
+                        "index": 1,
+                        "text": "Yes"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -1128,6 +1163,7 @@
       },
       "id": 7,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -1139,7 +1175,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -1199,6 +1235,21 @@
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
           "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "cosmos_validators_exporter_active",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "E"
         }
       ],
       "title": "validators info",
@@ -1218,15 +1269,18 @@
               "Time 2": true,
               "Time 3": true,
               "Time 4": true,
+              "Time 5": true,
               "Value #D": true,
               "__name__": true,
               "__name__ 1": true,
               "__name__ 2": true,
               "__name__ 3": true,
               "__name__ 4": true,
+              "__name__ 5": true,
               "chain 2": true,
               "chain 3": true,
               "chain 4": true,
+              "chain 5": true,
               "details": true,
               "identity": true,
               "instance": true,
@@ -1234,11 +1288,13 @@
               "instance 2": true,
               "instance 3": true,
               "instance 4": true,
+              "instance 5": true,
               "job": true,
               "job 1": true,
               "job 2": true,
               "job 3": true,
               "job 4": true,
+              "job 5": true,
               "moniker 2": true,
               "moniker 3": true,
               "moniker 4": true
@@ -1282,7 +1338,7 @@
               "Value #A": "commission",
               "Value #B": "max commission",
               "Value #C": "max daily change commission",
-              "Value #E": "",
+              "Value #E": "active?",
               "__name__": "",
               "chain 1": "chain",
               "moniker 1": "moniker"
@@ -1349,6 +1405,7 @@
       },
       "id": 48,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -1365,7 +1422,7 @@
           }
         ]
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -1595,7 +1652,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -1768,7 +1825,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -2228,7 +2285,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
@@ -2327,6 +2384,7 @@
       },
       "id": 55,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -2338,7 +2396,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "9.4.7",
+      "pluginVersion": "9.5.2",
       "targets": [
         {
           "datasource": {
