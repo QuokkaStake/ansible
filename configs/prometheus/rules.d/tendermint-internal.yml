@@ -8,7 +8,7 @@ groups:
           severity: warning
         annotations:
           summary: Tendermint node not having enough peers connected (instance {{ $labels.instance }})
-          description: "Tendermint node not having enough peers connected (< 3) \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "Tendermint node not having enough peers connected (< 3): {{ $value }}"
 
       - alert: TendermintInternalNoPeersConnected
         expr: tendermint_p2p_peers == 0
@@ -17,7 +17,7 @@ groups:
           severity: critical
         annotations:
           summary: Tendermint node not connected to any peers (instance {{ $labels.instance }})
-          description: "Tendermint node not connected to any peers \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "Tendermint node not connected to any peers"
 
       - alert: TendermintInternalMempoolOverflow
         expr: tendermint_mempool_size > 100
@@ -26,4 +26,4 @@ groups:
           severity: warning
         annotations:
           summary: Tendermint node has too many txs in mempool (instance {{ $labels.instance }})
-          description: "Tendermint node has too many txs in mempool (> 100) \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "Tendermint node has too many txs in mempool: {{ $value }}"

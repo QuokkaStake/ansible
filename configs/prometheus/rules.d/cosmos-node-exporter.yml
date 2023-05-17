@@ -9,7 +9,7 @@ groups:
           severity: critical
         annotations:
           summary: Tendermint node not in sync (host {{ $labels.host }})
-          description: "Tendermint node not in sync \n  VALUE = {{ $value }}\n"
+          description: "Tendermint node not in sync \n  VALUE = {{ $value }}"
 
       - alert: CosmosNodeNotLatestBinary
         expr: cosmos_node_exporter_is_latest == 0
@@ -18,7 +18,7 @@ groups:
           severity: warning
         annotations:
           summary: "Tendermint node is not running the latest binary (host {{ $labels.host }}): github version {{ $labels.remote_version }}, local version: {{ $labels.local_version }})"
-          description: "Tendermint node is not running the latest binary \n  VALUE = {{ $value }}\n"
+          description: "Tendermint node is not running the latest binary \n  VALUE = {{ $value }}"
 
       - alert: CosmosNodeVotingPowerValidator
         expr: cosmos_node_exporter_voting_power{type="validator"} == 0
@@ -27,7 +27,7 @@ groups:
           severity: critical
         annotations:
           summary: "Tendermint validator node has 0 voting power (host {{ $labels.host }})"
-          description: "Tendermint validator node has 0 voting power \n  VALUE = {{ $value }}\n"
+          description: "Tendermint validator node has 0 voting power \n  VALUE = {{ $value }}"
 
       - alert: CosmosNodeVotingPowerTestnet
         expr: cosmos_node_exporter_voting_power{type="testnet"} == 0
@@ -36,7 +36,7 @@ groups:
           severity: warning
         annotations:
           summary: "Tendermint testnet node has 0 voting power (host {{ $labels.host }}"
-          description: "Tendermint testnet node has 0 voting power \n  VALUE = {{ $value }}\n"
+          description: "Tendermint testnet node has 0 voting power \n  VALUE = {{ $value }}"
 
       - alert: CosmosNodeTimeSinceLatestBlock
         expr: (cosmos_node_exporter_time_since_latest_block / 60) > 10
@@ -45,7 +45,7 @@ groups:
           severity: critical
         annotations:
           summary: "Tendermint node's latest block was later than 10 minutes ago (host {{ $labels.host }}"
-          description: "Tendermint node's latest block was later than 10 minutes ago \n  VALUE = {{ $value }}\n"
+          description: "Tendermint node's latest block was later than 10 minutes ago \n  VALUE = {{ $value }}"
 
       - alert: CosmosNodeUpgradeBinaryNotPresent
         expr: cosmos_node_exporter_upgrade_binary_present == 0
@@ -54,7 +54,7 @@ groups:
           severity: warning
         annotations:
           summary: "Cosmos node does not have the upgrade binary (host {{ $labels.host }}, upgrade {{ $labels.name }})"
-          description: "Cosmos node does not have the upgrade binary \n  VALUE = {{ $value }}\n"
+          description: "Cosmos node does not have the upgrade binary \n  VALUE = {{ $value }}"
 
       - alert: CosmosNodeErrors
         expr: cosmos_node_exporter_query_successful == 0
@@ -63,4 +63,4 @@ groups:
           severity: warning
         annotations:
           summary: "cosmos-node-exporter has errors (host {{ $labels.host }})"
-          description: "cosmos-node-exporter has errors \n  VALUE = {{ $value }}\n"
+          description: "cosmos-node-exporter has errors \n  VALUE = {{ $value }}"

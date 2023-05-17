@@ -8,7 +8,7 @@ groups:
           severity: warning
         annotations:
           summary: cosmos-transactions-bot is not running
-          description: "cosmos-transactions-bot is not running \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "cosmos-transactions-bot is not running"
 
       - alert: CosmosProposalsCheckerNotRunning
         expr: sum(node_systemd_unit_state{name="cosmos-proposals-checker.service", state="active"}) == 0
@@ -17,7 +17,7 @@ groups:
           severity: warning
         annotations:
           summary: cosmos-proposals-checker is not running
-          description: "cosmos-proposals-checker is not running \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "cosmos-proposals-checker is not running"
 
       - alert: GrafanaInteracterNotRunning
         expr: sum(node_systemd_unit_state{name="grafana-interacter.service", state="active"}) == 0
@@ -26,4 +26,4 @@ groups:
           severity: warning
         annotations:
           summary: grafana-interacter is not running
-          description: "grafana-interacter is not running \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "grafana-interacter is not running"
