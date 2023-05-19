@@ -409,18 +409,6 @@
           "legendFormat": "{{ host }} ",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "exemplar": true,
-          "expr": "tendermint_node_voting_power{network=~\"emoney|nomic\"} / 1000000",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "{{ host }} ",
-          "refId": "B"
         }
       ],
       "title": "voting power",
@@ -713,6 +701,20 @@
           "interval": "",
           "legendFormat": "{{ chain_id }} @ {{ host  }}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "cometbft_consensus_block_size_bytes",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ chain_id }} @ {{ host  }}",
+          "refId": "B"
         }
       ],
       "title": "block size",
@@ -811,6 +813,20 @@
           "interval": "",
           "legendFormat": "{{ chain_id }} @ {{ host  }}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "cometbft_p2p_peers",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ chain_id }} @ {{ host  }}",
+          "refId": "B"
         }
       ],
       "title": "peers connected?",
@@ -1145,10 +1161,33 @@
           "legendFormat": "",
           "range": false,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(cosmos_node_exporter_voting_power / on(host) group_right() cometbft_consensus_validators_power) > 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
         }
       ],
       "title": "voting power %",
       "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "host",
+            "mode": "outer"
+          }
+        },
         {
           "id": "organize",
           "options": {
@@ -1181,6 +1220,7 @@
             },
             "renameByName": {
               "Value": "",
+              "Value #A": "voting power %",
               "chain_id": "",
               "sentinel-monitoring ": ""
             }
@@ -1443,6 +1483,6 @@
   "timezone": "",
   "title": "Cosmos Node Stats",
   "uid": "cosmos-node-stats",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }
