@@ -686,7 +686,7 @@
         },
         "tooltip": {
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "targets": [
@@ -1483,6 +1483,6 @@
   "timezone": "",
   "title": "Cosmos Node Stats",
   "uid": "cosmos-node-stats",
-  "version": 5,
+  "version": 7,
   "weekStart": ""
 }
