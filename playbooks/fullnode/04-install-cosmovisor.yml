@@ -9,48 +9,10 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
-    - name: Clone cosmos-sdk repo
-      ansible.builtin.git:
-        repo: "https://github.com/cosmos/cosmos-sdk"
-        dest: "{{ ansible_user_dir }}/cosmos-sdk"
-        update: true
-
-    # returns v1.1.0 if the latest cosmovisor tag is cosmovisor/v1.1.0
-    - name: Get the latest cosmovisor version
-      ansible.builtin.shell: "git describe --match 'cosmovisor*' --abbrev=0 HEAD | cut -f2 -d'/'"
+    - name: Install Cosmovisor
+      ansible.builtin.shell: "go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@{{ cosmovisor_version }}"
       args:
-        chdir: "{{ ansible_user_dir }}/cosmos-sdk"
         executable: /bin/bash
-      register: result
-      when: cosmovisor_version == 'latest'
-
-    - name: Set the latest cosmovisor version
-      set_fact:
-        cosmovisor_version: "{{ result.stdout }}"
-
-    - name: Git checkout to Cosmovisor tag
-      ansible.builtin.git:
-        repo: "https://github.com/cosmos/cosmos-sdk"
-        dest: "{{ ansible_user_dir }}/cosmos-sdk"
-        version: "cosmovisor/{{ cosmovisor_version }}"
-
-    - name: Build Cosmovisor
-      make:
-        chdir: "{{ ansible_user_dir }}/cosmos-sdk"
-        target: cosmovisor
-
-    - name: Copy Cosmovisor binary to the correct folder
-      ansible.builtin.copy:
-        src: "{{ ansible_user_dir }}/cosmos-sdk/cosmovisor/cosmovisor"
-        dest: "{{ ansible_user_dir }}/go/bin/cosmovisor"
-        remote_src: true
-
-    - name: Make Cosmovisor binary executable
-      ansible.builtin.copy:
-        src: "{{ ansible_user_dir }}/cosmos-sdk/cosmovisor/cosmovisor"
-        dest: "{{ ansible_user_dir }}/go/bin/cosmovisor"
-        mode: +x
-        remote_src: true
 
     - name: Create Cosmovisor folder layout
       file:
