@@ -1,0 +1,26 @@
+groups:
+  - name: ProxmoxAlerts
+    rules:
+      - alert: ProxmoxHostOutOfMemory
+        expr: (pve_memory_usage_bytes / pve_memory_size_bytes) * on(id, host) group_left(name) pve_guest_info * 100 > 90
+        labels:
+          severity: warning
+        annotations:
+          summary: "Proxmox VM is out of memory (>90%) (host: {{ $labels.host }}, container: {{ $labels.name }})"
+          description: "Proxmox host is out of memory (>90%): {{ $value }}"
+
+      - alert: ProxmoxHostOutOfDiskSpace
+        expr: (pve_disk_usage_bytes / pve_disk_size_bytes) * on(id, host) group_left(name) pve_guest_info * 100 > 90
+        labels:
+          severity: warning
+        annotations:
+          summary: "Proxmox VM is out of disk space (>90%) (host: {{ $labels.host }}, container: {{ $labels.name }})"
+          description: "Proxmox VM is out of disk space (>90%): {{ $value }}"
+
+      - alert: ProxmoxHighCPULoad
+        expr: (pve_cpu_usage_ratio / pve_cpu_usage_limit) * on(id, host) group_left(name) pve_guest_info * 100 > 80
+        labels:
+          severity: warning
+        annotations:
+          summary: "Proxmox VM eats too much CPU (>80%) (host: {{ $labels.host }}, container: {{ $labels.name }})"
+          description: "Proxmox VM eats too much CPU (>80%): {{ $value }}"
