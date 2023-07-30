@@ -9,7 +9,7 @@ groups:
           severity: critical
         annotations:
           summary: Tendermint node not in sync (host {{ $labels.host }})
-          description: "Tendermint node not in sync \n  VALUE = {{ $value }}"
+          description: "Tendermint node not in sync"
 
       - alert: CosmosNodeNotLatestBinary
         expr: cosmos_node_exporter_is_latest == 0
@@ -18,7 +18,7 @@ groups:
           severity: warning
         annotations:
           summary: "Tendermint node is not running the latest binary (host {{ $labels.host }}): github version {{ $labels.remote_version }}, local version: {{ $labels.local_version }})"
-          description: "Tendermint node is not running the latest binary \n  VALUE = {{ $value }}"
+          description: "Tendermint node is not running the latest binary"
 
       - alert: CosmosNodeVotingPowerValidator
         expr: cosmos_node_exporter_voting_power{type="validator"} == 0
@@ -27,7 +27,7 @@ groups:
           severity: critical
         annotations:
           summary: "Tendermint validator node has 0 voting power (host {{ $labels.host }})"
-          description: "Tendermint validator node has 0 voting power \n  VALUE = {{ $value }}"
+          description: "Tendermint validator node has 0 voting power"
 
       - alert: CosmosNodeVotingPowerTestnet
         expr: cosmos_node_exporter_voting_power{type="testnet"} == 0
@@ -36,7 +36,7 @@ groups:
           severity: warning
         annotations:
           summary: "Tendermint testnet node has 0 voting power (host {{ $labels.host }}"
-          description: "Tendermint testnet node has 0 voting power \n  VALUE = {{ $value }}"
+          description: "Tendermint testnet node has 0 voting power"
 
       - alert: CosmosNodeTimeSinceLatestBlock
         expr: (cosmos_node_exporter_time_since_latest_block / 60) > 10
@@ -54,7 +54,7 @@ groups:
           severity: warning
         annotations:
           summary: "Cosmos node does not have the upgrade binary (host {{ $labels.host }}, upgrade {{ $labels.name }})"
-          description: "Cosmos node does not have the upgrade binary \n  VALUE = {{ $value }}"
+          description: "Cosmos node does not have the upgrade binary"
 
       - alert: CosmosNodeErrors
         expr: cosmos_node_exporter_query_successful == 0
@@ -63,4 +63,13 @@ groups:
           severity: warning
         annotations:
           summary: "cosmos-node-exporter has errors (host {{ $labels.host }})"
-          description: "cosmos-node-exporter has errors \n  VALUE = {{ $value }}"
+          description: "cosmos-node-exporter has errors"
+
+      - alert: CosmosNodeUpgradeUpcoming
+        expr: (cosmos_node_exporter_upgrade_estimated_time - time()) < 30 * 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "There's an upgrade upcoming on node {{ $labels.host }}: {{ $labels.name }} in {{ $value }} seconds"
+          description: "There's an upgrade upcoming"
