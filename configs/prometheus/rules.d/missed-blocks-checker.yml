@@ -1,0 +1,20 @@
+groups:
+  - name: MissedBlocksCheckerAlerts
+    rules:
+      - alert: MissedBlocksCheckerNoNewEventsFromNode
+        expr: rate(missed_blocks_checker_events_total[1m]) == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: No new events from WS node
+          description: "No new events from WS node"
+
+      - alert: MissedBlocksCheckerNoNewEventsFromChain
+        expr: sum(rate(missed_blocks_checker_events_total[1m])) by (chain) == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: No new events from chain
+          description: "No new events from chain"
