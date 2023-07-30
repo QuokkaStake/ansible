@@ -27,30 +27,3 @@ groups:
         annotations:
           summary: Tendermint node has too many txs in mempool (instance {{ $labels.instance }})
           description: "Tendermint node has too many txs in mempool: {{ $value }}"
-
-      - alert: CometBFTInternalInsufficientPeersConnected
-        expr: cometbft_p2p_peers < 3
-        for: 1m
-        labels:
-          severity: warning
-        annotations:
-          summary: CometBFT node not having enough peers connected (instance {{ $labels.instance }})
-          description: "CometBFT node not having enough peers connected (< 3): {{ $value }}"
-
-      - alert: CometBFTInternalNoPeersConnected
-        expr: cometbft_p2p_peers == 0
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: CometBFT node not connected to any peers (instance {{ $labels.instance }})
-          description: "CometBFT node not connected to any peers"
-
-      - alert: CometBFTInternalMempoolOverflow
-        expr: cometbft_mev_mempool_size > 100
-        for: 1m
-        labels:
-          severity: warning
-        annotations:
-          summary: CometBFT node has too many txs in mempool (instance {{ $labels.instance }})
-          description: "CometBFT node has too many txs in mempool: {{ $value }}"
