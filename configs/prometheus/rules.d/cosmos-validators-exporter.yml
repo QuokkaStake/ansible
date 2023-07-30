@@ -1,0 +1,12 @@
+groups:
+  - name: CosmosValidatorsExporterAlerts
+    rules:
+      - alert: CosmosValidatorsExporterValidatorAtLastPlace
+        expr: cosmos_validators_exporter_validators_count - cosmos_validators_exporter_rank <= 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Cosmos validator is at the last place (instance {{ $labels.instance }})
+          description: "Cosmos validator is at the last place \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
