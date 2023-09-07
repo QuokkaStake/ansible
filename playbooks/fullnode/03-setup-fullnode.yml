@@ -63,6 +63,14 @@
         option: prometheus
         value: "true"
 
+    - name: Set Prometheus metrics namespace to tendermint
+      when: enable_prometheus is defined and enable_prometheus == true
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: instrumentation
+        option: namespace
+        value: "\"tendermint\""
+
     - name: Enable API
       when: enable_api is defined and enable_api == true
       community.general.ini_file:
