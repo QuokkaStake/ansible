@@ -11,7 +11,7 @@ groups:
           description: "cosmos-wallets-exporter cannot connect to node to get balances from \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: CosmosWalletExporterRestakeBalanceTooLow
-        expr: (cosmos_wallets_exporter_balance{group="restake"} / on (chain) group_right cosmos_wallets_exporter_denom_coefficient) < 5
+        expr: cosmos_wallets_exporter_balance{group="restake"} < 5
         for: 10m
         labels:
           severity: warning
