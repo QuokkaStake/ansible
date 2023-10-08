@@ -214,7 +214,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "cosmos_node_exporter_time_since_latest_block",
+          "expr": "cosmos_node_exporter_time_since_latest_block < 60 * 60 * 24 * 365",
           "interval": "",
           "legendFormat": "{{ host }}",
           "range": true,
@@ -1703,6 +1703,6 @@
   "timezone": "",
   "title": "Cosmos Node Stats",
   "uid": "cosmos-node-stats",
-  "version": 10,
+  "version": 11,
   "weekStart": ""
 }
