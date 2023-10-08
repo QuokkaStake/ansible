@@ -1,6 +1,15 @@
 groups:
   - name: CosmosValidatorsExporterAlerts
     rules:
+      - alert: CosmosValidatorsExporterNodeError
+        expr: cosmos_validators_exporter_queries_error > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: cosmos-validators-exporter has some errors from chain (instance {{ $labels.instance }}, chain {{ $labels.chain }})
+          description: "cosmos-validators-exporter has some errors from chain"
+
       - alert: CosmosValidatorsExporterValidatorAtLastPlace
         expr: cosmos_validators_exporter_validators_count - cosmos_validators_exporter_rank <= 0
         for: 1m
@@ -9,4 +18,3 @@ groups:
         annotations:
           summary: Cosmos validator is at the last place (instance {{ $labels.instance }})
           description: "Cosmos validator is at the last place \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-

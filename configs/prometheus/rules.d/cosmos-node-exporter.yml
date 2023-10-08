@@ -12,7 +12,7 @@ groups:
           description: "Tendermint node not in sync"
 
       - alert: CosmosNodeNotLatestBinary
-        expr: cosmos_node_exporter_is_latest == 0
+        expr: cosmos_node_exporter_is_latest == 0 AND on (instance, host) cosmos_node_exporter_upgrade_coming == 0
         for: 1m
         labels:
           severity: warning
