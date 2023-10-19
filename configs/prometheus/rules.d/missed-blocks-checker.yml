@@ -18,3 +18,21 @@ groups:
         annotations:
           summary: No new events from chain
           description: "No new events from chain"
+
+      - alert: MissedBlocksCheckerTimeSinceLatestEvent
+        expr: time() - missed_blocks_checker_last_time > 600
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Last event from missed-blocks-checker was more than 10 minutes ago
+          description: "Last event from missed-blocks-checker was more than 10 minutes ago"
+
+      - alert: MissedBlocksCheckerMissingBlocksInMemory
+        expr: missed_blocks_checker_store_blocks - missed_blocks_checker_node_blocks > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: missed-blocks-checker has some blocks missing from memory
+          description: "missed-blocks-checker has some blocks missing from memory ({{ $value }})"
