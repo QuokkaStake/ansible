@@ -1,10 +1,11 @@
+---
 - name: Install Nginx and Certbot
   hosts: "{{ hosts | default('all')   }}"
 
   tasks:
     - name: Install nginx and snapd
       become: true
-      package:
+      ansible.builtin.package:
         name:
           - nginx-full
           - snapd

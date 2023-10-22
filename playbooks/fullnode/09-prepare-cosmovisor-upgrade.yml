@@ -17,12 +17,12 @@
         update: true
 
     - name: Build the binary
-      make:
+      community.general.system.make:
         chdir: "{{ github_repo_local }}"
         target: install
 
     - name: Create upgrade folders layout
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
       loop:
@@ -46,5 +46,5 @@
         executable: /bin/bash
 
     - name: Print version
-      debug:
+      ansible.builtin.debug:
         msg: "{{ version.stderr }}{{ version.stdout }}"

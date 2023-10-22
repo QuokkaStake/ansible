@@ -3,19 +3,19 @@
   hosts: "{{ hosts | default('fullnodes') }}"
 
   vars:
-    golang_download_url: "https://go.dev/dl/go{{ go_version | default('1.21.3') }}.linux-amd64.tar.gz"
-    golang_download_file: "/tmp/golang.tar.gz"
-    golang_unpack_folder: "/usr/lib"
+    golang_download_url: https://go.dev/dl/go{{ go_version | default('1.21.3') }}.linux-amd64.tar.gz
+    golang_download_file: /tmp/golang.tar.gz
+    golang_unpack_folder: /usr/lib
     golang_install_folder: "{{ golang_unpack_folder }}/go"
 
   tasks:
     - name: Download Golang
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ golang_download_url }}"
-        dest: "/tmp/golang.tar.gz"
+        dest: /tmp/golang.tar.gz
 
     - name: Task name
-      stat:
+      ansible.builtin.stat:
         path: "{{ golang_install_folder }}"
       register: golang_install_folder_present
 
@@ -40,7 +40,7 @@
         remote_src: true
 
     - name: Add shell aliases for Golang folders
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: "{{ shell_config_path | default('~/.zshrc', true) }}"
         marker: "## {mark} added by ansible via playbook - Golang aliases"
         block: |
@@ -50,11 +50,11 @@
           export PATH=${PATH}:${GOROOT}/bin:${GOBIN}
 
     - name: Check version
-      ansible.builtin.shell: "{{ golang_install_folder }}/bin/go version"
+      ansible.builtin.command: "{{ golang_install_folder }}/bin/go version"
       register: result
 
     - name: Display version
-      debug:
+      ansible.builtin.debug:
         msg: "{{ result.stderr }}{{ result.stdout }}"
 
     - name: Remove Golang temporary file

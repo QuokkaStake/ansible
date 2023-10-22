@@ -8,7 +8,7 @@
       ansible.builtin.copy:
         src: ../../configs/prometheus
         dest: /etc
-        mode: '0755'
+        mode: "0755"
 
     - name: Reload Prometheus config
       ansible.builtin.uri:

@@ -9,22 +9,22 @@
 
   tasks:
     - name: Get latest release
-      uri:
+      ansible.builtin.uri:
         url: https://api.github.com/repos/prometheus/alertmanager/releases/latest
         return_content: true
       register: release_info
 
     - name: Get latest release JSON
-      set_fact:
+      ansible.builtin.set_fact:
         release_info_json: "{{ release_info.content | from_json }}"
 
-    - name: "Set Alertmanager version to {{ release_info_json.tag_name[1:] }}"
-      set_fact:
+    - name: Set Alertmanager version to {{ release_info_json.tag_name[1:] }}
+      ansible.builtin.set_fact:
         version: "{{ release_info_json.tag_name[1:] }}"
 
     - name: Download Alertmanager binary to local folder
-      get_url:
-        url: "https://github.com/prometheus/alertmanager/releases/download/v{{ version }}/alertmanager-{{ version }}.linux-amd64.tar.gz"
+      ansible.builtin.get_url:
+        url: https://github.com/prometheus/alertmanager/releases/download/v{{ version }}/alertmanager-{{ version }}.linux-amd64.tar.gz
         dest: "{{ alertmanager_tar_file }}"
 
     - name: Create Alertmanager tmp directory if it does not exist
@@ -43,7 +43,7 @@
       ansible.builtin.copy:
         src: "{{ item }}"
         dest: /usr/bin
-        mode: '0755'
+        mode: "0755"
         remote_src: true
       loop:
         - "{{ alertmanager_tmp_path }}/alertmanager-{{ version }}.linux-amd64/alertmanager"
@@ -56,7 +56,7 @@
         state: present
 
     - name: Add alertmanager user
-      user:
+      ansible.builtin.user:
         name: alertmanager
         groups: alertmanager
         shell: /sbin/nologin
@@ -70,7 +70,7 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        mode: '0755'
+        mode: "0755"
         group: alertmanager
         owner: alertmanager
       loop:
@@ -82,7 +82,7 @@
       ansible.builtin.copy:
         src: ../../configs/alertmanager
         dest: /etc
-        mode: '0755'
+        mode: "0755"
 
     - name: Put basic auth config
       become: true
@@ -99,7 +99,7 @@
 
     - name: Start Alertmanager and enable it on autostart
       become: true
-      service:
+      ansible.builtin.service:
         name: alertmanager
         state: restarted
         enabled: true

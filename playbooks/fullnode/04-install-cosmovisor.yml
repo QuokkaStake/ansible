@@ -10,12 +10,12 @@
 
   tasks:
     - name: Install Cosmovisor
-      ansible.builtin.shell: "go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@{{ cosmovisor_version }}"
+      ansible.builtin.shell: go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@{{ cosmovisor_version }}
       args:
         executable: /bin/bash
 
     - name: Create Cosmovisor folder layout
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
       loop:
@@ -26,7 +26,7 @@
         - "{{ fullnode_folder }}/cosmovisor/upgrades"
 
     - name: Add ~/.zshrc aliases for Cosmovisor
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: ~/.zshrc
         marker: "## {mark} added by ansible via playbook - Cosmovisor env vars"
         block: |

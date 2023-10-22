@@ -4,17 +4,17 @@
 
   tasks:
     - name: Fetch status
-      ansible.builtin.shell: "curl localhost:26657/status"
+      ansible.builtin.shell: curl localhost:26657/status
       args:
         executable: /bin/bash
       register: result_raw
 
     - name: Set vars
-      set_fact:
+      ansible.builtin.set_fact:
         result: "{{ result_raw.stdout | from_json }}"
 
     - name: Print info
-      debug:
+      ansible.builtin.debug:
         msg:
           - "Moniker: {{ result.result.node_info.moniker }}"
           - "Catching up: {{ result.result.sync_info.catching_up }}"

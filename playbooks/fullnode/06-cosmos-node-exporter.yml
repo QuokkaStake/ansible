@@ -11,29 +11,29 @@
   tasks:
     - name: Clone the repo
       ansible.builtin.git:
-        repo: "https://github.com/QuokkaStake/cosmos-node-exporter"
+        repo: https://github.com/QuokkaStake/cosmos-node-exporter
         dest: "{{ ansible_user_dir }}/cosmos-node-exporter"
         version: main
         update: true
 
     - name: Get services list
-      service_facts:
+      ansible.builtin.service_facts:
       register: services
 
     - name: Stop service
       become: true
-      systemd:
+      ansible.builtin.systemd:
         name: cosmos-node-exporter
         state: stopped
       when: "'cosmos-node-exporter.service' in services.ansible_facts.services"
 
     - name: Install binary
-      make:
+      community.general.system.make:
         chdir: "{{ ansible_user_dir }}/cosmos-node-exporter"
         target: install
 
     - name: Create config directory
-      file:
+      ansible.builtin.file:
         path: "{{ ansible_user_dir }}/config"
         state: directory
 

@@ -9,21 +9,21 @@
 
   tasks:
     - name: Get latest release
-      uri:
+      ansible.builtin.uri:
         url: https://api.github.com/repos/grafana/loki/releases/latest
         return_content: true
       register: release_info
 
     - name: Get latest release URL 1
-      set_fact:
+      ansible.builtin.set_fact:
         release_info_json: "{{ release_info.content | from_json }}"
 
     - name: Get latest release URL 2
-      set_fact:
+      ansible.builtin.set_fact:
         latest_version: "{{ release_info_json | community.general.json_query('assets[?name==`promtail-linux-amd64.zip`].browser_download_url') | join(', ') }}"
 
     - name: Download Promtail
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ latest_version }}"
         dest: "{{ promtail_zip_file }}"
 
@@ -44,7 +44,7 @@
       ansible.builtin.copy:
         src: "{{ promtail_tmp_path }}/promtail-linux-amd64"
         dest: /usr/bin/promtail
-        mode: '0755'
+        mode: "0755"
         remote_src: true
 
     - name: Create Promtail config directory if it does not exist
@@ -67,7 +67,7 @@
 
     - name: Start Promtail and enable it on autostart
       become: true
-      service:
+      ansible.builtin.service:
         name: promtail
         state: started
         enabled: true

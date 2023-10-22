@@ -7,12 +7,12 @@
 
   tasks:
     - name: Fetch rustup installer
-      get_url:
+      ansible.builtin.get_url:
         url: https://sh.rustup.rs
         dest: "{{ rustup_path }}"
 
     - name: Make rustup binary executable
-      file:
+      ansible.builtin.file:
         path: "{{ rustup_path }}"
         state: file
         mode: +x
@@ -23,12 +23,12 @@
         executable: /bin/zsh
       register: result
 
-    - name: debug
-      debug:
+    - name: Debug
+      ansible.builtin.debug:
         var: result
 
     - name: Add ~/.zshrc aliases for rustup
-      blockinfile:
+      ansible.builtin.blockinfile:
         path: ~/.zshrc
         marker: "## {mark} added by ansible via playbook - rustup aliases"
         block: . $HOME/.cargo/env

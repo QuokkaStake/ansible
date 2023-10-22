@@ -14,7 +14,7 @@
 
   tasks:
     - name: Check if a fullnode folder exists
-      stat:
+      ansible.builtin.stat:
         path: "{{ fullnode_folder }}"
       register: stat_result
 
@@ -28,16 +28,16 @@
       when: minimum_gas_prices is defined
       community.general.ini_file:
         path: "{{ app_path }}"
-        section: null
-        option: "minimum-gas-prices"
-        value: "\"{{ minimum_gas_prices }}\""
+        section:
+        option: minimum-gas-prices
+        value: '"{{ minimum_gas_prices }}"'
 
     - name: Set moniker
       community.general.ini_file:
         path: "{{ config_path }}"
-        section: null
+        section:
         option: moniker
-        value: "\"{{ moniker }}\""
+        value: '"{{ moniker }}"'
 
     - name: Set persistent peers
       when: persistent_peers is defined
@@ -45,15 +45,15 @@
         path: "{{ config_path }}"
         section: p2p
         option: persistent_peers
-        value: "\"{{ persistent_peers }}\""
+        value: '"{{ persistent_peers }}"'
 
     - name: Set seeds
       when: seeds is defined
       community.general.ini_file:
         path: "{{ config_path }}"
         section: p2p
-        option: "seeds"
-        value: "\"{{ seeds }}\""
+        option: seeds
+        value: '"{{ seeds }}"'
 
     - name: Enable Prometheus config
       when: enable_prometheus is defined and enable_prometheus == true
@@ -69,14 +69,14 @@
         path: "{{ config_path }}"
         section: instrumentation
         option: namespace
-        value: "\"tendermint\""
+        value: '"tendermint"'
 
     - name: Enable API
       when: enable_api is defined and enable_api == true
       community.general.ini_file:
         path: "{{ app_path }}"
         section: api
-        option: "enable"
+        option: enable
         value: "true"
 
     - name: Enable Swagger
@@ -84,7 +84,7 @@
       community.general.ini_file:
         path: "{{ app_path }}"
         section: api
-        option: "swagger"
+        option: swagger
         value: "true"
 
     - name: Set API address
@@ -92,25 +92,25 @@
       community.general.ini_file:
         path: "{{ app_path }}"
         section: api
-        option: "address"
-        value: "\"{{ api_address }}\""
+        option: address
+        value: '"{{ api_address }}"'
 
     - name: Disable snapshots
       when: disable_snapshots is defined and disable_snapshots == true
       community.general.ini_file:
         path: "{{ app_path }}"
-        section: "state-sync"
-        option: "snapshot-interval"
+        section: state-sync
+        option: snapshot-interval
         value: "0"
 
     - name: Fetch genesis
       when: genesis_path is defined
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ genesis_path }}"
         dest: "{{ fullnode_folder }}/config/genesis.json"
 
     - name: Fetch addrbook
       when: addrbook_url is defined
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ addrbook_url }}"
         dest: "{{ fullnode_folder }}/config/addrbook.json"

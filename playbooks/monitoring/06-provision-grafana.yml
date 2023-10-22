@@ -25,11 +25,11 @@
       ansible.builtin.copy:
         src: ../../configs/grafana/dashboards
         dest: "{{ grafana_dashboards_dir }}"
-        mode: '0755'
+        mode: "0755"
 
     - name: Restart Grafana
       become: true
-      service:
+      ansible.builtin.service:
         name: grafana-server
         state: restarted
         enabled: true

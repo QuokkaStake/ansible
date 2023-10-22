@@ -11,7 +11,7 @@
   tasks:
     - name: Install required packages
       become: true
-      apt:
+      ansible.builtin.apt:
         name:
           - git
           - build-essential
@@ -26,7 +26,7 @@
         update: true
 
     - name: Install binary
-      make:
+      community.general.system.make:
         chdir: "{{ github_repo_local }}"
         target: install
 
@@ -37,5 +37,5 @@
       register: result
 
     - name: Display version
-      debug:
+      ansible.builtin.debug:
         msg: "{{ result.stderr }}{{ result.stdout }}"

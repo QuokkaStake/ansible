@@ -8,11 +8,11 @@
       ansible.builtin.copy:
         src: ../../configs/alertmanager
         dest: /etc
-        mode: '0755'
+        mode: "0755"
 
     - name: Restart Alertmanager
       become: true
-      service:
+      ansible.builtin.service:
         name: alertmanager
         state: restarted
         enabled: true

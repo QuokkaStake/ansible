@@ -6,12 +6,12 @@
 
   tasks:
     - name: Update package cache
-      package:
+      ansible.builtin.package:
         update_cache: true
       become: true
 
     - name: Install zsh, git, wget, curl, fzf
-      package:
+      ansible.builtin.package:
         name:
           - zsh
           - git
@@ -22,12 +22,12 @@
 
     - name: Change user shell to zsh
       become: true
-      user:
+      ansible.builtin.user:
         name: "{{ user }}"
         shell: /bin/zsh
 
     - name: Install antigen
-      ansible.builtin.shell: "curl -L git.io/antigen > {{ ansible_user_dir }}/antigen.zsh"
+      ansible.builtin.shell: curl -L git.io/antigen > {{ ansible_user_dir }}/antigen.zsh
 
     - name: Set up .zshrc
       ansible.builtin.template:
@@ -41,4 +41,4 @@
 
     - name: Reboot server
       become: true
-      reboot:
+      ansible.builtin.reboot:

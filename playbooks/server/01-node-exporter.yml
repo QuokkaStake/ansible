@@ -3,7 +3,7 @@
   pre_tasks:
     - name: Install dependencies
       become: true
-      apt:
+      ansible.builtin.apt:
         name: unzip
         state: latest
         update_cache: true

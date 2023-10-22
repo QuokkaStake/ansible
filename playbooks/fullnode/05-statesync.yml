@@ -15,7 +15,7 @@
   tasks:
     - name: Install required packages
       become: true
-      apt:
+      ansible.builtin.apt:
         name:
           - jq
           - curl
@@ -30,13 +30,13 @@
         value: "true"
 
     - name: Fetch latest block
-      ansible.builtin.shell: "curl -s {{ statesync_node }}/block | jq -r .result.block.header.height"
+      ansible.builtin.shell: curl -s {{ statesync_node }}/block | jq -r .result.block.header.height
       args:
         executable: /bin/bash
       register: latest_block
 
     - name: Fetch statesync block
-      ansible.builtin.shell: "curl -s '{{ statesync_node }}/block?height={{ latest_block.stdout | int - blocks_behind }}' | jq -r .result.block_id.hash"
+      ansible.builtin.shell: curl -s '{{ statesync_node }}/block?height={{ latest_block.stdout | int - blocks_behind }}' | jq -r .result.block_id.hash
       args:
         executable: /bin/bash
       register: statesync_block_hash
@@ -46,7 +46,7 @@
         path: "{{ config_path }}"
         section: statesync
         option: rpc_servers
-        value: "\"{{ statesync_node }},{{ statesync_node }}\""
+        value: '"{{ statesync_node }},{{ statesync_node }}"'
 
     - name: Set up statesync trust height in config
       community.general.ini_file:
@@ -60,4 +60,4 @@
         path: "{{ config_path }}"
         section: statesync
         option: trust_hash
-        value: "\"{{ statesync_block_hash.stdout }}\""
+        value: '"{{ statesync_block_hash.stdout }}"'

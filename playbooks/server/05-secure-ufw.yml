@@ -5,7 +5,7 @@
   tasks:
     - name: Install required packages
       become: true
-      apt:
+      ansible.builtin.apt:
         name:
           - ufw
         state: latest
@@ -28,11 +28,11 @@
 
     - name: Reject all incoming traffic
       become: true
-      ufw:
+      community.general.system.ufw:
         policy: reject
         direction: incoming
 
     - name: Allow everything and enable UFW
       become: true
-      ufw:
+      community.general.system.ufw:
         state: enabled
