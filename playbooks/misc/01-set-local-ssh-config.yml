@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: Set local SSH config
+  hosts: localhost
 
   vars:
     ssh_config: "{{ ansible_user_dir }}/.ssh/config"
