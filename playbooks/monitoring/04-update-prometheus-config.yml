@@ -1,6 +1,6 @@
 ---
 - name: Update Prometheus config
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('monitoring')  }}"
 
   tasks:
     - name: Set up Prometheus config

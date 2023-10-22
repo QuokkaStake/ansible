@@ -1,6 +1,6 @@
 ---
 - name: Install Prometheus
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('monitoring')  }}"
 
   vars:
     prometheus_tar_file: /tmp/prometheus.tar.gz

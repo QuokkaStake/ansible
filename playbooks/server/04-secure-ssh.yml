@@ -1,6 +1,6 @@
 ---
 - name: Secure SSH
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('all')   }}"
 
   vars:
     sshd_config: /etc/ssh/sshd_config

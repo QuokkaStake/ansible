@@ -1,6 +1,6 @@
 ---
 - name: Install Filebeat
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('all')   }}"
 
   tasks:
   - name: Ensure required dependencies are present

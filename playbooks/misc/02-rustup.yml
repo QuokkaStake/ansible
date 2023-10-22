@@ -1,6 +1,6 @@
 ---
 - name: Install Rust
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('all') }}"
 
   vars:
     rustup_path: "{{ ansible_user_dir }}/rustup.sh"

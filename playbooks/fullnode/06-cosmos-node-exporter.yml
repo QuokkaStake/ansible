@@ -1,6 +1,6 @@
 ---
 - name: Install cosmos-node-exporter
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('fullnodes') }}"
 
   environment:
     GOROOT: /usr/lib/go

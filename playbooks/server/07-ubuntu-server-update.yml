@@ -1,6 +1,6 @@
 ---
 - name: Update and reboot server
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('all')   }}"
 
   tasks:
     - name: Update repositories cache

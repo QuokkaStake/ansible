@@ -1,6 +1,6 @@
 ---
 - name: Get node status
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('fullnodes') }}"
 
   tasks:
     - name: Fetch status

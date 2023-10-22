@@ -1,6 +1,6 @@
 ---
 - name: Install Alertmanager
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('monitoring')  }}"
 
   vars:
     alertmanager_tar_file: /tmp/alertmanager.tar.gz

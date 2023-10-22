@@ -1,6 +1,6 @@
 ---
 - name: Secure SSH
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('all')   }}"
 
   tasks:
     - name: Install required packages

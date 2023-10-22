@@ -1,6 +1,6 @@
 ---
 - name: Update Alertmanager config
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('monitoring')  }}"
 
   tasks:
     - name: Set up Alertmanager config

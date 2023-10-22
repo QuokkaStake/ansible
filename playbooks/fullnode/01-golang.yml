@@ -1,6 +1,6 @@
 ---
 - name: Install Golang
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('fullnodes') }}"
 
   vars:
     golang_download_url: "https://go.dev/dl/go{{ go_version | default('1.21.3') }}.linux-amd64.tar.gz"

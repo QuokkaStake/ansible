@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ hosts }}"
+- hosts: "{{ hosts | default('all')   }}"
 
   vars:
     user: "{{ ansible_user }}"
@@ -17,7 +17,6 @@
           - git
           - wget
           - curl
-          - fzf
         state: present
       become: true
 

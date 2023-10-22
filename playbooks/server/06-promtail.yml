@@ -1,6 +1,6 @@
 ---
 - name: Install Promtail
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('all')   }}"
 
   vars:
     promtail_zip_file: /tmp/promtail.zip

@@ -1,6 +1,6 @@
 ---
 - name: Setup fullnode config
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('fullnodes') }}"
 
   environment:
     GOROOT: /usr/lib/go

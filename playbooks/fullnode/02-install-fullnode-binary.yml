@@ -1,6 +1,6 @@
 ---
 - name: Install fullnode binary
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('fullnodes') }}"
 
   environment:
     GOROOT: /usr/lib/go

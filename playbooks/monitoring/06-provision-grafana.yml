@@ -1,6 +1,6 @@
 ---
 - name: Provision Grafana datasources and dashboards
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('monitoring')  }}"
 
   vars:
     grafana_provision_dir: /etc/grafana/provisioning

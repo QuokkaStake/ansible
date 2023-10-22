@@ -1,6 +1,6 @@
 ---
 - name: Prepare Cosmovisor upgrade
-  hosts: "{{ hosts }}"
+  hosts: "{{ hosts | default('fullnodes') }}"
 
   environment:
     GOROOT: /usr/lib/go
