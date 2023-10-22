@@ -1,15 +1,6 @@
 groups:
   - name: SystemdServicesAlerts
     rules:
-      - alert: CosmosTransactionsBotNotRunning
-        expr: sum(node_systemd_unit_state{name="cosmos-transactions-bot.service", state="active"}) == 0
-        for: 1m
-        labels:
-          severity: warning
-        annotations:
-          summary: cosmos-transactions-bot is not running
-          description: "cosmos-transactions-bot is not running"
-
       - alert: CosmosProposalsCheckerNotRunning
         expr: sum(node_systemd_unit_state{name="cosmos-proposals-checker.service", state="active"}) == 0
         for: 1m
