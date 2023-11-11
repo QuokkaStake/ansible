@@ -83,13 +83,13 @@ groups:
           description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
       - alert: HostHighCpuLoad
-        expr: sum by (instance, host) (avg by (mode, instance, host) (rate(node_cpu_seconds_total{mode!="idle"}[2m]))) > 0.8
+        expr: sum by (instance, host) (avg by (mode, instance, host) (rate(node_cpu_seconds_total{mode!="idle"}[2m]))) * 100 > 80
         for: 0m
         labels:
           severity: warning
         annotations:
           summary: Host high CPU load (instance {{ $labels.instance }})
-          description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "CPU load is > 80%:  {{ $value }}"
 
       - alert: HostCpuStealNoisyNeighbor
         expr: avg by(instance, host) (rate(node_cpu_seconds_total{mode="steal"}[5m])) * 100 > 10
