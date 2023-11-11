@@ -1,0 +1,20 @@
+groups:
+  - name: CosmosTransactionsBotAlerts
+    rules:
+      - alert: CosmosTransactionBotNoNewEventsFromNode
+        expr: rate(cosmos_transactions_bot_events_total[5m]) == 0
+        for: 60m
+        labels:
+          severity: warning
+        annotations:
+          summary: No new events from WS node
+          description: "No new events from WS node"
+
+      - alert: CosmosTransactionsBotNoNewEventsFromChain
+        expr: sum(rate(cosmos_transactions_bot_events_total[5m])) by (chain) == 0
+        for: 60m
+        labels:
+          severity: critical
+        annotations:
+          summary: No new events from chain
+          description: "No new events from chain"
