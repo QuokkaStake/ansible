@@ -25,7 +25,7 @@ chain-binary-name = "{{ binary_name }}"
 {% endif %}
 cosmovisor-path = "{{ ansible_user_dir }}/go/bin/cosmovisor"
 
-[github]
+[git]
 {% if github_repo_remote is defined %}
 repository = "{{ github_repo_remote }}"
 {% endif %}
