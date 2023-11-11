@@ -1,0 +1,37 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+
+common:
+  path_prefix: /etc/loki/data
+  storage:
+    filesystem:
+      chunks_directory: /etc/loki/data/chunks
+      rules_directory: /etc/loki/data/rules
+  replication_factor: 1
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+limits_config:
+  split_queries_by_interval: 0
+  max_query_series: 100000
+
+frontend:
+  max_outstanding_per_tenant: 10000
+
+ruler:
+  alertmanager_url: http://localhost:9093

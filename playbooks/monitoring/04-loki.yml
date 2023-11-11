@@ -1,0 +1,92 @@
+---
+- name: Install Loki
+  hosts: "{{ hosts | default('monitoring')  }}"
+
+  vars:
+    loki_tar_file: /tmp/loki.tar.gz
+    loki_tmp_path: /tmp/loki
+    loki_config_path: /etc/loki
+
+  tasks:
+    - name: Get latest release
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/grafana/loki/releases/latest
+        return_content: true
+      register: release_info
+
+    - name: Get latest release JSON
+      ansible.builtin.set_fact:
+        release_info_json: "{{ release_info.content | from_json }}"
+
+    - name: Set Loki version to {{ release_info_json.tag_name[1:] }}
+      ansible.builtin.set_fact:
+        version: "{{ release_info_json.tag_name[1:] }}"
+
+    - name: Download Loki binary to local folder
+      ansible.builtin.get_url:
+        url: https://github.com/grafana/loki/releases/download/v{{ version }}/loki-linux-amd64.zip
+        dest: "{{ loki_tar_file }}"
+
+    - name: Create Loki tmp directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ loki_tmp_path }}"
+        state: directory
+
+    - name: Unzip Loki
+      ansible.builtin.unarchive:
+        src: "{{ loki_tar_file }}"
+        dest: "{{ loki_tmp_path }}"
+        remote_src: true
+
+    - name: Copy Loki binary
+      become: true
+      ansible.builtin.copy:
+        src:  "{{ loki_tmp_path }}/loki-linux-amd64"
+        dest: /usr/bin/loki
+        mode: "0755"
+        remote_src: true
+
+    - name: Create Loki group
+      become: true
+      ansible.builtin.group:
+        name: loki
+        state: present
+
+    - name: Add Loki user
+      ansible.builtin.user:
+        name: loki
+        groups: loki
+        shell: /sbin/nologin
+        create_home: false
+        append: true
+        state: present
+      become: true
+
+    - name: Create Loki folders
+      become: true
+      ansible.builtin.file:
+        path: /etc/loki
+        state: directory
+        mode: "0755"
+        group: loki
+        owner: loki
+
+    - name: Set up Loki config
+      become: true
+      ansible.builtin.copy:
+        src: ../../configs/loki
+        dest: /etc
+        mode: "0755"
+
+    - name: Set up Loki systemd config
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/monitoring/loki.service.j2
+        dest: /etc/systemd/system/loki.service
+
+    - name: Start Loki and enable it on autostart
+      become: true
+      ansible.builtin.service:
+        name: loki
+        state: restarted
+        enabled: true
