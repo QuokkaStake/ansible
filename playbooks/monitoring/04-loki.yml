@@ -26,24 +26,27 @@
       ansible.builtin.get_url:
         url: https://github.com/grafana/loki/releases/download/v{{ version }}/loki-linux-amd64.zip
         dest: "{{ loki_tar_file }}"
+        mode: '0755'
 
     - name: Create Loki tmp directory if it does not exist
       ansible.builtin.file:
         path: "{{ loki_tmp_path }}"
         state: directory
+        mode: '0755'
 
     - name: Unzip Loki
       ansible.builtin.unarchive:
         src: "{{ loki_tar_file }}"
         dest: "{{ loki_tmp_path }}"
         remote_src: true
+        mode: '0755'
 
     - name: Copy Loki binary
       become: true
       ansible.builtin.copy:
-        src:  "{{ loki_tmp_path }}/loki-linux-amd64"
+        src: "{{ loki_tmp_path }}/loki-linux-amd64"
         dest: /usr/bin/loki
-        mode: "0755"
+        mode: '0755'
         remote_src: true
 
     - name: Create Loki group
@@ -67,7 +70,7 @@
       ansible.builtin.file:
         path: /etc/loki
         state: directory
-        mode: "0755"
+        mode: '0755'
         group: loki
         owner: loki
 
@@ -76,13 +79,14 @@
       ansible.builtin.copy:
         src: ../../configs/loki
         dest: /etc
-        mode: "0755"
+        mode: '0755'
 
     - name: Set up Loki systemd config
       become: true
       ansible.builtin.template:
         src: ../../templates/monitoring/loki.service.j2
         dest: /etc/systemd/system/loki.service
+        mode: '0644'
 
     - name: Start Loki and enable it on autostart
       become: true

@@ -28,6 +28,7 @@
         section: statesync
         option: enable
         value: "true"
+        mode: '0755'
 
     - name: Fetch latest block
       ansible.builtin.shell: curl -s {{ statesync_node }}/block | jq -r .result.block.header.height
@@ -47,6 +48,7 @@
         section: statesync
         option: rpc_servers
         value: '"{{ statesync_node }},{{ statesync_node }}"'
+        mode: '0755'
 
     - name: Set up statesync trust height in config
       community.general.ini_file:
@@ -54,6 +56,7 @@
         section: statesync
         option: trust_height
         value: "{{ latest_block.stdout | int - blocks_behind }}"
+        mode: '0755'
 
     - name: Set up statesync trust hash in config
       community.general.ini_file:
@@ -61,3 +64,4 @@
         section: statesync
         option: trust_hash
         value: '"{{ statesync_block_hash.stdout }}"'
+        mode: '0755'

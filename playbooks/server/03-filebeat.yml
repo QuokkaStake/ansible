@@ -36,6 +36,7 @@
       ansible.builtin.template:
         src: ../../templates/server/filebeat.yml.j2
         dest: /etc/filebeat/filebeat.yml
+        mode: '0755'
 
     - name: Start Filebeat and enable it on autostart
       become: true

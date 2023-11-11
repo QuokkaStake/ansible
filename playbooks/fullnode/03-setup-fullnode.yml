@@ -31,6 +31,7 @@
         section:
         option: minimum-gas-prices
         value: '"{{ minimum_gas_prices }}"'
+        mode: '0755'
 
     - name: Set moniker
       community.general.ini_file:
@@ -38,6 +39,7 @@
         section:
         option: moniker
         value: '"{{ moniker }}"'
+        mode: '0755'
 
     - name: Set persistent peers
       when: persistent_peers is defined
@@ -46,6 +48,7 @@
         section: p2p
         option: persistent_peers
         value: '"{{ persistent_peers }}"'
+        mode: '0755'
 
     - name: Set seeds
       when: seeds is defined
@@ -54,6 +57,7 @@
         section: p2p
         option: seeds
         value: '"{{ seeds }}"'
+        mode: '0755'
 
     - name: Enable Prometheus config
       when: enable_prometheus is defined and enable_prometheus == true
@@ -62,6 +66,7 @@
         section: instrumentation
         option: prometheus
         value: "true"
+        mode: '0755'
 
     - name: Set Prometheus metrics namespace to tendermint
       when: enable_prometheus is defined and enable_prometheus == true
@@ -70,6 +75,7 @@
         section: instrumentation
         option: namespace
         value: '"tendermint"'
+        mode: '0755'
 
     - name: Enable API
       when: enable_api is defined and enable_api == true
@@ -78,6 +84,7 @@
         section: api
         option: enable
         value: "true"
+        mode: '0755'
 
     - name: Enable Swagger
       when: enable_api is defined and enable_api == true
@@ -86,6 +93,7 @@
         section: api
         option: swagger
         value: "true"
+        mode: '0755'
 
     - name: Set API address
       when: api_address is defined
@@ -94,6 +102,7 @@
         section: api
         option: address
         value: '"{{ api_address }}"'
+        mode: '0755'
 
     - name: Disable snapshots
       when: disable_snapshots is defined and disable_snapshots == true
@@ -102,15 +111,18 @@
         section: state-sync
         option: snapshot-interval
         value: "0"
+        mode: '0755'
 
     - name: Fetch genesis
       when: genesis_path is defined
       ansible.builtin.get_url:
         url: "{{ genesis_path }}"
         dest: "{{ fullnode_folder }}/config/genesis.json"
+        mode: '0755'
 
     - name: Fetch addrbook
       when: addrbook_url is defined
       ansible.builtin.get_url:
         url: "{{ addrbook_url }}"
         dest: "{{ fullnode_folder }}/config/addrbook.json"
+        mode: '0755'
