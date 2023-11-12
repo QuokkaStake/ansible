@@ -13,6 +13,7 @@
       ansible.builtin.get_url:
         url: "{{ golang_download_url }}"
         dest: /tmp/golang.tar.gz
+        mode: "0755"
 
     - name: Task name
       ansible.builtin.stat:
@@ -31,6 +32,7 @@
       ansible.builtin.file:
         path: "{{ golang_install_folder }}"
         state: directory
+        mode: "0755"
 
     - name: Unzip Golang
       become: true
@@ -52,6 +54,7 @@
     - name: Check version
       ansible.builtin.command: "{{ golang_install_folder }}/bin/go version"
       register: result
+      changed_when: false
 
     - name: Display version
       ansible.builtin.debug:

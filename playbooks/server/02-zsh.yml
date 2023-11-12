@@ -1,5 +1,6 @@
 ---
-- hosts: "{{ hosts | default('all')   }}"
+- name: Install zsh
+  hosts: "{{ hosts | default('all')   }}"
 
   vars:
     user: "{{ ansible_user }}"
@@ -27,17 +28,22 @@
         shell: /bin/zsh
 
     - name: Install antigen
-      ansible.builtin.shell: curl -L git.io/antigen > {{ ansible_user_dir }}/antigen.zsh
+      ansible.builtin.get_url:
+        url: git.io/antigen
+        dest: "{{ ansible_user_dir }}/antigen.zsh"
+        mode: '0755'
 
     - name: Set up .zshrc
       ansible.builtin.template:
         src: ../../templates/server/.zshrc.j2
         dest: "{{ ansible_user_dir }}/.zshrc"
+        mode: '0755'
 
     - name: Set up powerlevel10k config
       ansible.builtin.copy:
         src: ../../templates/server/.p10k.zsh
         dest: "{{ ansible_user_dir }}/.p10k.zsh"
+        mode: '0755'
 
     - name: Reboot server
       become: true

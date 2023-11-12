@@ -10,6 +10,7 @@
       ansible.builtin.get_url:
         url: https://sh.rustup.rs
         dest: "{{ rustup_path }}"
+        mode: '0755'
 
     - name: Make rustup binary executable
       ansible.builtin.file:
@@ -22,6 +23,7 @@
       args:
         executable: /bin/zsh
       register: result
+      changed_when: true
 
     - name: Debug
       ansible.builtin.debug:

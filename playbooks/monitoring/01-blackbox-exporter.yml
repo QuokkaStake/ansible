@@ -1,4 +1,5 @@
 ---
-- hosts: "{{ hosts | default('monitoring') }}"
+- name: Install blackbox-exporter
+  hosts: "{{ hosts | default('monitoring') }}"
   roles:
     - cloudalchemy.blackbox-exporter

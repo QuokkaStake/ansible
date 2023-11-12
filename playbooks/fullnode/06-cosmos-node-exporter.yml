@@ -36,17 +36,20 @@
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/config"
         state: directory
+        mode: '0755'
 
     - name: Generate config
       ansible.builtin.template:
         src: ../../templates/fullnode/cosmos-node-exporter.toml.j2
         dest: "{{ ansible_user_dir }}/config/cosmos-node-exporter.toml"
+        mode: '0755'
 
     - name: Generate systemd file
       become: true
       ansible.builtin.template:
         src: ../../templates/fullnode/cosmos-node-exporter.service.j2
         dest: /etc/systemd/system/cosmos-node-exporter.service
+        mode: '0644'
 
     - name: Start the service
       become: true

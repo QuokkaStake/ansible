@@ -26,11 +26,13 @@
       ansible.builtin.get_url:
         url: "{{ latest_version }}"
         dest: "{{ promtail_zip_file }}"
+        mode: '0755'
 
     - name: Create Promtail tmp directory if it does not exist
       ansible.builtin.file:
         path: "{{ promtail_tmp_path }}"
         state: directory
+        mode: '0755'
 
     - name: Unzip Promtail
       become: true
@@ -38,13 +40,14 @@
         src: "{{ promtail_zip_file }}"
         dest: "{{ promtail_tmp_path }}"
         remote_src: true
+        mode: '0755'
 
     - name: Copy Promtail binary
       become: true
       ansible.builtin.copy:
         src: "{{ promtail_tmp_path }}/promtail-linux-amd64"
         dest: /usr/bin/promtail
-        mode: "0755"
+        mode: '0755'
         remote_src: true
 
     - name: Create Promtail config directory if it does not exist
@@ -52,18 +55,21 @@
       ansible.builtin.file:
         path: "{{ promtail_config_path }}"
         state: directory
+        mode: '0755'
 
     - name: Set up Promtail config
       become: true
       ansible.builtin.template:
         src: ../../templates/server/promtail.yml.j2
         dest: "{{ promtail_config_path }}/promtail.yml"
+        mode: '0755'
 
     - name: Set up Promtail systemd config
       become: true
       ansible.builtin.template:
         src: ../../templates/server/promtail.service.j2
         dest: /etc/systemd/system/promtail.service
+        mode: '0644'
 
     - name: Start Promtail and enable it on autostart
       become: true
