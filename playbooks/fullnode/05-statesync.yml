@@ -13,15 +13,6 @@
     blocks_behind: 1000
 
   tasks:
-    - name: Install required packages
-      become: true
-      ansible.builtin.apt:
-        name:
-          - jq
-          - curl
-        state: latest
-        update_cache: true
-
     - name: Enable statesync
       community.general.ini_file:
         path: "{{ config_path }}"
@@ -30,17 +21,33 @@
         value: "true"
         mode: '0755'
 
-    - name: Fetch latest block
-      ansible.builtin.shell: curl -s {{ statesync_node }}/block | jq -r .result.block.header.height
-      args:
-        executable: /bin/bash
-      register: latest_block
+    - name: Fetch latest block, part 1
+      ansible.builtin.uri:
+        url: "{{ statesync_node }}/block"
+        return_content: true
+      register: latest_block_response
 
-    - name: Fetch statesync block
-      ansible.builtin.shell: curl -s '{{ statesync_node }}/block?height={{ latest_block.stdout | int - blocks_behind }}' | jq -r .result.block_id.hash
-      args:
-        executable: /bin/bash
-      register: statesync_block_hash
+    - name: Fetch latest block, part 2
+      ansible.builtin.set_fact:
+        latest_block_json: "{{ latest_block_response.content | from_json }}"
+
+    - name: Fetch latest block, part 3
+      ansible.builtin.set_fact:
+        latest_block: "{{ latest_block_json.result.block.header.height }}"
+
+    - name: Fetch statesync block hash, part 1
+      ansible.builtin.uri:
+        url: "{{ statesync_node }}/block?height={{ latest_block | int - blocks_behind }}"
+        return_content: true
+      register: statesync_block_response
+
+    - name: Fetch statesync block hash, part 2
+      ansible.builtin.set_fact:
+        statesync_block_json: "{{ statesync_block_response.content | from_json }}"
+
+    - name: Fetch statesync block hash, part 3
+      ansible.builtin.set_fact:
+        statesync_block_hash: "{{ statesync_block_json.result.block_id.hash }}"
 
     - name: Set up statesync nodes in config
       community.general.ini_file:
@@ -55,7 +62,7 @@
         path: "{{ config_path }}"
         section: statesync
         option: trust_height
-        value: "{{ latest_block.stdout | int - blocks_behind }}"
+        value: "{{ latest_block | int - blocks_behind }}"
         mode: '0755'
 
     - name: Set up statesync trust hash in config
@@ -63,5 +70,5 @@
         path: "{{ config_path }}"
         section: statesync
         option: trust_hash
-        value: '"{{ statesync_block_hash.stdout }}"'
+        value: '"{{ statesync_block_hash }}"'
         mode: '0755'

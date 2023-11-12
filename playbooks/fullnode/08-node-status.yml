@@ -4,14 +4,14 @@
 
   tasks:
     - name: Fetch status
-      ansible.builtin.shell: curl localhost:26657/status
-      args:
-        executable: /bin/bash
+      ansible.builtin.uri:
+        url: "http://localhost:26657/status"
+        return_content: true
       register: result_raw
 
     - name: Set vars
       ansible.builtin.set_fact:
-        result: "{{ result_raw.stdout | from_json }}"
+        result: "{{ result_raw.content | from_json }}"
 
     - name: Print info
       ansible.builtin.debug:

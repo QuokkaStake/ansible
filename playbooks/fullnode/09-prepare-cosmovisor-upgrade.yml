@@ -45,6 +45,7 @@
       register: version
       args:
         executable: /bin/bash
+      changed_when: false
 
     - name: Print version
       ansible.builtin.debug:

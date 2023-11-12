@@ -23,6 +23,7 @@
       args:
         executable: /bin/zsh
       register: result
+      changed_when: true
 
     - name: Debug
       ansible.builtin.debug:

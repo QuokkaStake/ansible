@@ -54,6 +54,7 @@
     - name: Check version
       ansible.builtin.command: "{{ golang_install_folder }}/bin/go version"
       register: result
+      changed_when: false
 
     - name: Display version
       ansible.builtin.debug:

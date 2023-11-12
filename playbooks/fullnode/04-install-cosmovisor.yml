@@ -13,6 +13,7 @@
       ansible.builtin.shell: go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@{{ cosmovisor_version }}
       args:
         executable: /bin/bash
+      changed_when: true
 
     - name: Create Cosmovisor folder layout
       ansible.builtin.file:

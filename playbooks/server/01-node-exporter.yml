@@ -1,5 +1,6 @@
 ---
-- hosts: "{{ hosts | default('all')  }}"
+- name: Install node_exporter
+  hosts: "{{ hosts | default('all')  }}"
   pre_tasks:
     - name: Install dependencies
       become: true
