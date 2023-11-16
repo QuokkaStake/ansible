@@ -17,7 +17,7 @@
         update: true
 
     - name: Build the binary
-      community.general.system.make:
+      community.general.make:
         chdir: "{{ github_repo_local }}"
         target: install
 

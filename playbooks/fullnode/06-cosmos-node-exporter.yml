@@ -28,7 +28,7 @@
       when: "'cosmos-node-exporter.service' in services.ansible_facts.services"
 
     - name: Install binary
-      community.general.system.make:
+      community.general.make:
         chdir: "{{ ansible_user_dir }}/cosmos-node-exporter"
         target: install
 
