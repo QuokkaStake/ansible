@@ -46,10 +46,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [e-Money](https://www.mintscan.io/emoney/validators/emoneyvaloper1jk4n79c5gv36972ptnly3rvx5nvn3hl3hgly9g)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
+        "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [Gitopia](https://ping.pub/gitopia/staking/gitopiavaloper1w52vzp25uj9zvd0rtt6s6stud3ff8n3pzklusg)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "title": "Info",
       "type": "text"
     },
@@ -116,7 +116,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -124,7 +124,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "count(cosmos_validators_exporter_info)",
+          "expr": "count(cosmos_validators_exporter_active_set_size)",
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": true,
           "refId": "A"
@@ -183,7 +183,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -191,7 +191,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum ((cosmos_validators_exporter_total_delegations) / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price)",
+          "expr": "sum(\n    (cosmos_validators_exporter_total_delegations) * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n    * on (chain, denom) cosmos_validators_exporter_price\n)",
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": true,
           "refId": "A"
@@ -250,7 +250,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -317,7 +317,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -325,7 +325,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum (cosmos_validators_exporter_self_delegated / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price)",
+          "expr": "sum (cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) cosmos_validators_exporter_price)",
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": true,
           "refId": "A"
@@ -339,7 +339,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "% of all our self-delegated tokens compared to all our delegations.",
+      "description": "Total rewards (commission + self-delegated rewards) + wallet balance, in USD.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -355,7 +355,7 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
@@ -365,7 +365,7 @@
         "x": 16,
         "y": 10
       },
-      "id": 19,
+      "id": 56,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -380,7 +380,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -388,13 +388,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "avg(cosmos_validators_exporter_self_delegated / on (chain, address, moniker) cosmos_validators_exporter_total_delegations)",
+          "expr": "sum((cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}\n+ cosmos_validators_exporter_wallet_balance\n+ cosmos_validators_exporter_self_delegation_rewards{denom=~\"u.*\"}\n)  / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price)",
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "self-delegated %",
+      "title": "total rewards, $",
       "type": "stat"
     },
     {
@@ -443,7 +443,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -451,7 +451,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum((cosmos_validators_exporter_self_delegation_rewards + cosmos_validators_exporter_unclaimed_commission + \ncosmos_validators_exporter_wallet_balance +\ncosmos_validators_exporter_self_delegated) / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price)\n",
+          "expr": "sum((cosmos_validators_exporter_self_delegation_rewards + cosmos_validators_exporter_unclaimed_commission + \ncosmos_validators_exporter_wallet_balance +\ncosmos_validators_exporter_self_delegated) / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) cosmos_validators_exporter_price)\n",
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": true,
           "refId": "A"
@@ -523,7 +523,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -565,6 +565,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -617,7 +618,7 @@
         },
         "tooltip": {
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "targets": [
@@ -627,9 +628,9 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "(cosmos_validators_exporter_total_delegations) / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price",
+          "expr": "(cosmos_validators_exporter_total_delegations) * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n/ on (chain, denom) cosmos_validators_exporter_denom_coefficient\n* on (chain, denom) cosmos_validators_exporter_price",
           "hide": false,
-          "legendFormat": "__auto",
+          "legendFormat": "{{chain}}",
           "range": true,
           "refId": "B"
         }
@@ -683,7 +684,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -747,7 +748,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -824,6 +825,18 @@
                 "value": "currencyUSD"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "base denom"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
           }
         ]
       },
@@ -852,7 +865,7 @@
           }
         ]
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -861,12 +874,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_self_delegated / on (chain, address, moniker) cosmos_validators_exporter_total_delegations",
+          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, address, moniker) cosmos_validators_exporter_total_delegations) by (chain)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "A"
+          "refId": "votingPowerPercent"
         },
         {
           "datasource": {
@@ -875,13 +888,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_self_delegated / on (chain) cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "B"
+          "refId": "totalSelfDelegated"
         },
         {
           "datasource": {
@@ -890,13 +903,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(cosmos_validators_exporter_base_denom * on (chain, denom) group_right cosmos_validators_exporter_denom_coefficient) by (chain, display_denom)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "C"
+          "refId": "baseDenom"
         },
         {
           "datasource": {
@@ -905,13 +918,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_self_delegated / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "D"
+          "refId": "totalSelfDelegatedUsd"
         }
       ],
       "title": "self-delegated info",
@@ -932,15 +945,18 @@
               "Time 3": true,
               "Time 4": true,
               "Value #C": true,
+              "Value #D": true,
+              "Value #baseDenom": true,
               "__name__": true,
               "__name__ 1": true,
               "__name__ 2": true,
               "address": true,
               "address 1": true,
               "address 2": true,
-              "denom": true,
-              "denom 1": true,
-              "denom 2": true,
+              "denom": false,
+              "denom 1": false,
+              "denom 2": false,
+              "denom 3": false,
               "instance": true,
               "instance 1": true,
               "instance 2": true,
@@ -977,6 +993,10 @@
               "Value #B": "tokens, in denom",
               "Value #C": "",
               "Value #D": "tokens, $",
+              "Value #baseDenom": "base denom",
+              "Value #totalSelfDelegated": "tokens, in denom",
+              "Value #totalSelfDelegatedUsd": "tokens, $",
+              "Value #votingPowerPercent": "voting power %",
               "display_denom": "denom",
               "moniker 1": "moniker"
             }
@@ -1031,7 +1051,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -1039,7 +1059,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "cosmos_validators_exporter_self_delegated  / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price",
+          "expr": "cosmos_validators_exporter_self_delegated  / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) cosmos_validators_exporter_price",
           "legendFormat": "{{ chain }}",
           "range": true,
           "refId": "A"
@@ -1175,7 +1195,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -1395,7 +1415,116 @@
           },
           "unit": "none"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, $"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "$ needed for active set"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active validators"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 131
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tokens needed for active set"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 213
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 169
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, tokens"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 137
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "chain"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 162
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -1422,7 +1551,7 @@
           }
         ]
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -1431,12 +1560,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_active_set_size",
+          "expr": "sum(cosmos_validators_exporter_active_set_size) by (chain)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "A"
+          "refId": "activeSetSize"
         },
         {
           "datasource": {
@@ -1445,28 +1574,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_active_set_tokens / on (chain) cosmos_validators_exporter_denom_coefficient",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "{{address}} @ {{ chain }}",
-          "range": false,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "cosmos_validators_exporter_total_delegations / on (chain) cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(\n    cosmos_validators_exporter_active_set_tokens\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "C"
+          "refId": "activeSetTokens"
         },
         {
           "datasource": {
@@ -1475,13 +1589,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(\n    cosmos_validators_exporter_total_delegations\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "D"
+          "refId": "ourStake"
         },
         {
           "datasource": {
@@ -1490,13 +1604,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_validators_count",
+          "expr": "sum(cosmos_validators_exporter_validators_count) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "E"
+          "refId": "activeValidators"
         },
         {
           "datasource": {
@@ -1505,13 +1619,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_active_set_tokens / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price",
+          "expr": "sum(\n    cosmos_validators_exporter_active_set_tokens\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n    * on (chain, denom) cosmos_validators_exporter_price\n) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "F"
+          "refId": "activeSetUsd"
         },
         {
           "datasource": {
@@ -1520,13 +1634,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_total_delegations / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price",
+          "expr": "sum(\n    cosmos_validators_exporter_total_delegations\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n    * on (chain, denom) cosmos_validators_exporter_price\n) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "G"
+          "refId": "ourStakeUsd"
         }
       ],
       "title": "chain info",
@@ -1565,33 +1679,18 @@
             },
             "indexByName": {
               "Time 1": 1,
-              "Time 2": 7,
-              "Time 3": 9,
-              "Time 4": 13,
-              "Time 5": 19,
-              "Time 6": 25,
-              "Time 7": 27,
-              "Value #A": 2,
-              "Value #B": 8,
-              "Value #C": 5,
-              "Value #D": 18,
-              "Value #E": 3,
-              "Value #F": 26,
-              "Value #G": 6,
-              "__name__ 1": 10,
-              "__name__ 2": 14,
-              "__name__ 3": 20,
-              "address": 21,
-              "chain": 0,
-              "denom": 15,
-              "display_denom": 4,
-              "instance 1": 11,
-              "instance 2": 16,
-              "instance 3": 22,
-              "job 1": 12,
-              "job 2": 17,
-              "job 3": 23,
-              "moniker": 24
+              "Time 2": 6,
+              "Time 3": 7,
+              "Time 4": 8,
+              "Time 5": 9,
+              "Time 6": 10,
+              "Value #activeSetSize": 2,
+              "Value #activeSetTokens": 11,
+              "Value #activeSetUsd": 12,
+              "Value #activeValidators": 3,
+              "Value #ourStake": 4,
+              "Value #ourStakeUsd": 5,
+              "chain": 0
             },
             "renameByName": {
               "Time 2": "",
@@ -1600,7 +1699,13 @@
               "Value #C": "our stake, tokens",
               "Value #E": "active validators",
               "Value #F": "$ needed for active set",
-              "Value #G": "our stake, $",
+              "Value #G": "our stake",
+              "Value #activeSetSize": "active set",
+              "Value #activeSetTokens": "active set threshold, tokens ",
+              "Value #activeSetUsd": "active set threshold, $",
+              "Value #activeValidators": "active validators",
+              "Value #ourStake": "our stake, tokens",
+              "Value #ourStakeUsd": "our stake, $",
               "display_denom": "denom"
             }
           }
@@ -1652,7 +1757,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -1660,7 +1765,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "cosmos_validators_exporter_price",
+          "expr": "cosmos_validators_exporter_price{denom=~\"u.*\"}",
           "legendFormat": "{{ chain }}",
           "range": true,
           "refId": "A"
@@ -1707,6 +1812,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1825,7 +1931,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -1880,6 +1986,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1940,7 +2047,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}  / on (chain) cosmos_validators_exporter_denom_coefficient * on (chain) cosmos_validators_exporter_price",
+          "expr": "sum(cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}  / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) cosmos_validators_exporter_price) by (chain)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -1975,6 +2082,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2035,7 +2143,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "cosmos_validators_exporter_self_delegation_rewards{denom=~\"u.*\"} / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "cosmos_validators_exporter_self_delegation_rewards{denom=~\"u.*\"} / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price",
           "hide": false,
           "legendFormat": "{{chain}}",
           "range": true,
@@ -2070,6 +2178,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2130,7 +2239,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "cosmos_validators_exporter_wallet_balance{denom=~\"u.*\"} / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "cosmos_validators_exporter_wallet_balance{denom=~\"u.*\"} / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price",
           "hide": false,
           "legendFormat": "{{chain}}",
           "range": true,
@@ -2165,6 +2274,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2225,7 +2335,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "(cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}\n+ cosmos_validators_exporter_wallet_balance\n+ cosmos_validators_exporter_self_delegation_rewards{denom=~\"u.*\"}\n)  / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "(cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}\n+ cosmos_validators_exporter_wallet_balance\n+ cosmos_validators_exporter_self_delegation_rewards{denom=~\"u.*\"}\n)  / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price",
           "hide": false,
           "legendFormat": "{{chain}}",
           "range": true,
@@ -2285,7 +2395,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -2293,7 +2403,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "(cosmos_validators_exporter_unclaimed_commission + cosmos_validators_exporter_self_delegated +\ncosmos_validators_exporter_wallet_balance + cosmos_validators_exporter_self_delegation_rewards)  / on (chain) group_left cosmos_validators_exporter_denom_coefficient * on (chain) group_left cosmos_validators_exporter_price",
+          "expr": "(cosmos_validators_exporter_unclaimed_commission + cosmos_validators_exporter_self_delegated +\ncosmos_validators_exporter_wallet_balance + cosmos_validators_exporter_self_delegation_rewards)  / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price",
           "hide": false,
           "legendFormat": "{{chain}}",
           "range": true,
@@ -2341,36 +2451,24 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "website"
+              "options": "self-delegated rewards"
             },
             "properties": [
               {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "",
-                    "url": "${__data.fields.website}"
-                  }
-                ]
+                "id": "custom.width",
+                "value": 176
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "security_contact"
+              "options": "commission"
             },
             "properties": [
               {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "mail",
-                    "url": "mailto:${__data.fields.security_contact}"
-                  }
-                ]
+                "id": "custom.width",
+                "value": 134
               }
             ]
           }
@@ -2396,7 +2494,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "9.5.2",
+      "pluginVersion": "10.1.0",
       "targets": [
         {
           "datasource": {
@@ -2405,12 +2503,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}  / on (chain) cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(cosmos_validators_exporter_unclaimed_commission{denom=~\"u.*\"}  / on (chain, denom) cosmos_validators_exporter_denom_coefficient) by (chain, address)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "A"
+          "refId": "commission"
         },
         {
           "datasource": {
@@ -2425,7 +2523,7 @@
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "B"
+          "refId": "denom"
         },
         {
           "datasource": {
@@ -2434,13 +2532,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_self_delegation_rewards{denom!~\"ibc.*\"} / on (chain) group_left cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(cosmos_validators_exporter_self_delegation_rewards{denom!~\"ibc.*\"} / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient) by (chain, address)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "C"
+          "refId": "selfDelegatedRewards"
         },
         {
           "datasource": {
@@ -2449,13 +2547,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_wallet_balance{denom!~\"ibc.*\"} / on (chain) group_left cosmos_validators_exporter_denom_coefficient",
+          "expr": "sum(cosmos_validators_exporter_wallet_balance{denom!~\"ibc.*\"} / on (chain, denom) group_left cosmos_validators_exporter_denom_coefficient) by (chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "D"
+          "refId": "walletBalance"
         }
       ],
       "title": "rewards info",
@@ -2478,11 +2576,13 @@
               "Time 4": true,
               "Value #B": true,
               "Value #D": false,
+              "Value #denom": true,
               "__name__": true,
               "__name__ 1": true,
               "__name__ 2": true,
               "__name__ 3": true,
               "__name__ 4": true,
+              "address": false,
               "address 1": true,
               "address 2": false,
               "chain 2": true,
@@ -2508,35 +2608,31 @@
               "moniker 4": true
             },
             "indexByName": {
-              "Time 1": 3,
-              "Time 2": 4,
-              "Time 3": 12,
-              "Time 4": 17,
-              "Value #A": 6,
-              "Value #B": 7,
-              "Value #C": 16,
-              "Value #D": 21,
-              "__name__": 8,
-              "address 1": 1,
-              "address 2": 2,
+              "Time 1": 4,
+              "Time 2": 5,
+              "Time 3": 7,
+              "Time 4": 8,
+              "Value #commission": 2,
+              "Value #denom": 12,
+              "Value #selfDelegatedRewards": 3,
+              "Value #walletBalance": 14,
+              "__name__": 6,
+              "address": 13,
               "chain": 0,
-              "denom 1": 9,
-              "denom 2": 13,
-              "denom 3": 18,
-              "display_denom": 5,
-              "instance 1": 10,
-              "instance 2": 14,
-              "instance 3": 19,
-              "job 1": 11,
-              "job 2": 15,
-              "job 3": 20
+              "denom": 9,
+              "display_denom": 1,
+              "instance": 10,
+              "job": 11
             },
             "renameByName": {
               "Value #A": "unclaimed commission",
-              "Value #B": "",
+              "Value #B": "asd",
               "Value #C": "unclaimed rewards",
               "Value #D": "wallet balance",
               "Value #E": "",
+              "Value #commission": "commission",
+              "Value #selfDelegatedRewards": "self-delegated rewards",
+              "Value #walletBalance": "wallet balance",
               "__name__": "",
               "address 1": "",
               "address 2": "address",
@@ -2588,6 +2684,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2684,6 +2781,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2765,13 +2863,13 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "validators overall",
   "uid": "validators-overall",
-  "version": 15,
+  "version": 28,
   "weekStart": ""
 }
