@@ -915,6 +915,94 @@
                     "type": "special"
                   }
                 ]
+              },
+              {
+                "id": "custom.width",
+                "value": 113
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "remote version"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 121
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "local version"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 118
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 124
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 109
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "hosting"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 114
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "datacenter"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 168
               }
             ]
           }
@@ -955,53 +1043,16 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_node_exporter_local_version",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "cosmos_node_exporter_remote_version",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "cosmos_node_exporter_is_latest",
+          "expr": "sum(cosmos_node_exporter_is_latest) without (job, instance)",
           "format": "table",
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "C"
+          "refId": "isLatest"
         }
       ],
       "title": "versions",
       "transformations": [
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "host",
-            "mode": "outer"
-          }
-        },
         {
           "id": "organize",
           "options": {
@@ -1013,6 +1064,8 @@
               "Value": false,
               "Value #A": true,
               "Value #B": true,
+              "Value #localVersion": true,
+              "Value #remoteVersion": true,
               "__name__": true,
               "__name__ 1": true,
               "__name__ 2": true,
@@ -1032,52 +1085,29 @@
               "job 1": true,
               "job 2": true,
               "job 3": true,
-              "local_version": true,
-              "network": true,
+              "local_version": false,
+              "network": false,
               "network 1": true,
               "network 2": true,
               "network 3": true,
-              "remote_version": true,
+              "remote_version": false,
               "sentinel-monitoring ": true,
-              "type": true,
+              "type": false,
               "type 1": true,
               "type 2": true,
               "type 3": true,
               "version 2": false
             },
             "indexByName": {
-              "Time 1": 6,
-              "Time 2": 13,
-              "Time 3": 22,
-              "Value #A": 12,
-              "Value #B": 21,
-              "Value #C": 29,
-              "__name__ 1": 7,
-              "__name__ 2": 14,
-              "__name__ 3": 23,
-              "datacenter 1": 2,
-              "datacenter 2": 30,
-              "datacenter 3": 31,
+              "Time": 7,
+              "Value": 8,
+              "datacenter": 1,
               "host": 0,
-              "hosting 1": 1,
-              "hosting 2": 15,
-              "hosting 3": 24,
-              "instance 1": 8,
-              "instance 2": 16,
-              "instance 3": 25,
-              "job 1": 9,
-              "job 2": 17,
-              "job 3": 26,
-              "local_version": 4,
-              "network 1": 10,
-              "network 2": 18,
-              "network 3": 27,
-              "remote_version": 5,
-              "type 1": 11,
-              "type 2": 19,
-              "type 3": 28,
-              "version 1": 3,
-              "version 2": 20
+              "hosting": 2,
+              "local_version": 5,
+              "network": 3,
+              "remote_version": 6,
+              "type": 4
             },
             "renameByName": {
               "Value": "is latest?",
@@ -1086,9 +1116,9 @@
               "datacenter 1": "datacenter",
               "host 1": "host",
               "hosting 1": "hosting",
-              "local_version": "",
+              "local_version": "local version",
               "network 1": "",
-              "remote_version": "",
+              "remote_version": "remote version",
               "sentinel-monitoring ": "",
               "type 1": "type",
               "version 1": "local version",
@@ -1168,40 +1198,17 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(cosmos_node_exporter_voting_power / on(host) group_right() tendermint_consensus_validators_power) > 0",
+          "expr": "sum((cosmos_node_exporter_voting_power / on(host) group_right() tendermint_consensus_validators_power) > 0) by (host)",
           "format": "table",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "range": false,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "(cosmos_node_exporter_voting_power / on(host) group_right() cometbft_consensus_validators_power) > 0",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "range": false,
-          "refId": "B"
         }
       ],
       "title": "voting power %",
       "transformations": [
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "host",
-            "mode": "outer"
-          }
-        },
         {
           "id": "organize",
           "options": {
@@ -1234,7 +1241,7 @@
               "sentinel-monitoring ": 8
             },
             "renameByName": {
-              "Value": "",
+              "Value": "voting power %",
               "Value #A": "voting power %",
               "chain_id": "",
               "sentinel-monitoring ": ""
@@ -1286,6 +1293,10 @@
               {
                 "id": "unit",
                 "value": "dateTimeAsIso"
+              },
+              {
+                "id": "custom.width",
+                "value": 160
               }
             ]
           },
@@ -1337,6 +1348,46 @@
                   "mode": "gradient",
                   "type": "color-background"
                 }
+              },
+              {
+                "id": "custom.width",
+                "value": 130
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 108
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 166
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "height"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
               }
             ]
           }
@@ -1371,12 +1422,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_node_exporter_upgrade_estimated_time * 1000",
+          "expr": "sum(cosmos_node_exporter_upgrade_estimated_time * 1000) by (host, name)",
           "format": "table",
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "upgradeTime"
         },
         {
           "datasource": {
@@ -1385,13 +1436,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(cosmos_node_exporter_upgrade_estimated_time - time())",
+          "expr": "sum(cosmos_node_exporter_upgrade_estimated_time - time()) by (host, name)",
           "format": "table",
           "hide": false,
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "B"
+          "refId": "timeTillUpgrade"
         },
         {
           "datasource": {
@@ -1400,13 +1451,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_node_exporter_upgrade_binary_present",
+          "expr": "sum(cosmos_node_exporter_upgrade_binary_present) by (host, name)",
           "format": "table",
           "hide": false,
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "C"
+          "refId": "binaryPresent"
         },
         {
           "datasource": {
@@ -1415,23 +1466,20 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_node_exporter_upgrade_height",
+          "expr": "sum(cosmos_node_exporter_upgrade_height) by (host, name)",
           "format": "table",
           "hide": false,
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "refId": "D"
+          "refId": "upgradeHeight"
         }
       ],
       "title": "upgrades",
       "transformations": [
         {
-          "id": "joinByField",
-          "options": {
-            "byField": "host",
-            "mode": "inner"
-          }
+          "id": "merge",
+          "options": {}
         },
         {
           "id": "organize",
@@ -1454,6 +1502,7 @@
               "hosting 4": true,
               "info 2": true,
               "info 3": true,
+              "info 4": true,
               "instance 1": true,
               "instance 2": true,
               "instance 3": true,
@@ -1475,51 +1524,23 @@
               "type 4": true
             },
             "indexByName": {
-              "Time 1": 1,
-              "Time 2": 9,
-              "Time 3": 17,
-              "Time 4": 30,
-              "Value #A": 7,
-              "Value #B": 15,
-              "Value #C": 16,
-              "Value #D": 8,
-              "__name__ 1": 27,
-              "__name__ 2": 31,
-              "datacenter 1": 23,
-              "datacenter 2": 25,
-              "datacenter 3": 28,
-              "datacenter 4": 32,
+              "Time": 6,
+              "Value #binaryPresent": 5,
+              "Value #timeTillUpgrade": 4,
+              "Value #upgradeHeight": 3,
+              "Value #upgradeTime": 2,
               "host": 0,
-              "hosting 1": 24,
-              "hosting 2": 26,
-              "hosting 3": 29,
-              "hosting 4": 33,
-              "instance 1": 3,
-              "instance 2": 10,
-              "instance 3": 18,
-              "instance 4": 34,
-              "job 1": 4,
-              "job 2": 11,
-              "job 3": 19,
-              "job 4": 35,
-              "name 1": 2,
-              "name 2": 12,
-              "name 3": 20,
-              "name 4": 36,
-              "network 1": 5,
-              "network 2": 13,
-              "network 3": 21,
-              "network 4": 37,
-              "type 1": 6,
-              "type 2": 14,
-              "type 3": 22,
-              "type 4": 38
+              "name": 1
             },
             "renameByName": {
               "Value #A": "time",
               "Value #B": "estimated time left?",
               "Value #C": "binary present?",
               "Value #D": "height",
+              "Value #binaryPresent": "binary present?",
+              "Value #timeTillUpgrade": "estimated time left?",
+              "Value #upgradeHeight": "height",
+              "Value #upgradeTime": "time",
               "info 1": "info",
               "name 1": "name"
             }
@@ -1550,8 +1571,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1605,8 +1625,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "red",
-                      "value": null
+                      "color": "red"
                     },
                     {
                       "color": "green",
@@ -1660,7 +1679,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_node_exporter_version",
+          "expr": "sum(cosmos_node_exporter_version) by (host, datacenter, hosting, network, type, version)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1682,6 +1701,9 @@
               "__name__": true,
               "__name__ 1": true,
               "__name__ 2": true,
+              "datacenter": false,
+              "host": false,
+              "hosting": false,
               "info 2": true,
               "info 3": true,
               "instance": true,
@@ -1694,12 +1716,15 @@
               "job 3": true,
               "name 2": true,
               "name 3": true,
+              "network": false,
               "network 1": true,
               "network 2": true,
               "network 3": true,
+              "type": false,
               "type 1": true,
               "type 2": true,
-              "type 3": true
+              "type 3": true,
+              "version": false
             },
             "indexByName": {
               "Time 1": 1,
@@ -1754,6 +1779,6 @@
   "timezone": "",
   "title": "Cosmos Node Stats",
   "uid": "cosmos-node-stats",
-  "version": 16,
+  "version": 26,
   "weekStart": ""
 }
