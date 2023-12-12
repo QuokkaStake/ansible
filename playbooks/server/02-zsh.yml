@@ -29,7 +29,7 @@
 
     - name: Install antigen
       ansible.builtin.get_url:
-        url: git.io/antigen
+        url: https://git.io/antigen
         dest: "{{ ansible_user_dir }}/antigen.zsh"
         mode: '0755'
 
