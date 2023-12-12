@@ -1,0 +1,37 @@
+---
+- name: Set public nodes templates
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  tasks:
+    - name: Generate RPC Nginx config
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/fullnode/nginx-rpc.j2
+        dest: "/etc/nginx/sites-enabled/rpc"
+        mode: '0755'
+
+    - name: Generate API Nginx config
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/fullnode/nginx-api.j2
+        dest: "/etc/nginx/sites-enabled/api"
+        mode: '0755'
+
+    - name: Generate Certbot template
+      become: true
+      ansible.builtin.shell: "sudo /snap/bin/certbot --nginx --agree-tos -m {{ certbot_email }} -n -d {{ api_domain }},{{ rpc_domain }}"
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: false
+
+    - name: Verify Nginx config
+      become: yes
+      command: nginx -t
+      changed_when: false
+
+    - name: (Re)start Nginx
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: nginx
