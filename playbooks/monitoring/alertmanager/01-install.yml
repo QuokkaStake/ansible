@@ -91,14 +91,14 @@
       become: true
       when: alertmanager_username is defined and alertmanager_password is defined
       ansible.builtin.template:
-        src: ../../templates/monitoring/alertmanager.web.yml.j2
+        src: ../../../templates/monitoring/alertmanager.web.yml.j2
         dest: /etc/alertmanager/web.yml
         mode: '0755'
 
     - name: Set up Alertmanager systemd config
       become: true
       ansible.builtin.template:
-        src: ../../templates/monitoring/alertmanager.service.j2
+        src: ../../../templates/monitoring/alertmanager.service.j2
         dest: /etc/systemd/system/alertmanager.service
         mode: '0644'
 

@@ -6,7 +6,7 @@
     - name: Set up Alertmanager config
       become: true
       ansible.builtin.copy:
-        src: ../../configs/alertmanager
+        src: ../../../configs/alertmanager
         dest: /etc
         mode: "0755"
 

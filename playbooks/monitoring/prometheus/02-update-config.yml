@@ -6,7 +6,7 @@
     - name: Set up Prometheus config
       become: true
       ansible.builtin.copy:
-        src: ../../configs/prometheus
+        src: ../../../configs/prometheus
         dest: /etc
         mode: "0755"
 
