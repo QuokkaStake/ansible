@@ -1,0 +1,16 @@
+---
+- name: Backup config folder
+  hosts: "{{ hosts | default('all') }}"
+
+  tasks:
+    - name: Create backups directory
+      ansible.builtin.file:
+        path: "../../backups/{{ inventory_hostname }}"
+        state: directory
+      delegate_to: localhost
+
+    - name: Backup config folder
+      synchronize:
+        src: "{{ ansible_user_dir }}/config"
+        dest: "../../backups/{{ inventory_hostname }}"
+        mode: pull
