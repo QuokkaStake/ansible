@@ -7,10 +7,11 @@
       ansible.builtin.file:
         path: "../../backups/{{ inventory_hostname }}"
         state: directory
+        mode: '0755'
       delegate_to: localhost
 
     - name: Backup config folder
-      synchronize:
+      ansible.posix.synchronize:
         src: "{{ ansible_user_dir }}/config"
         dest: "../../backups/{{ inventory_hostname }}"
         mode: pull

@@ -26,8 +26,8 @@
       changed_when: false
 
     - name: Verify Nginx config
-      become: yes
-      command: nginx -t
+      become: true
+      ansible.builtin.command: nginx -t
       changed_when: false
 
     - name: (Re)start Nginx
