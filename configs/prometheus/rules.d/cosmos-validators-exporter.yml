@@ -17,4 +17,4 @@ groups:
           severity: critical
         annotations:
           summary: Cosmos validator is at the last place (instance {{ $labels.instance }})
-          description: "Cosmos validator is at the last place \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "Cosmos validator is at the last place"

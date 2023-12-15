@@ -26,7 +26,7 @@ groups:
           severity: warning
         annotations:
           summary: Blackbox slow probe (instance {{ $labels.instance }})
-          description: "Blackbox probe took more than 1s to complete: $value"
+          description: "Blackbox probe took more than 1s to complete: {{ $value }}"
 
       - alert: BlackboxProbeHttpFailure
         expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
@@ -35,7 +35,7 @@ groups:
           severity: critical
         annotations:
           summary: Blackbox probe HTTP failure (instance {{ $labels.instance }})
-          description: "HTTP status code is not 200-399: $value"
+          description: "HTTP status code is not 200-399: {{ $value }}"
 
       - alert: BlackboxSslCertificateWillExpireSoon
         expr: (probe_ssl_earliest_cert_expiry - time()) / 86400 < 3
@@ -44,7 +44,7 @@ groups:
           severity: critical
         annotations:
           summary: Blackbox SSL certificate will expire soon (instance {{ $labels.instance }})
-          description: "SSL certificate expires in 3 days: $value"
+          description: "SSL certificate expires in 3 days: {{ $value }}"
 
       - alert: BlackboxSslCertificateExpired
         expr: probe_ssl_earliest_cert_expiry - time() <= 0
@@ -62,7 +62,7 @@ groups:
           severity: warning
         annotations:
           summary: Blackbox probe slow HTTP (instance {{ $labels.instance }})
-          description: "HTTP request took more than 1s: $value"
+          description: "HTTP request took more than 1s: {{ $value }}"
 
       - alert: BlackboxProbeSlowPing
         expr: avg_over_time(probe_icmp_duration_seconds[1m]) > 1
@@ -71,4 +71,4 @@ groups:
           severity: warning
         annotations:
           summary: Blackbox probe slow ping (instance {{ $labels.instance }})
-          description: "Blackbox ping took more than 1s: $value"
+          description: "Blackbox ping took more than 1s: {{ $value }}"

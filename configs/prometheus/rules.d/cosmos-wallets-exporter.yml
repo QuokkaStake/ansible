@@ -8,7 +8,7 @@ groups:
           severity: warning
         annotations:
           summary: cosmos-wallets-exporter cannot connect to node to get balances from (instance {{ $labels.instance }}, chain {{ $labels.chain }})
-          description: "cosmos-wallets-exporter cannot connect to node to get balances from \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "cosmos-wallets-exporter cannot connect to node to get balances from"
 
       - alert: CosmosWalletExporterRestakeBalanceTooLow
         expr: cosmos_wallets_exporter_balance{group="restake"} < 5
@@ -17,4 +17,4 @@ groups:
           severity: warning
         annotations:
           summary: The balance of ReStake wallet on {{ $labels.chain }} is below threshold (instance {{ $labels.instance }}, chain {{ $labels.chain }})
-          description: "The balance of ReStake wallet on {{ $labels.chain }} is below threshold \n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          description: "The balance of ReStake wallet on {{ $labels.chain }} is below threshold: {{ $value }}"

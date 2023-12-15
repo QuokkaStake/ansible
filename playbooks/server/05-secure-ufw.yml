@@ -28,11 +28,11 @@
 
     - name: Reject all incoming traffic
       become: true
-      community.general.system.ufw:
+      community.general.ufw:
         policy: reject
         direction: incoming
 
     - name: Allow everything and enable UFW
       become: true
-      community.general.system.ufw:
+      community.general.ufw:
         state: enabled
