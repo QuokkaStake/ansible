@@ -75,5 +75,5 @@
       become: true
       ansible.builtin.service:
         name: promtail
-        state: started
+        state: restarted
         enabled: true
