@@ -16,17 +16,6 @@
         version: main
         update: true
 
-    - name: Get services list
-      ansible.builtin.service_facts:
-      register: services
-
-    - name: Stop service
-      become: true
-      ansible.builtin.systemd:
-        name: cosmos-node-exporter
-        state: stopped
-      when: "'cosmos-node-exporter.service' in services.ansible_facts.services"
-
     - name: Install binary
       community.general.make:
         chdir: "{{ ansible_user_dir }}/cosmos-node-exporter"
@@ -54,7 +43,7 @@
     - name: Start the service
       become: true
       ansible.builtin.systemd:
-        state: started
+        state: restarted
         name: cosmos-node-exporter
         enabled: true
         daemon_reload: true

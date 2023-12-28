@@ -4,31 +4,16 @@ level = "debug"
 json = true
 {% endif %}
 
-[tendermint]
-address = "http://localhost:26657"
-
-[grpc]
-{% if disable_grpc is defined and disable_grpc == true %}
-enabled = false
-{% endif %}
-address = "localhost:9090"
-
-[cosmovisor]
+[[node]]
+name = "{{ inventory_hostname }}"
+tendermint = { address = "http://localhost:26657" }
 {% if disable_cosmovisor is defined and disable_cosmovisor == true %}
-enabled = false
+cosmovisor = { enabled = false }
+{% else %}
+cosmovisor = { chain-folder = "{{ fullnode_folder }}", chain-binary-name = "{{ binary_name }}", cosmovisor-path = "{{ ansible_user_dir }}/go/bin/cosmovisor" }
 {% endif %}
-{% if fullnode_folder is defined %}
-chain-folder = "{{ fullnode_folder }}"
-{% endif %}
-{% if binary_name is defined %}
-chain-binary-name = "{{ binary_name }}"
-{% endif %}
-cosmovisor-path = "{{ ansible_user_dir }}/go/bin/cosmovisor"
-
-[git]
-{% if github_repo_remote is defined %}
-repository = "{{ github_repo_remote }}"
-{% endif %}
-{% if github_token is defined %}
-token = "{{ github_token }}"
+{% if github_repo_remote is defined and github_token is defined %}
+git = { repository = "{{ github_repo_remote }}", token = "{{ github_token }}" }
+{% elif github_repo_remote is defined %}
+git = { repository = "{{ github_repo_remote }}" }
 {% endif %}
