@@ -18,7 +18,7 @@
         password: "{{ loki_password }}"
         owner: loki
         group: loki
-        mode: 0644
+        mode: '0644'
 
     - name: Set up Loki Nginx template
       become: true
