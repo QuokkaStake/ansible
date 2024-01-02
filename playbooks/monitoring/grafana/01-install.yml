@@ -1,0 +1,209 @@
+---
+- name: Install Grafana
+  hosts: "{{ hosts | default('monitoring')  }}"
+
+  tasks:
+    - name: Install required packages
+      become: true
+      ansible.builtin.package:
+        name:
+          - apt-transport-https
+          - software-properties-common
+          - wget
+        state: present
+
+    # Taken from here: https://grafana.com/docs/grafana/latest/setup-grafana/image-rendering/troubleshooting/
+    - name: Install grafana-image-renderer dependencies
+      become: true
+      ansible.builtin.package:
+        name:
+          - libx11-6
+          - libx11-xcb1
+          - libxcomposite1
+          - libxcursor1
+          - libxdamage1
+          - libxext6
+          - libxfixes3
+          - libxi6
+          - libxrender1
+          - libxtst6
+          - libglib2.0-0
+          - libnss3
+          - libcups2
+          - libdbus-1-3
+          - libxss1
+          - libxrandr2
+          - libgtk-3-0
+          - libasound2
+          - libxcb-dri3-0
+          - libgbm1
+          - libxshmfence1
+        state: present
+
+    - name: Creates keyring directory
+      become: true
+      ansible.builtin.file:
+        path: /etc/apt/keyrings/
+        state: directory
+
+    - name: Download repository GPG
+      become: true
+      ansible.builtin.shell: "wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null"
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Add apt entry
+      become: true
+      ansible.builtin.copy:
+        content: 'deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main'
+        dest: /etc/apt/sources.list.d/grafana.list
+
+    - name: Update package cache
+      become: true
+      ansible.builtin.package:
+        update_cache: true
+
+    - name: Install Grafana
+      become: true
+      ansible.builtin.package:
+        name: grafana
+        state: present
+
+    - name: Install grafana-image-renderer plugin
+      become: true
+      ansible.builtin.shell: "grafana-cli plugins install grafana-image-renderer"
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Set Grafana URL
+      become: true
+      when: grafana_domain is defined
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: server
+        option: root_url
+        value: '"{{ grafana_domain }}"'
+        mode: '0644'
+
+    - name: Start Grafana and enable it on autostart
+      become: true
+      ansible.builtin.service:
+        name: grafana-server
+        state: restarted
+        enabled: true
+
+
+# - name: One way to avoid apt_key once it is removed from your distro
+#   block:
+#     - name: somerepo |no apt key
+#       ansible.builtin.get_url:
+#         url: https://apt.grafana.com/gpg.key
+#         dest: https://apt.grafana.com/gpg.key
+
+#     - name: somerepo | apt source
+#       ansible.builtin.apt_repository:
+#         repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/myrepo.asc] https://download.example.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+#         state: present
+
+#   - name: Get latest release
+#     ansible.builtin.uri:
+#       url: https://api.github.com/repos/prometheus/alertmanager/releases/latest
+#       return_content: true
+#     register: release_info
+
+#   - name: Get latest release JSON
+#     ansible.builtin.set_fact:
+#       release_info_json: "{{ release_info.content | from_json }}"
+
+#   - name: Set Alertmanager version to {{ release_info_json.tag_name[1:] }}
+#     ansible.builtin.set_fact:
+#       version: "{{ release_info_json.tag_name[1:] }}"
+
+#   - name: Download Alertmanager binary to local folder
+#     ansible.builtin.get_url:
+#       url: https://github.com/prometheus/alertmanager/releases/download/v{{ version }}/alertmanager-{{ version }}.linux-amd64.tar.gz
+#       dest: "{{ alertmanager_tar_file }}"
+#       mode: '0755'
+
+#   - name: Create Alertmanager tmp directory if it does not exist
+#     ansible.builtin.file:
+#       path: "{{ alertmanager_tmp_path }}"
+#       state: directory
+#       mode: '0755'
+
+#   - name: Unzip Alertmanager
+#     ansible.builtin.unarchive:
+#       src: "{{ alertmanager_tar_file }}"
+#       dest: "{{ alertmanager_tmp_path }}"
+#       remote_src: true
+#       mode: '0755'
+
+#   - name: Copy Alertmanager binary
+#     become: true
+#     ansible.builtin.copy:
+#       src: "{{ item }}"
+#       dest: /usr/bin
+#       mode: '0755'
+#       remote_src: true
+#     loop:
+#       - "{{ alertmanager_tmp_path }}/alertmanager-{{ version }}.linux-amd64/alertmanager"
+#       - "{{ alertmanager_tmp_path }}/alertmanager-{{ version }}.linux-amd64/amtool"
+
+#   - name: Create alertmanager group
+#     become: true
+#     ansible.builtin.group:
+#       name: alertmanager
+#       state: present
+
+#   - name: Add alertmanager user
+#     ansible.builtin.user:
+#       name: alertmanager
+#       groups: alertmanager
+#       shell: /sbin/nologin
+#       create_home: false
+#       append: true
+#       state: present
+#     become: true
+
+#   - name: Create Alertmanager folders
+#     become: true
+#     ansible.builtin.file:
+#       path: "{{ item }}"
+#       state: directory
+#       mode: "0755"
+#       group: alertmanager
+#       owner: alertmanager
+#     loop:
+#       - /etc/alertmanager
+#       - /var/lib/alertmanager
+
+#   - name: Set up Alertmanager config
+#     become: true
+#     ansible.builtin.copy:
+#       src: ../../configs/alertmanager
+#       dest: /etc
+#       mode: '0755'
+
+#   - name: Put basic auth config
+#     become: true
+#     when: alertmanager_username is defined and alertmanager_password is defined
+#     ansible.builtin.template:
+#       src: ../../../templates/monitoring/alertmanager.web.yml.j2
+#       dest: /etc/alertmanager/web.yml
+#       mode: '0755'
+
+#   - name: Set up Alertmanager systemd config
+#     become: true
+#     ansible.builtin.template:
+#       src: ../../../templates/monitoring/alertmanager.service.j2
+#       dest: /etc/systemd/system/alertmanager.service
+#       mode: '0644'
+
+#   - name: Start Grafana and enable it on autostart
+#     become: true
+#     ansible.builtin.service:
+#       name: grafana-server
+#       state: restarted
+#       enabled: true
