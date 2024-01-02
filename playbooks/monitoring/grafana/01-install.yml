@@ -45,10 +45,11 @@
       ansible.builtin.file:
         path: /etc/apt/keyrings/
         state: directory
+        mode: '0644'
 
     - name: Download repository GPG
       become: true
-      ansible.builtin.shell: "wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null"
+      ansible.builtin.shell: "wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null" # noqa: command-instead-of-module risky-shell-pipe
       args:
         executable: /bin/bash
       changed_when: true
@@ -58,6 +59,7 @@
       ansible.builtin.copy:
         content: 'deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main'
         dest: /etc/apt/sources.list.d/grafana.list
+        mode: '0644'
 
     - name: Update package cache
       become: true
