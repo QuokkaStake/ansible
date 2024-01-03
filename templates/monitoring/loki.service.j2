@@ -6,7 +6,7 @@ After=network-online.target
 [Service]
 User=loki
 Type=simple
-ExecStart=/usr/bin/loki --config.file /etc/loki/config.yaml
+ExecStart=/usr/bin/loki --config.file /etc/loki/config.yml
 
 [Install]
 WantedBy=multi-user.target
