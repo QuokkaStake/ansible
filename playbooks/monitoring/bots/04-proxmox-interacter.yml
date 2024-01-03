@@ -1,0 +1,50 @@
+---
+- name: Install proxmox-interacter
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  tasks:
+    - name: Clone the repo
+      ansible.builtin.git:
+        repo: https://github.com/QuokkaStake/proxmox-interacter
+        dest: "{{ ansible_user_dir }}/proxmox-interacter"
+        version: main
+        update: true
+
+    - name: Install binary
+      community.general.make:
+        chdir: "{{ ansible_user_dir }}/proxmox-interacter"
+        target: install
+
+    - name: Create config directory
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/config"
+        state: directory
+        mode: '0755'
+
+    - name: Generate config
+      become: true
+      ansible.builtin.copy:
+        src: "../../../configs/bots/{{ inventory_hostname }}/proxmox-interacter.toml"
+        dest: "{{ ansible_user_dir }}/config/proxmox-interacter.toml"
+        mode: "0755"
+
+    - name: Generate systemd file
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/bots/proxmox-interacter.service.j2
+        dest: /etc/systemd/system/proxmox-interacter.service
+        mode: '0644'
+
+    - name: Start the service
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: proxmox-interacter
+        enabled: true
+        daemon_reload: true

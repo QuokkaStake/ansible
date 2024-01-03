@@ -1,0 +1,17 @@
+[Unit]
+Description=Cosmos Proposals Checker
+After=network-online.target
+
+[Service]
+User={{ ansible_user }}
+TimeoutStartSec=0
+CPUWeight=95
+IOWeight=95
+ExecStart={{ ansible_user_dir }}/go/bin/cosmos-proposals-checker --config {{ ansible_user_dir }}/config/cosmos-proposals-checker.toml
+Restart=always
+RestartSec=2
+LimitNOFILE=800000
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
