@@ -1,0 +1,57 @@
+---
+- name: Install cosmos-transactions-bot
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  tasks:
+    - name: Clone the repo
+      ansible.builtin.git:
+        repo: https://github.com/QuokkaStake/cosmos-transactions-bot
+        dest: "{{ ansible_user_dir }}/cosmos-transactions-bot"
+        version: main
+        update: true
+
+    - name: Install binary
+      community.general.make:
+        chdir: "{{ ansible_user_dir }}/cosmos-transactions-bot"
+        target: install
+
+    - name: Create config directory
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/config"
+        state: directory
+        mode: '0755'
+
+    - name: Generate config
+      become: true
+      ansible.builtin.copy:
+        src: "../../../configs/cosmos/{{ inventory_hostname }}/cosmos-transactions-bot.toml"
+        dest: "{{ ansible_user_dir }}/config/cosmos-transactions-bot.toml"
+        mode: "0755"
+
+    - name: Copy aliases path
+      become: true
+      ansible.builtin.copy:
+        src: "../../../configs/cosmos/{{ inventory_hostname }}/cosmos-transactions-bot-aliases.toml"
+        dest: "{{ ansible_user_dir }}/config/cosmos-transactions-bot-aliases.toml"
+        mode: "0755"
+
+    - name: Generate systemd file
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/cosmos/cosmos-transactions-bot.service.j2
+        dest: /etc/systemd/system/cosmos-transactions-bot.service
+        mode: '0644'
+
+    - name: Start the service
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: cosmos-transactions-bot
+        enabled: true
+        daemon_reload: true
