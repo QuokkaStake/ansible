@@ -1,0 +1,50 @@
+---
+- name: Install cosmos-validators-exporter
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  tasks:
+    - name: Clone the repo
+      ansible.builtin.git:
+        repo: https://github.com/QuokkaStake/cosmos-validators-exporter
+        dest: "{{ ansible_user_dir }}/cosmos-validators-exporter"
+        version: main
+        update: true
+
+    - name: Install binary
+      community.general.make:
+        chdir: "{{ ansible_user_dir }}/cosmos-validators-exporter"
+        target: install
+
+    - name: Create config directory
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/config"
+        state: directory
+        mode: '0755'
+
+    - name: Generate config
+      become: true
+      ansible.builtin.copy:
+        src: "../../../configs/cosmos/{{ inventory_hostname }}/cosmos-validators-exporter.toml"
+        dest: "{{ ansible_user_dir }}/config/cosmos-validators-exporter.toml"
+        mode: "0755"
+
+    - name: Generate systemd file
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/cosmos/cosmos-validators-exporter.service.j2
+        dest: /etc/systemd/system/cosmos-validators-exporter.service
+        mode: '0644'
+
+    - name: Start the service
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: cosmos-validators-exporter
+        enabled: true
+        daemon_reload: true
