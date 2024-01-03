@@ -30,21 +30,21 @@
     - name: Generate config
       become: true
       ansible.builtin.copy:
-        src: "../../../configs/cosmos/{{ inventory_hostname }}/cosmos-transactions-bot.toml"
+        src: "../../../configs/bots/{{ inventory_hostname }}/cosmos-transactions-bot.toml"
         dest: "{{ ansible_user_dir }}/config/cosmos-transactions-bot.toml"
         mode: "0755"
 
     - name: Copy aliases path
       become: true
       ansible.builtin.copy:
-        src: "../../../configs/cosmos/{{ inventory_hostname }}/cosmos-transactions-bot-aliases.toml"
+        src: "../../../configs/bots/{{ inventory_hostname }}/cosmos-transactions-bot-aliases.toml"
         dest: "{{ ansible_user_dir }}/config/cosmos-transactions-bot-aliases.toml"
         mode: "0755"
 
     - name: Generate systemd file
       become: true
       ansible.builtin.template:
-        src: ../../../templates/monitoring/cosmos/cosmos-transactions-bot.service.j2
+        src: ../../../templates/monitoring/bots/cosmos-transactions-bot.service.j2
         dest: /etc/systemd/system/cosmos-transactions-bot.service
         mode: '0644'
 

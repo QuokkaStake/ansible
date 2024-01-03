@@ -1,4 +1,5 @@
 prometheus/prometheus.yml
 prometheus/targets.d/*
 alertmanager/alertmanager.yml
-cosmos/**
+bots/**
+exporters/**
