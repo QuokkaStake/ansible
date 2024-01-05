@@ -2,6 +2,45 @@
   "annotations": {
     "list": [
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "tendermint_consensus_state_syncing",
+        "hide": true,
+        "iconColor": "purple",
+        "name": "statesync",
+        "textFormat": "",
+        "titleFormat": "{{ host }}: statesync"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "(1 - up{job=~\"tendermint.*\"})",
+        "hide": true,
+        "iconColor": "super-light-red",
+        "name": "tendermint down",
+        "textFormat": "",
+        "titleFormat": "{{ host }}: tendermint node is down"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "1 - up{job=~\"cosmos-node-exporter.*\"}",
+        "hide": true,
+        "iconColor": "dark-red",
+        "name": "cosmos-node-exporter down",
+        "textFormat": "",
+        "titleFormat": "{{ host }}: cosmos-node-exporter is down"
+      },
+      {
         "builtIn": 1,
         "datasource": {
           "type": "datasource",
@@ -18,6 +57,30 @@
           "type": "dashboard"
         },
         "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "changes(cosmos_node_exporter_start_time[2m])",
+        "hide": true,
+        "iconColor": "green",
+        "name": "cosmos-node-exporter restart",
+        "titleFormat": "{{ host }}: cosmos-node-exporter restart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "changes(process_start_time_seconds{job=~\"tendermint.*\"}[2m])",
+        "hide": true,
+        "iconColor": "light-blue",
+        "name": "tendermint restart",
+        "titleFormat": "{{ host }}: tendermint restart"
       }
     ]
   },
@@ -26,7 +89,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 15173,
   "graphTooltip": 0,
-  "id": 71,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -41,6 +104,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -138,6 +202,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -235,6 +300,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -333,6 +399,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -429,6 +496,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -527,6 +595,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -625,6 +694,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -738,6 +808,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -862,8 +933,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1034,7 +1104,7 @@
           }
         ]
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
           "datasource": {
@@ -1090,6 +1160,7 @@
               "network 1": true,
               "network 2": true,
               "network 3": true,
+              "node": true,
               "remote_version": false,
               "sentinel-monitoring ": true,
               "type": false,
@@ -1098,6 +1169,7 @@
               "type 3": true,
               "version 2": false
             },
+            "includeByName": {},
             "indexByName": {
               "Time": 7,
               "Value": 8,
@@ -1151,8 +1223,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1189,7 +1260,7 @@
           }
         ]
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
           "datasource": {
@@ -1273,8 +1344,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1336,8 +1406,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "red",
-                      "value": null
+                      "color": "red"
                     },
                     {
                       "color": "green",
@@ -1417,7 +1486,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
           "datasource": {
@@ -1576,8 +1645,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1631,8 +1699,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "red",
-                      "value": null
+                      "color": "red"
                     },
                     {
                       "color": "green",
@@ -1677,7 +1744,7 @@
           }
         ]
       },
-      "pluginVersion": "10.1.0",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
           "datasource": {
@@ -1772,8 +1839,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
@@ -1786,6 +1852,6 @@
   "timezone": "",
   "title": "Cosmos Node Stats",
   "uid": "cosmos-node-stats",
-  "version": 28,
+  "version": 6,
   "weekStart": ""
 }
