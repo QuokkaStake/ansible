@@ -1,0 +1,10 @@
+server {
+    server_name  {{ alertmanager_domain }};
+
+    location / {
+        proxy_pass           http://localhost:9093;
+    }
+
+    listen [::]:80;
+    listen 80;
+}

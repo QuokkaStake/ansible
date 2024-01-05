@@ -10,6 +10,9 @@ Type=simple
 ExecStart=alertmanager --config.file=/etc/alertmanager/alertmanager.yml \
     --cluster.advertise-address=0.0.0.0:9093 \
     --storage.path=/etc/alertmanager/data \
+{% if alertmanager_domain is defined %}
+    --web.external-url=https://{{ alertmanager_domain }} \
+{% endif %}
     --web.config.file=/etc/alertmanager/web.yml
 
 [Install]
