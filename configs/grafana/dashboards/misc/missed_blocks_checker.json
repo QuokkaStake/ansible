@@ -12,13 +12,37 @@
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
         "type": "dashboard"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "changes(missed_blocks_checker_start_time[2m])",
+        "hide": true,
+        "iconColor": "green",
+        "name": "restart",
+        "titleFormat": "App restart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "enable": true,
+        "expr": "(1 - up{job=~\"missed-blocks-checker.*\"})",
+        "hide": true,
+        "iconColor": "red",
+        "name": "down",
+        "titleFormat": "App down"
       }
     ]
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 90,
+  "id": 25,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1208,6 +1232,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1301,6 +1326,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1394,6 +1420,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1457,7 +1484,7 @@
         },
         "tooltip": {
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "targets": [
@@ -1555,6 +1582,6 @@
   "timezone": "",
   "title": "missed-blocks-checker",
   "uid": "missed-blocks-checker",
-  "version": 39,
+  "version": 3,
   "weekStart": ""
 }
