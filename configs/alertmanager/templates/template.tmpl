@@ -15,7 +15,8 @@ Labels:
 {{ range .Labels.SortedPairs }} - {{ .Name }} = {{ .Value }}
 {{ end }}
 <a href="{{ .GeneratorURL }}">Source</a>
-{{ end }}{{ end }}
+{{ end }}
+{{ end }}
 
 {{ define "pagerduty.default.description" }}{{ template "__subject" . }}{{ end }}
 {{ define "pagerduty.default.client" }}{{ template "__alertmanager" . }}{{ end }}
