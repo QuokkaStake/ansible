@@ -1,0 +1,10 @@
+server {
+    server_name  {{ prometheus_domain }};
+
+    location / {
+        proxy_pass           http://localhost:9090;
+    }
+
+    listen [::]:80;
+    listen 80;
+}

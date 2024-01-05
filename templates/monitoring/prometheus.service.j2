@@ -15,6 +15,9 @@ ExecStart=/usr/bin/prometheus \
 {% if prometheus_username is defined and prometheus_password is defined %}
     --web.config.file=/etc/prometheus/web.yml \
 {% endif %}
+{% if prometheus_domain is defined %}
+    --web.external-url=https://{{ prometheus_domain }} \
+{% endif %}
     --web.enable-lifecycle
 
 
