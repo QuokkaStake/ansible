@@ -1,0 +1,18 @@
+server {
+    server_name {{ icinga_domain }};
+
+    location ~ ^//index\.php(.*)$ {
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /usr/share/icingaweb2/public/index.php;
+        fastcgi_param ICINGAWEB_CONFIGDIR /etc/icingaweb2;
+        fastcgi_param REMOTE_USER $remote_user;
+    }
+
+    location ~ ^/(.+)? {
+        alias /usr/share/icingaweb2/public;
+        index index.php;
+        try_files $1 $uri //index.php$is_args$args;
+    }
+}

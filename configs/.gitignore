@@ -3,3 +3,4 @@ prometheus/targets.d/*
 alertmanager/alertmanager.yml
 bots/**
 exporters/**
+icinga/**

@@ -1,0 +1,33 @@
+---
+- name: Update Icinga config
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  tasks:
+    - name: Update Icinga config
+      become: true
+      ansible.builtin.copy:
+        src: ../../../configs/icinga/
+        dest: /etc/icinga2
+        mode: "0755"
+
+    - name: Validate Icinga config
+      ansible.builtin.shell: "icinga2 daemon -C"
+      become: true
+      args:
+        executable: /bin/bash
+      register: icinga_config
+      changed_when: false
+
+    - name: Print Icinga config validation result
+      ansible.builtin.debug:
+        msg:
+          - "Stdout:"
+          - "{{ (icinga_config.stdout).split('\n') }}"
+          - "Stderr:"
+          - "{{ (icinga_config.stderr).split('\n') }}"
+
+    - name: (Re)start icinga2
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: icinga2

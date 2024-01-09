@@ -1,0 +1,241 @@
+---
+- name: Install Icinga
+  hosts: "{{ hosts | default('monitoring')  }}"
+
+  vars:
+    mysql_ido_user: icinga
+    mysql_ido_password: password
+    mysql_icinga_user: icingaweb2
+    mysql_icinga_password: password
+    mysql_icingadb_user: icingadb
+    mysql_icingadb_password: CHANGEME
+
+  tasks:
+    # source: https://computingforgeeks.com/install-icinga2-monitoring-tool-on-ubuntu-linux/
+
+    - name: Install packages
+      block:
+        - name: Install required packages
+          become: true
+          ansible.builtin.package:
+            name:
+              - apt-transport-https
+              - gnupg
+              - wget
+            state: present
+
+        - name: Download repository GPG
+          become: true
+          ansible.builtin.shell: "wget -O - https://packages.icinga.com/icinga.key | gpg --dearmor -o /usr/share/keyrings/icinga-archive-keyring.gpg" # noqa: command-instead-of-module risky-shell-pipe
+          args:
+            executable: /bin/bash
+          changed_when: true
+
+        - name: Add apt entry
+          become: true
+          ansible.builtin.copy:
+            content: |
+              deb [signed-by=/usr/share/keyrings/icinga-archive-keyring.gpg] https://packages.icinga.com/ubuntu icinga-{{ ansible_distribution_release }} main
+              deb-src [signed-by=/usr/share/keyrings/icinga-archive-keyring.gpg] https://packages.icinga.com/ubuntu icinga-{{ ansible_distribution_release }} main
+            dest: "/etc/apt/sources.list.d/{{ ansible_distribution_release }}-icinga.list"
+            mode: '0644'
+
+        - name: Update package cache
+          become: true
+          ansible.builtin.package:
+            update_cache: true
+
+        - name: Install Icinga
+          become: true
+          ansible.builtin.package:
+            name:
+              - icinga2
+              - monitoring-plugins
+              - icingadb
+              - icingadb-redis
+              - icingadb-web
+              - icingaweb2
+              - php8.1-fpm
+              - mariadb-server
+              - mariadb-client
+              - icinga2-ido-mysql
+              - redis
+              - python3
+              - python3-requests
+              - python3-packaging
+            state: present
+
+        - name: Start mariadb-server and enable it on autostart
+          become: true
+          ansible.builtin.service:
+            name: mysql
+            state: restarted
+            enabled: true
+
+        - name: Start redis and enable it on autostart
+          become: true
+          ansible.builtin.service:
+            name: redis
+            state: restarted
+            enabled: true
+
+    - name: Init IDO
+      block:
+        - name: Create MySQL IDO database and user
+          ansible.builtin.shell: "mysql -u root --execute \"CREATE DATABASE icinga; GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON icinga.* TO '{{ mysql_ido_user }}'@'localhost' IDENTIFIED BY '{{ mysql_ido_password }}'; FLUSH PRIVILEGES;\""
+          become: true
+          args:
+            executable: /bin/bash
+          register: mysql_ido_result
+          changed_when: false
+          failed_when: false
+
+        - name: Print create MySQL IDO database and user result
+          ansible.builtin.debug:
+            msg: "{{ mysql_ido_result.stderr }}{{ mysql_ido_result.stdout }}"
+
+        - name: Migrate Icinga IDO database
+          ansible.builtin.shell: "mysql -u root -D icinga < /usr/share/icinga2-ido-mysql/schema/mysql.sql"
+          become: true
+          args:
+            executable: /bin/bash
+          register: mysql_migrate_result
+          changed_when: false
+          failed_when: false
+
+        - name: Print migrate MySQL IDO database and user result
+          ansible.builtin.debug:
+            msg: "{{ mysql_migrate_result.stderr }}{{ mysql_migrate_result.stdout }}"
+
+        - name: Generate IDO config
+          become: true
+          ansible.builtin.template:
+            src: ../../../templates/monitoring/icinga/ido-mysql.conf.j2
+            dest: "/etc/icinga2/features-available/ido-mysql.conf"
+            mode: '0755'
+
+        - name: Init Icinga IDO
+          ansible.builtin.shell: "icinga2 feature enable ido-mysql"
+          become: true
+          args:
+            executable: /bin/bash
+          register: icinga_ido_init
+          changed_when: false
+
+        - name: Print Icinga DB init result
+          ansible.builtin.debug:
+            msg: "{{ icinga_ido_init.stderr }}{{ icinga_ido_init.stdout }}"
+
+    - name: Init Icinga API
+      block:
+        - name: Create MySQL Icinga database and user
+          ansible.builtin.shell: "mysql -u root --execute \"CREATE DATABASE icingaweb2; GRANT ALL ON icingaweb2.* TO {{ mysql_icinga_user }}@localhost IDENTIFIED BY '{{ mysql_icinga_password }}';\""
+          become: true
+          args:
+            executable: /bin/bash
+          register: mysql_icinga_result
+          changed_when: false
+          failed_when: false
+
+        - name: Print create MySQL Icinga database and user result
+          ansible.builtin.debug:
+            msg: "{{ mysql_icinga_result.stderr }}{{ mysql_icinga_result.stdout }}"
+
+        - name: Init Icinga API
+          ansible.builtin.shell: "icinga2 api setup"
+          become: true
+          args:
+            executable: /bin/bash
+          register: icinga_api_init
+          changed_when: false
+
+        - name: Print Icinga API init result
+          ansible.builtin.debug:
+            msg: "{{ icinga_api_init.stderr }}{{ icinga_api_init.stdout }}"
+
+    - name: Init icinga-db
+      block:
+        - name: Start icingadb-redis and enable it on autostart
+          become: true
+          ansible.builtin.service:
+            name: icingadb-redis
+            state: restarted
+            enabled: true
+
+        - name: Create MySQL icinga-db database and user
+          ansible.builtin.shell: "mysql -u root --execute \"CREATE DATABASE icingadb; CREATE USER '{{ mysql_icingadb_user }}'@'localhost' IDENTIFIED BY '{{ mysql_icingadb_password }}'; GRANT ALL ON icingadb.* TO '{{ mysql_icingadb_user }}'@'localhost';\""
+          become: true
+          args:
+            executable: /bin/bash
+          register: mysql_icingadb_create_result
+          changed_when: false
+          failed_when: false
+
+        - name: Print create MySQL icinga-db database and user result
+          ansible.builtin.debug:
+            msg: "{{ mysql_icingadb_create_result.stderr }}{{ mysql_icingadb_create_result.stdout }}"
+
+        - name: Migrate icinga-db database
+          ansible.builtin.shell: "mysql -u root -D {{ mysql_icingadb_user }} < /usr/share/icingadb/schema/mysql/schema.sql"
+          become: true
+          args:
+            executable: /bin/bash
+          register: mysql_icingadb_migrate_result
+          changed_when: false
+          failed_when: false
+
+        - name: Print migrate MySQL IDO database and user result
+          ansible.builtin.debug:
+            msg: "{{ mysql_icingadb_migrate_result.stderr }}{{ mysql_icingadb_migrate_result.stdout }}"
+
+        - name: Init Icinga DB
+          ansible.builtin.shell: "icinga2 feature enable icingadb"
+          become: true
+          args:
+            executable: /bin/bash
+          register: icinga_db_init
+          changed_when: false
+
+        - name: Print Icinga DB init result
+          ansible.builtin.debug:
+            msg: "{{ icinga_db_init.stderr }}{{ icinga_db_init.stdout }}"
+
+        - name: Restart icingadb and enable it on autostart
+          become: true
+          ansible.builtin.service:
+            name: icingadb
+            state: restarted
+            enabled: true
+
+    - name: Create token
+      ansible.builtin.shell: "icingacli setup token create"
+      become: true
+      args:
+        executable: /bin/bash
+      register: icinga_token
+      changed_when: false
+
+    - name: Display token
+      ansible.builtin.debug:
+        msg: "{{ icinga_token.stderr }}{{ icinga_token.stdout }}"
+
+    - name: Download check-pve
+      become: true
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/nbuchwitz/check_pve/main/check_pve.py"
+        dest: /usr/lib/nagios/plugins/check_pve.py
+        mode: "0755"
+
+    - name: Start php8.1-fpm and enable it on autostart
+      become: true
+      ansible.builtin.service:
+        name: php8.1-fpm
+        state: restarted
+        enabled: true
+
+    - name: Start icinga2 and enable it on autostart
+      become: true
+      ansible.builtin.service:
+        name: icinga2
+        state: restarted
+        enabled: true
