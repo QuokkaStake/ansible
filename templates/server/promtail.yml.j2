@@ -12,17 +12,27 @@ clients:
       password: {{ loki_password }}
 
 scrape_configs:
-- job_name: journald
-  journal:
-    labels:
-      job: journald
-      host: "{{ inventory_hostname }}"
-  relabel_configs:
-    - source_labels: [__journal__systemd_unit]
-      target_label: systemd_unit
-    - source_labels: [__journal__hostname]
-      target_label: hostname
-    - source_labels: [__journal_syslog_identifier]
-      target_label: syslog_identifier
-    - source_labels: [__journal__comm]
-      target_label: command
+  - job_name: journald
+    journal:
+      labels:
+        job: journald
+        host: "{{ inventory_hostname }}"
+    relabel_configs:
+      - source_labels: [__journal__systemd_unit]
+        target_label: systemd_unit
+      - source_labels: [__journal__hostname]
+        target_label: hostname
+      - source_labels: [__journal_syslog_identifier]
+        target_label: syslog_identifier
+      - source_labels: [__journal__comm]
+        target_label: command
+
+  - job_name: nginx
+    static_configs:
+    - targets:
+        - localhost
+      labels:
+        job: nginx
+        host: "{{ inventory_hostname }}"
+        agent: promtail
+        __path__: /var/log/nginx/access.json.log
