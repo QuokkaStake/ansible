@@ -6,7 +6,7 @@
     - name: Generate RPC Nginx config
       become: true
       ansible.builtin.template:
-        src: ../../../templates/monitoring/alertmanager-nginx.j2
+        src: ../../../templates/monitoring/alertmanager/nginx.j2
         dest: "/etc/nginx/sites-enabled/alertmanager"
         mode: '0755'
 

@@ -12,7 +12,7 @@ datasources:
     access: proxy
     orgId: 1
     uid: prometheus
-    url: http://localhost:9090
+    url: https://{{ prometheus_domain }}
     user: {{ prometheus_username }}
     basicAuth: true
     basicAuthUser: {{ prometheus_username }}

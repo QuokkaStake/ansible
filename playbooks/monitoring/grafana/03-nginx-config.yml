@@ -6,7 +6,7 @@
     - name: Generate RPC Nginx config
       become: true
       ansible.builtin.template:
-        src: ../../../templates/monitoring/grafana.j2
+        src: ../../../templates/monitoring/grafana/nginx.j2
         dest: "/etc/nginx/sites-enabled/grafana"
         mode: '0755'
 

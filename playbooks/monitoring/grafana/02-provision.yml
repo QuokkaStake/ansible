@@ -11,14 +11,14 @@
     - name: Provision datasources
       become: true
       ansible.builtin.template:
-        src: ../../../templates/monitoring/provisioning/datasources.yml.j2
+        src: ../../../templates/monitoring/grafana/provisioning/datasources.yml.j2
         dest: "{{ grafana_datasources_dir }}/datasources.yml"
         mode: '0755'
 
     - name: Provision dashboards
       become: true
       ansible.builtin.template:
-        src: ../../../templates/monitoring/provisioning/dashboards.yml.j2
+        src: ../../../templates/monitoring/grafana/provisioning/dashboards.yml.j2
         dest: "{{ grafana_dashboards_dir }}/dashboards.yml"
         mode: '0755'
 
