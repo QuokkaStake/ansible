@@ -10,9 +10,46 @@
           - nginx-full
           - snapd
         state: present
+        update_cache: true
 
     - name: Install certbot
       become: true
       community.general.snap:
         name: certbot
         classic: true
+
+    - name: Set up nginx config
+      become: true
+      ansible.builtin.copy:
+        src: ../../templates/server/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        mode: '0644'
+
+    - name: Create GeoIP2 folder
+      become: true
+      ansible.builtin.file:
+        path: /usr/share/geoip2
+        state: directory
+        mode: '0755'
+
+    - name: Download database
+      become: true
+      ansible.builtin.get_url:
+        url: "https://git.io/{{ item }}"
+        dest: "/usr/share/geoip2/{{ item }}"
+        mode: "0755"
+      loop:
+        - GeoLite2-City.mmdb
+        - GeoLite2-Country.mmdb
+
+    - name: Verify Nginx config
+      become: true
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: (Re)start Nginx
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: nginx
+        enabled: true
