@@ -3,12 +3,42 @@
   hosts: "{{ hosts | default('monitoring')  }}"
 
   tasks:
-    - name: Set up Alertmanager config
+    - name: Create Alertmanager template folder
+      become: true
+      ansible.builtin.file:
+        path: "/etc/alertmanager/templates"
+        state: directory
+        mode: "0755"
+        group: alertmanager
+        owner: alertmanager
+
+    - name: Copy Alertmanager template
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/alertmanager
-        dest: /etc
+        src: ../../../templates/monitoring/alertmanager/template.tmpl
+        dest: /etc/alertmanager/templates/template.tmpl
         mode: "0755"
+        group: alertmanager
+        owner: alertmanager
+
+    - name: Copy Alertmanager config
+      become: true
+      ansible.builtin.copy:
+        src: ../../../configs/alertmanager/alertmanager.yml
+        dest: /etc/alertmanager/alertmanager.yml
+        mode: "0755"
+        group: alertmanager
+        owner: alertmanager
+
+    - name: Verify Alertmanager config
+      become: true
+      ansible.builtin.command: amtool check-config /etc/alertmanager/alertmanager.yml
+      changed_when: false
+      register: alertmanager_config
+
+    - name: Print Alertmanager config validation result
+      ansible.builtin.debug:
+        msg: "{{ alertmanager_config.stderr }}{{ alertmanager_config.stdout }}"
 
     - name: Restart Alertmanager
       become: true

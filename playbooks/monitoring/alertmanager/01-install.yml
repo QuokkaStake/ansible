@@ -78,14 +78,17 @@
         owner: alertmanager
       loop:
         - /etc/alertmanager
+        - /etc/alertmanager/templates
         - /var/lib/alertmanager
 
     - name: Set up Alertmanager config
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/alertmanager
-        dest: /etc
+        src: ../../../configs/alertmanager/alertmanager.yml
+        dest: /etc/alertmanager/alertmanager.yml
         mode: '0755'
+        group: alertmanager
+        owner: alertmanager
 
     - name: Put basic auth config
       become: true
@@ -101,6 +104,16 @@
         src: ../../../templates/monitoring/alertmanager/service.j2
         dest: /etc/systemd/system/alertmanager.service
         mode: '0644'
+
+    - name: Verify Alertmanager config
+      become: true
+      ansible.builtin.command: amtool check-config /etc/alertmanager/alertmanager.yml
+      changed_when: false
+      register: alertmanager_config
+
+    - name: Print Alertmanager config validation result
+      ansible.builtin.debug:
+        msg: "{{ alertmanager_config.stderr }}{{ alertmanager_config.stdout }}"
 
     - name: Start Alertmanager and enable it on autostart
       become: true
