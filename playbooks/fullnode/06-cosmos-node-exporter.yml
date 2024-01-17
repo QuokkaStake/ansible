@@ -9,6 +9,15 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   tasks:
+    - name: Install required packages
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - build-essential
+        state: latest
+        update_cache: true
+
     - name: Clone the repo
       ansible.builtin.git:
         repo: https://github.com/QuokkaStake/cosmos-node-exporter
