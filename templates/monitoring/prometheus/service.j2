@@ -10,6 +10,7 @@ Type=simple
 ExecStart=/usr/bin/prometheus \
     --config.file /etc/prometheus/prometheus.yml \
     --storage.tsdb.path /var/lib/prometheus/ \
+    --storage.tsdb.retention.time=999y \
     --web.console.templates=/etc/prometheus/consoles \
     --web.console.libraries=/etc/prometheus/console_libraries \
 {% if prometheus_username is defined and prometheus_password is defined %}

@@ -102,6 +102,20 @@
         dest: /etc/systemd/system/prometheus.service
         mode: '0644'
 
+    - name: Verify Prometheus config
+      become: true
+      ansible.builtin.command: promtool check config /etc/prometheus/prometheus.yml
+      changed_when: false
+      register: prometheus_config
+
+    - name: Print Prometheus config validation result
+      ansible.builtin.debug:
+        msg:
+          - "Stdout:"
+          - "{{ (prometheus_config.stdout).split('\n') }}"
+          - "Stderr:"
+          - "{{ (prometheus_config.stderr).split('\n') }}"
+
     - name: Start Prometheus and enable it on autostart
       become: true
       ansible.builtin.service:

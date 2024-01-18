@@ -10,6 +10,20 @@
         dest: /etc
         mode: "0755"
 
+    - name: Verify Prometheus config
+      become: true
+      ansible.builtin.command: promtool check config /etc/prometheus/prometheus.yml
+      changed_when: false
+      register: prometheus_config
+
+    - name: Print Prometheus config validation result
+      ansible.builtin.debug:
+        msg:
+          - "Stdout:"
+          - "{{ (prometheus_config.stdout).split('\n') }}"
+          - "Stderr:"
+          - "{{ (prometheus_config.stderr).split('\n') }}"
+
     - name: Reload Prometheus config
       ansible.builtin.uri:
         url: http://localhost:9090/-/reload
