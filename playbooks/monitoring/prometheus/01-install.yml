@@ -78,14 +78,32 @@
         owner: prometheus
       loop:
         - /etc/prometheus
+        - /etc/prometheus/rules.d
+        - /etc/prometheus/targets.d
         - /var/lib/prometheus
 
-    - name: Set up Prometheus config
+    - name: Copy Prometheus rules
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/prometheus
-        dest: /etc
-        mode: '0755'
+        src: "{{ item }}"
+        dest: /etc/prometheus/rules.d
+        mode: "0755"
+      with_fileglob: "../../../templates/monitoring/prometheus/rules.d/**.yml"
+
+    - name: Copy Prometheus targets
+      become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /etc/prometheus/targets.d
+        mode: "0755"
+      with_fileglob: "../../../configs/prometheus/targets.d/**.json"
+
+    - name: Copy Prometheus config
+      become: true
+      ansible.builtin.copy:
+        src: ../../../configs/prometheus/prometheus.yml
+        dest: /etc/prometheus/prometheus.yml
+        mode: "0755"
 
     - name: Put basic auth config
       become: true

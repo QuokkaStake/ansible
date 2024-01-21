@@ -44,8 +44,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Tendermint node's latest block was later than 10 minutes ago (host {{ $labels.host }}"
-          description: "Tendermint node's latest block was later than 10 minutes ago \n  VALUE = {{ $value }}"
+          summary: "Tendermint node's latest block was later than 10 minutes ago (host {{ $labels.host }})"
+          description: "Tendermint node's latest block was later than 10 minutes ago: {{ $value }}"
 
       - alert: CosmosNodeUpgradeBinaryNotPresent
         expr: cosmos_node_exporter_upgrade_binary_present == 0

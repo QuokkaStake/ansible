@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: BlackboxProbeFailed
         expr: probe_success == 0
-        for: 30s
+        for: 300s
         labels:
           severity: critical
         annotations:

@@ -3,11 +3,39 @@
   hosts: "{{ hosts | default('monitoring')  }}"
 
   tasks:
-    - name: Set up Prometheus config
+    - name: Create Prometheus folders
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        group: prometheus
+        owner: prometheus
+      loop:
+        - /etc/prometheus/rules.d
+        - /etc/prometheus/targets.d
+
+    - name: Copy Prometheus rules
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/prometheus
-        dest: /etc
+        src: "{{ item }}"
+        dest: /etc/prometheus/rules.d
+        mode: "0755"
+      with_fileglob: "../../../templates/monitoring/prometheus/rules.d/**.yml"
+
+    - name: Copy Prometheus targets
+      become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /etc/prometheus/targets.d
+        mode: "0755"
+      with_fileglob: "../../../configs/prometheus/targets.d/**.json"
+
+    - name: Copy Prometheus config
+      become: true
+      ansible.builtin.copy:
+        src: ../../../configs/prometheus/prometheus.yml
+        dest: /etc/prometheus/prometheus.yml
         mode: "0755"
 
     - name: Verify Prometheus config
