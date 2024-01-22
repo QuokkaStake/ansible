@@ -25,7 +25,7 @@
     - name: Copy dashboards
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/grafana/dashboards
+        src: ../../../templates/monitoring/grafana/dashboards
         dest: "{{ grafana_dashboards_dir }}"
         mode: '0755'
 
