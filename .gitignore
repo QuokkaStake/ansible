@@ -1,6 +1,7 @@
 hosts.txt
 host_vars
 group_vars
+configs
 .idea
 **/.DS_Store
 backups

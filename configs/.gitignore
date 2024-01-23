@@ -1,5 +1,0 @@
-prometheus/**
-alertmanager/alertmanager.yml
-bots/**
-exporters/**
-icinga/**
