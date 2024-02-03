@@ -8,6 +8,14 @@
     loki_config_path: /etc/loki
 
   tasks:
+    - name: Install memcached
+      become: true
+      ansible.builtin.package:
+        name:
+          - memcached
+          - libmemcached-tools
+        state: present
+
     - name: Get latest release
       ansible.builtin.uri:
         url: https://api.github.com/repos/grafana/loki/releases/latest
@@ -89,6 +97,21 @@
         src: ../../../templates/monitoring/loki/service.j2
         dest: /etc/systemd/system/loki.service
         mode: '0644'
+
+    - name: Add ~/.zshrc aliases for Cosmovisor
+      become: true
+      ansible.builtin.blockinfile:
+        path: /etc/memcached.conf
+        marker: "## {mark} added by ansible via playbook - Loki config"
+        block: |
+          --memory-limit=8192 --max-item-size=5m --conn-limit=1024
+
+    - name: Start memcached and enable it on autostart
+      become: true
+      ansible.builtin.service:
+        name: memcached
+        state: restarted
+        enabled: true
 
     - name: Start Loki and enable it on autostart
       become: true

@@ -3,6 +3,11 @@ auth_enabled: false
 server:
   http_listen_port: 3100
   grpc_listen_port: 9096
+  http_server_write_timeout: 5m
+  http_server_read_timeout: 5m
+  http_server_idle_timeout: 10m
+  grpc_server_max_recv_msg_size: 41943040000
+  grpc_server_max_send_msg_size: 41943040000
 
 common:
   path_prefix: /etc/loki/data
@@ -16,6 +21,35 @@ common:
     kvstore:
       store: inmemory
 
+query_range:
+  cache_results: true
+  results_cache:
+    cache:
+      memcached_client:
+        consistent_hash: true
+        addresses: dns+localhost:11211
+        max_idle_conns: 16
+        timeout: 500ms
+        update_interval: 1m
+
+storage_config:
+  index_queries_cache_config:
+    memcached:
+      batch_size: 100
+      parallelism: 100
+    memcached_client:
+      addresses: dns+localhost:11211
+      consistent_hash: true
+
+chunk_store_config:
+  chunk_cache_config:
+    memcached:
+      batch_size: 256
+      parallelism: 10
+    memcached_client:
+      addresses: dns+localhost:11211
+
+
 schema_config:
   configs:
     - from: 2020-10-24
@@ -28,7 +62,7 @@ schema_config:
 
 limits_config:
   split_queries_by_interval: 0
-  max_query_series: 100000
+  max_query_series: 10000000
 
 frontend:
   max_outstanding_per_tenant: 10000
