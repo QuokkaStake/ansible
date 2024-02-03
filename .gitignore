@@ -5,3 +5,4 @@ configs
 .idea
 **/.DS_Store
 backups
+.vscode

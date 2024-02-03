@@ -1,0 +1,103 @@
+---
+- name: Set up statesync on a running node
+  hosts: "{{ hosts | default('fullnodes') }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  vars:
+    config_path: "{{ fullnode_folder }}/config/config.toml"
+    blocks_behind: 1000
+
+  tasks:
+    - name: Enable statesync
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: statesync
+        option: enable
+        value: "true"
+        mode: '0755'
+
+    - name: Fetch latest block, part 1
+      ansible.builtin.uri:
+        url: "{{ statesync_node }}/block"
+        return_content: true
+      register: latest_block_response
+
+    - name: Fetch latest block, part 2
+      ansible.builtin.set_fact:
+        latest_block_json: "{{ latest_block_response.content | from_json }}"
+
+    - name: Fetch latest block, part 3
+      ansible.builtin.set_fact:
+        latest_block: "{{ latest_block_json.result.block.header.height }}"
+
+    - name: Fetch statesync block hash, part 1
+      ansible.builtin.uri:
+        url: "{{ statesync_node }}/block?height={{ latest_block | int - blocks_behind }}"
+        return_content: true
+      register: statesync_block_response
+
+    - name: Fetch statesync block hash, part 2
+      ansible.builtin.set_fact:
+        statesync_block_json: "{{ statesync_block_response.content | from_json }}"
+
+    - name: Fetch statesync block hash, part 3
+      ansible.builtin.set_fact:
+        statesync_block_hash: "{{ statesync_block_json.result.block_id.hash }}"
+
+    - name: Set up statesync nodes in config
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: statesync
+        option: rpc_servers
+        value: '"{{ statesync_node }},{{ statesync_node }}"'
+        mode: '0755'
+
+    - name: Set up statesync trust height in config
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: statesync
+        option: trust_height
+        value: "{{ latest_block | int - blocks_behind }}"
+        mode: '0755'
+
+    - name: Set up statesync trust hash in config
+      community.general.ini_file:
+        path: "{{ config_path }}"
+        section: statesync
+        option: trust_hash
+        value: '"{{ statesync_block_hash }}"'
+        mode: '0755'
+
+    - name: Stop cosmovisor
+      become: true
+      ansible.builtin.systemd:
+        state: stopped
+        name: cosmovisor
+
+    - name: Move data folder to a temp location
+      ansible.builtin.command: "mv {{ fullnode_folder }}/data {{ fullnode_folder }}/data-old"
+      changed_when: false
+
+    - name: Create data directory
+      ansible.builtin.file:
+        path: "{{ fullnode_folder }}/data"
+        state: directory
+        mode: "0755"
+
+    - name: Copy priv_validator_state to data folder
+      ansible.builtin.copy:
+        src: "{{ fullnode_folder }}/data-old/priv_validator_state.json"
+        dest: "{{ fullnode_folder }}/data/priv_validator_state.json"
+        mode: "0755"
+        remote_src: true
+
+    - name: Start cosmovisor
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: cosmovisor
