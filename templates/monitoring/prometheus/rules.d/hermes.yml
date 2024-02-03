@@ -1,0 +1,36 @@
+groups:
+  - name: HermesAlerts
+    rules:
+      - alert: HermesBroadcastErrors
+        expr: rate(broadcast_errors_total{error_code!~"22|32"}[5m]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "Hermes wallet {{ $labels.account }} has error {{ $labels.error_code }} : {{ $labels.error_description }}"
+          description: "Hermes wallet {{ $labels.account }} has error"
+
+      - alert: HermesNoNewEventsFromChain
+        expr: rate(ws_events_total[1m]) == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Hermes has no new events on chain {{ $labels.chain }}"
+          description: "Hermes has no new events on chain {{ $labels.chain }}"
+
+      - alert: HermesWalletBalanceTooLow
+        expr: wallet_balance < 1000000
+        labels:
+          severity: warning
+        annotations:
+          summary: "Hermes wallet {{ $labels.account }} has less than 1,000,000 tokens : {{ $value }}"
+          description: "Hermes wallet {{ $labels.account }}: balance is getting low"
+
+      - alert: HermesNoRPCQueriesOnChain
+        expr: sum(rate(queries_total[1m])) by(chain) == 0
+        for: 20m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Hermes chain { $labels.chain }} has no RPC queries"
+          description: "Hermes chain { $labels.chain }} has no RPC queries"
