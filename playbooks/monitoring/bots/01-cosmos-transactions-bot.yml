@@ -34,13 +34,6 @@
         dest: "{{ ansible_user_dir }}/config/cosmos-transactions-bot.toml"
         mode: "0755"
 
-    - name: Copy aliases path
-      become: true
-      ansible.builtin.copy:
-        src: "../../../configs/bots/{{ inventory_hostname }}/cosmos-transactions-bot-aliases.toml"
-        dest: "{{ ansible_user_dir }}/config/cosmos-transactions-bot-aliases.toml"
-        mode: "0755"
-
     - name: Generate systemd file
       become: true
       ansible.builtin.template:
