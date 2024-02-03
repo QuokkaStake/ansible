@@ -96,12 +96,12 @@
         src: "{{ item }}"
         dest: /etc/prometheus/targets.d
         mode: "0755"
-      with_fileglob: "../../../configs/prometheus/targets.d/**.json"
+      with_fileglob: "../../../configs/prometheus/{{ inventory_hostname }}/targets.d/**.json"
 
     - name: Copy Prometheus config
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/prometheus/prometheus.yml
+        src: ../../../configs/prometheus/{{ inventory_hostname }}/prometheus.yml
         dest: /etc/prometheus/prometheus.yml
         mode: "0755"
 
