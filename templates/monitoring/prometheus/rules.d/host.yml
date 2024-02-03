@@ -115,8 +115,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: Host systemd service crashed (instance {{ $labels.instance }})
-          description: "systemd service crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          summary: "Host systemd service crashed"
+          description: "Host systemd service {{ $labels.name}} crashed on {{ $labels.host }}"
 
       - alert: HostPhysicalComponentTooHot
         expr: node_hwmon_temp_celsius > 75
