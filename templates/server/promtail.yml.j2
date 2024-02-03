@@ -16,7 +16,7 @@ scrape_configs:
     journal:
       labels:
         job: journald
-        host: "{{ inventory_hostname }}"
+        host: {{ inventory_hostname }}
     relabel_configs:
       - source_labels: [__journal__systemd_unit]
         target_label: systemd_unit
@@ -26,6 +26,12 @@ scrape_configs:
         target_label: syslog_identifier
       - source_labels: [__journal__comm]
         target_label: command
+    pipeline_stages:
+      - json:
+          expressions:
+            level: level
+      - labels:
+          level:
 
   - job_name: nginx
     static_configs:
@@ -33,6 +39,6 @@ scrape_configs:
         - localhost
       labels:
         job: nginx
-        host: "{{ inventory_hostname }}"
+        host: {{ inventory_hostname }}
         agent: promtail
         __path__: /var/log/nginx/access.json.log
