@@ -8,8 +8,12 @@
     GOBIN: "{{ ansible_env.HOME }}/go/bin"
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
+  vars:
+    build_binary: "{{ build | default(true) | bool }}"
+
   tasks:
     - name: Clone the repo
+      when: build_binary
       ansible.builtin.git:
         repo: https://github.com/QuokkaStake/proxmox-interacter
         dest: "{{ ansible_user_dir }}/proxmox-interacter"
@@ -17,6 +21,7 @@
         update: true
 
     - name: Install binary
+      when: build_binary
       community.general.make:
         chdir: "{{ ansible_user_dir }}/proxmox-interacter"
         target: install
@@ -35,6 +40,7 @@
         mode: "0755"
 
     - name: Generate systemd file
+      when: build_binary
       become: true
       ansible.builtin.template:
         src: ../../../templates/monitoring/bots/proxmox-interacter.service.j2

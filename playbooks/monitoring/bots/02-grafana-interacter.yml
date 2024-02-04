@@ -8,8 +8,12 @@
     GOBIN: "{{ ansible_env.HOME }}/go/bin"
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
+  vars:
+    build_binary: "{{ build | default(true) | bool }}"
+
   tasks:
     - name: Clone the repo
+      when: build_binary
       ansible.builtin.git:
         repo: https://github.com/freak12techno/grafana-interacter
         dest: "{{ ansible_user_dir }}/grafana-interacter"
@@ -17,6 +21,7 @@
         update: true
 
     - name: Install binary
+      when: build_binary
       community.general.make:
         chdir: "{{ ansible_user_dir }}/grafana-interacter"
         target: install
@@ -36,6 +41,7 @@
 
     - name: Generate systemd file
       become: true
+      when: build_binary
       ansible.builtin.template:
         src: ../../../templates/monitoring/bots/grafana-interacter.service.j2
         dest: /etc/systemd/system/grafana-interacter.service
