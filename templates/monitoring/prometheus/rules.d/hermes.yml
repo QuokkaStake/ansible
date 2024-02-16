@@ -6,8 +6,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Hermes wallet {{ $labels.account }} has error {{ $labels.error_code }} : {{ $labels.error_description }}"
-          description: "Hermes wallet {{ $labels.account }} has error"
+          summary: "Hermes wallet has error"
+          description: "Hermes wallet {{ $labels.account }} has error {{ $labels.error_code }}: {{ $labels.error_description }}"
 
       - alert: HermesNoNewEventsFromChain
         expr: rate(ws_events_total[1m]) == 0
@@ -15,16 +15,16 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Hermes has no new events on chain {{ $labels.chain }}"
+          summary: "Hermes has no new events on chain"
           description: "Hermes has no new events on chain {{ $labels.chain }}"
 
       - alert: HermesWalletBalanceTooLow
-        expr: wallet_balance < 1000000
+        expr: wallet_balance < 5000000
         labels:
           severity: warning
         annotations:
-          summary: "Hermes wallet {{ $labels.account }} has less than 1,000,000 tokens : {{ $value }}"
-          description: "Hermes wallet {{ $labels.account }}: balance is getting low"
+          summary: "Hermes wallet {{ $labels.account }}: balance is getting low"
+          description: "Hermes wallet {{ $labels.account }} has less than 5,000,000 tokens: {{ $value | humanize }} {{ $labels.denom }}"
 
       - alert: HermesNoRPCQueriesOnChain
         expr: sum(rate(queries_total[1m])) by(chain) == 0
@@ -32,5 +32,5 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Hermes chain { $labels.chain }} has no RPC queries"
-          description: "Hermes chain { $labels.chain }} has no RPC queries"
+          summary: "Hermes chain has no RPC queries"
+          description: "Hermes chain {{ $labels.chain }} has no RPC queries"
