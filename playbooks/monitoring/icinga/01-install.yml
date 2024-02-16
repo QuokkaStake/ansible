@@ -26,7 +26,7 @@
 
         - name: Download repository GPG
           become: true
-          ansible.builtin.shell: "wget -O - https://packages.icinga.com/icinga.key | gpg --dearmor -o /usr/share/keyrings/icinga-archive-keyring.gpg" # noqa: command-instead-of-module risky-shell-pipe
+          ansible.builtin.shell: "wget -O - https://packages.icinga.com/icinga.key | gpg --batch --yes --dearmor -o /usr/share/keyrings/icinga-archive-keyring.gpg" # noqa: command-instead-of-module risky-shell-pipe
           args:
             executable: /bin/bash
           changed_when: true
