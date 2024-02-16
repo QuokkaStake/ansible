@@ -5,16 +5,26 @@
 {{ define "__description" }}{{ end }}
 
 {{ define "alerts_list" }}
-{{ range . }}{{ if index .Labels "host" }}🖥️ Host: {{ index .Labels "host" }} ({{ index .Labels "instance" }}){{ else }}🖥️ Host: {{ index .Labels "instance" }}{{ end }}
-{{ if eq (index .Labels "severity") "critical" }}🔴 Severity: critical {{ else }}🟠 Severity: warning {{ end }}
+{{ range . }}{{ if index .Labels "host" -}}
+🖥️ Host: {{ index .Labels "host" }} ({{ index .Labels "instance" }})
+{{- else -}}
+🖥️ Host: {{ index .Labels "instance" }}
+{{- end }}
+{{ if eq (index .Labels "severity") "critical" -}}
+🔴 Severity: critical
+{{- else -}}
+🟠 Severity: warning
+{{- end }}
 📖 Alert: {{ index .Labels "alertname" }}
 ℹ️ Details: {{ index .Annotations "summary" }}
+⌛ Firing since: {{ .StartsAt }}
 📝 Description: {{ index .Annotations "description" }}
 
 Labels:
 {{ range .Labels.SortedPairs }} - {{ .Name }} = {{ .Value }}
 {{ end }}
-<a href="{{ .GeneratorURL }}">Source</a>
+{{ if .GeneratorURL }}<a href="{{ .GeneratorURL }}">Source</a>{{ end }}
+
 {{ end }}
 {{ end }}
 
@@ -26,11 +36,11 @@ Labels:
 
 {{ define "telegram.text" }}
 {{ if gt (len .Alerts.Firing) 0 }}
-🔥 <strong>Alerts Firing</strong>
+🔥 <strong>Alerts Firing ({{ len .Alerts.Firing }}):</strong>
 {{ template "alerts_list" .Alerts.Firing }}
 {{ end }}
 {{ if gt (len .Alerts.Resolved) 0 }}
-✅ <strong>Alerts Resolved</strong>
+✅ <strong>Alerts Resolved ({{ len .Alerts.Resolved }}):</strong>
 {{ template "alerts_list" .Alerts.Resolved }}
 {{ end }}
 {{ end }}
