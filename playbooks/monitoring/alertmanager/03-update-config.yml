@@ -24,7 +24,7 @@
     - name: Copy Alertmanager config
       become: true
       ansible.builtin.copy:
-        src: ../../../configs/alertmanager/alertmanager.yml
+        src: "../../../configs/alertmanager/{{ inventory_hostname }}/alertmanager.yml"
         dest: /etc/alertmanager/alertmanager.yml
         mode: "0755"
         group: alertmanager
