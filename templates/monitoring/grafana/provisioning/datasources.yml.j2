@@ -23,6 +23,7 @@ datasources:
     version: 1
     editable: false
 
+{% if loki_domain is defined %}
   - name: Loki
     type: loki
     access: proxy
@@ -38,3 +39,4 @@ datasources:
       basicAuthPassword: {{ loki_password }}
     version: 1
     editable: false
+{% endif %}
