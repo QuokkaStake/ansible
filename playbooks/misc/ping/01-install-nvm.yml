@@ -1,0 +1,43 @@
+---
+- name: Install nvm
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  vars:
+    node_version: v20.10.0
+    node_binaries_path: "{{ ansible_user_dir }}/.nvm/versions/node/{{ node_version }}/bin"
+    nvm_version: v0.39.7
+    nvm_install_path: "{{ ansible_user_dir }}/nvm-install.zsh"
+
+  tasks:
+    - name: Fetch nvm installer
+      ansible.builtin.get_url:
+        url: "https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh"
+        dest: "{{ nvm_install_path }}"
+        mode: '0755'
+
+    - name: Make nvm binary executable
+      ansible.builtin.file:
+        dest: "{{ nvm_install_path }}"
+        state: file
+        mode: +x
+
+    - name: Install nvm
+      ansible.builtin.shell: "{{ nvm_install_path }}"
+      register: nvm_result
+      changed_when: true
+      args:
+        executable: /bin/zsh
+
+    - name: Install node and set version
+      ansible.builtin.shell: "source {{ ansible_user_dir }}/.nvm/nvm.sh && nvm install {{ node_version }}"
+      args:
+        executable: /bin/zsh
+      register: nvm_result
+      changed_when: true
+
+    - name: Install yarn
+      ansible.builtin.shell: "source {{ ansible_user_dir }}/.nvm/nvm.sh && npm install --global yarn"
+      args:
+        executable: /bin/zsh
+      register: yarn_result
+      changed_when: true

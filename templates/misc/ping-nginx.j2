@@ -1,0 +1,11 @@
+server {
+    server_name {{ ping_domain }};
+    root {{ ping_out_path }};
+
+    location / {
+        try_files $uri $uri.html /index.html;
+    }
+
+    listen [::]:80;
+    listen 80;
+}

@@ -1,0 +1,51 @@
+---
+- name: Install ping.pub explorer
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  vars:
+    ping_out_path: /opt/explorer
+    ping_source_path: "{{ ansible_user_dir }}/ping-explorer"
+    node_version: v20.10.0
+    node_binaries_path: "{{ ansible_user_dir }}/.nvm/versions/node/{{ node_version }}/bin"
+
+  tasks:
+    - name: Remove older ping.pub installation if present
+      ansible.builtin.file:
+        state: absent
+        path: "{{ ping_source_path }}"
+
+    - name: Clone ping.pub repo
+      ansible.builtin.git:
+        repo: "https://github.com/ping-pub/explorer/"
+        dest: "{{ ping_source_path }}"
+        version: master
+        update: true
+
+    - name: Remove existing chains
+      ansible.builtin.shell: "rm -rf {{ ping_source_path }}/chains/mainnet/**.json"
+      args:
+        executable: /bin/zsh
+      changed_when: true
+
+    - name: Copy ping.pub chains
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ ping_source_path }}/chains/mainnet"
+        mode: "0755"
+      with_fileglob: "../../../configs/ping.pub/{{ inventory_hostname }}/chains/mainnet/**.json"
+
+    - name: Build ping.pub
+      ansible.builtin.shell: "source {{ ansible_user_dir }}/.nvm/nvm.sh && yarn --ignore-engines && yarn build"
+      args:
+        executable: /bin/zsh
+        chdir: "{{ ping_source_path }}"
+      register: ping_build_result
+      changed_when: true
+
+    - name: Copy build files
+      become: true
+      ansible.builtin.copy:
+        src: "{{ ping_source_path }}/dist/"
+        dest: "{{ ping_out_path }}"
+        mode: "0755"
+        remote_src: true
