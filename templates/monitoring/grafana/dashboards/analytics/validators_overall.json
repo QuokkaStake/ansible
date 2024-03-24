@@ -73,7 +73,7 @@
         "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [Gitopia](https://ping.pub/gitopia/staking/gitopiavaloper1w52vzp25uj9zvd0rtt6s6stud3ff8n3pzklusg)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "title": "Info",
       "type": "text"
     },
@@ -121,7 +121,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
+        "w": 3,
         "x": 0,
         "y": 10
       },
@@ -138,10 +138,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -189,8 +190,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 4,
+        "w": 3,
+        "x": 3,
         "y": 10
       },
       "id": 6,
@@ -206,10 +207,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -224,6 +226,75 @@
         }
       ],
       "title": "total secured",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "The difference of total secured $ between last and first graph points.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 10
+      },
+      "id": 61,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "diff"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n    (cosmos_validators_exporter_total_delegations) * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n    * on (chain, denom) cosmos_validators_exporter_price\n)",
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "total secured diff",
       "type": "stat"
     },
     {
@@ -257,8 +328,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 8,
+        "w": 3,
+        "x": 9,
         "y": 10
       },
       "id": 16,
@@ -274,10 +345,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -342,10 +414,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -406,10 +479,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -470,10 +544,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -551,10 +626,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -634,7 +710,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 8,
+        "w": 16,
         "x": 8,
         "y": 15
       },
@@ -698,8 +774,8 @@
       "gridPos": {
         "h": 9,
         "w": 8,
-        "x": 16,
-        "y": 15
+        "x": 0,
+        "y": 24
       },
       "id": 21,
       "options": {
@@ -714,10 +790,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -732,7 +809,71 @@
         }
       ],
       "title": "validator ranking",
-      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Total amount of secured tokens in $ on all our validators.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-YlBl"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 24
+      },
+      "id": 62,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "(cosmos_validators_exporter_total_delegations) * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n/ on (chain, denom) cosmos_validators_exporter_denom_coefficient\n* on (chain, denom) cosmos_validators_exporter_price",
+          "legendFormat": "{{chain}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "delegations - $",
       "type": "stat"
     },
     {
@@ -763,7 +904,7 @@
       "gridPos": {
         "h": 9,
         "w": 8,
-        "x": 0,
+        "x": 16,
         "y": 24
       },
       "id": 22,
@@ -779,10 +920,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -798,309 +940,6 @@
         }
       ],
       "title": "voting power %",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "Info about self-delegated tokens",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "tokens, in denom"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "none"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "tokens, $"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "base denom"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 8,
-        "y": 24
-      },
-      "id": 13,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "tokens, $"
-          }
-        ]
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, address, moniker) cosmos_validators_exporter_total_delegations) by (chain)",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "{{address}} @ {{ chain }}",
-          "range": false,
-          "refId": "votingPowerPercent"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient) by (chain)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "totalSelfDelegated"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_base_denom * on (chain, denom) group_right cosmos_validators_exporter_denom_coefficient) by (chain, display_denom)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "baseDenom"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price) by (chain)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "totalSelfDelegatedUsd"
-        }
-      ],
-      "title": "self-delegated info",
-      "transformations": [
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "chain",
-            "mode": "outer"
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time 1": true,
-              "Time 2": true,
-              "Time 3": true,
-              "Time 4": true,
-              "Value #C": true,
-              "Value #D": true,
-              "Value #baseDenom": true,
-              "__name__": true,
-              "__name__ 1": true,
-              "__name__ 2": true,
-              "address": true,
-              "address 1": true,
-              "address 2": true,
-              "denom": false,
-              "denom 1": false,
-              "denom 2": false,
-              "denom 3": false,
-              "instance": true,
-              "instance 1": true,
-              "instance 2": true,
-              "job": true,
-              "job 1": true,
-              "job 2": true,
-              "moniker": true,
-              "moniker 2": true
-            },
-            "indexByName": {
-              "Time 1": 1,
-              "Time 2": 6,
-              "Time 3": 14,
-              "Value #A": 5,
-              "Value #B": 13,
-              "Value #C": 19,
-              "__name__ 1": 7,
-              "__name__ 2": 15,
-              "address 1": 2,
-              "address 2": 8,
-              "chain": 0,
-              "denom 1": 9,
-              "denom 2": 16,
-              "display_denom": 3,
-              "instance 1": 10,
-              "instance 2": 17,
-              "job 1": 11,
-              "job 2": 18,
-              "moniker 1": 4,
-              "moniker 2": 12
-            },
-            "renameByName": {
-              "Value #A": "self-delegated %",
-              "Value #B": "tokens, in denom",
-              "Value #C": "",
-              "Value #D": "tokens, $",
-              "Value #baseDenom": "base denom",
-              "Value #totalSelfDelegated": "tokens, in denom",
-              "Value #totalSelfDelegatedUsd": "tokens, $",
-              "Value #votingPowerPercent": "voting power %",
-              "display_denom": "denom",
-              "moniker 1": "moniker"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "Amount of tokens in $ we've self-delegated, per validator.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 24
-      },
-      "id": 20,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "cosmos_validators_exporter_self_delegated  / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) cosmos_validators_exporter_price",
-          "legendFormat": "{{ chain }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "self-delegations amount, $",
       "type": "stat"
     },
     {
@@ -1126,7 +965,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1210,7 +1050,7 @@
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 13,
         "w": 24,
         "x": 0,
         "y": 33
@@ -1229,7 +1069,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -1408,7 +1248,323 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 46
+      },
+      "id": 60,
+      "panels": [],
+      "title": "Self-delegation info",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Info about self-delegated tokens",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tokens, in denom"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tokens, $"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "base denom"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 16,
+        "x": 0,
+        "y": 47
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "tokens, $"
+          }
+        ]
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, address, moniker) cosmos_validators_exporter_total_delegations) by (chain)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "votingPowerPercent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "totalSelfDelegated"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_base_denom * on (chain, denom) group_right cosmos_validators_exporter_denom_coefficient) by (chain, display_denom)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "baseDenom"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_self_delegated / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) group_left cosmos_validators_exporter_price) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "totalSelfDelegatedUsd"
+        }
+      ],
+      "title": "self-delegated info",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "chain",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Value #C": true,
+              "Value #D": true,
+              "Value #baseDenom": true,
+              "__name__": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "address": true,
+              "address 1": true,
+              "address 2": true,
+              "denom": false,
+              "denom 1": false,
+              "denom 2": false,
+              "denom 3": false,
+              "instance": true,
+              "instance 1": true,
+              "instance 2": true,
+              "job": true,
+              "job 1": true,
+              "job 2": true,
+              "moniker": true,
+              "moniker 2": true
+            },
+            "indexByName": {
+              "Time 1": 1,
+              "Time 2": 6,
+              "Time 3": 14,
+              "Value #A": 5,
+              "Value #B": 13,
+              "Value #C": 19,
+              "__name__ 1": 7,
+              "__name__ 2": 15,
+              "address 1": 2,
+              "address 2": 8,
+              "chain": 0,
+              "denom 1": 9,
+              "denom 2": 16,
+              "display_denom": 3,
+              "instance 1": 10,
+              "instance 2": 17,
+              "job 1": 11,
+              "job 2": 18,
+              "moniker 1": 4,
+              "moniker 2": 12
+            },
+            "renameByName": {
+              "Value #A": "self-delegated %",
+              "Value #B": "tokens, in denom",
+              "Value #C": "",
+              "Value #D": "tokens, $",
+              "Value #baseDenom": "base denom",
+              "Value #totalSelfDelegated": "tokens, in denom",
+              "Value #totalSelfDelegatedUsd": "tokens, $",
+              "Value #votingPowerPercent": "voting power %",
+              "display_denom": "denom",
+              "moniker 1": "moniker"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Amount of tokens in $ we've self-delegated, per validator.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 8,
+        "x": 16,
+        "y": 47
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "cosmos_validators_exporter_self_delegated  / on (chain, denom) cosmos_validators_exporter_denom_coefficient * on (chain, denom) cosmos_validators_exporter_price",
+          "legendFormat": "{{ chain }}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "self-delegations amount, $",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 60
       },
       "id": 50,
       "panels": [],
@@ -1438,7 +1594,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1472,7 +1629,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "$ needed for active set"
+              "options": "active set threshold, $"
             },
             "properties": [
               {
@@ -1556,14 +1713,58 @@
                 "value": 162
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, tokens "
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 215
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, tokens"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, tokens "
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 9,
-        "w": 16,
+        "h": 13,
+        "w": 24,
         "x": 0,
-        "y": 43
+        "y": 61
       },
       "id": 48,
       "options": {
@@ -1584,7 +1785,7 @@
           }
         ]
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -1747,6 +1948,19 @@
       "type": "table"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 74
+      },
+      "id": 57,
+      "panels": [],
+      "title": "Price info",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -1762,7 +1976,8 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1773,8 +1988,8 @@
       "gridPos": {
         "h": 9,
         "w": 8,
-        "x": 16,
-        "y": 43
+        "x": 0,
+        "y": 75
       },
       "id": 51,
       "options": {
@@ -1787,10 +2002,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -1808,12 +2024,189 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "How much 1 token costs. Prices taken from Coingecko.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "text",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1e-10
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 75
+      },
+      "id": 58,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "diff"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "delta(cosmos_validators_exporter_price{denom=~\"u.*\"}[$__range])",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{ chain }}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Price diff, $",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "How much 1 token costs. Prices taken from Coingecko.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "text",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1e-10
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 75
+      },
+      "id": 59,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "cosmos_validators_exporter_price{denom=~\"u.*\"}",
+          "legendFormat": "{{ chain }}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Price long-term, $",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 84
       },
       "id": 45,
       "panels": [],
@@ -1871,7 +2264,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1887,7 +2281,7 @@
         "h": 10,
         "w": 16,
         "x": 0,
-        "y": 53
+        "y": 85
       },
       "id": 47,
       "options": {
@@ -1934,7 +2328,8 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1946,7 +2341,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 53
+        "y": 85
       },
       "id": 52,
       "options": {
@@ -1961,10 +2356,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -1987,7 +2383,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 95
       },
       "id": 30,
       "panels": [],
@@ -2042,7 +2438,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2058,7 +2455,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 64
+        "y": 96
       },
       "id": 31,
       "options": {
@@ -2138,7 +2535,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2154,7 +2552,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 64
+        "y": 96
       },
       "id": 34,
       "options": {
@@ -2234,7 +2632,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2250,7 +2649,7 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 64
+        "y": 96
       },
       "id": 41,
       "options": {
@@ -2330,7 +2729,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2346,7 +2746,7 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 64
+        "y": 96
       },
       "id": 40,
       "options": {
@@ -2394,7 +2794,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2410,7 +2811,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 71
+        "y": 103
       },
       "id": 39,
       "options": {
@@ -2425,10 +2826,11 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.4.1",
       "targets": [
         {
           "datasource": {
@@ -2477,7 +2879,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -2507,10 +2910,10 @@
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 13,
         "w": 24,
         "x": 0,
-        "y": 78
+        "y": 110
       },
       "id": 55,
       "options": {
@@ -2526,7 +2929,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "10.3.3",
       "targets": [
         {
           "datasource": {
@@ -2684,7 +3087,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 87
+        "y": 123
       },
       "id": 24,
       "panels": [],
@@ -2747,7 +3150,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -2755,7 +3159,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 88
+        "y": 124
       },
       "id": 9,
       "options": {
@@ -2844,7 +3248,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -2852,7 +3257,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 88
+        "y": 124
       },
       "id": 11,
       "options": {
@@ -2894,13 +3299,13 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "validators overall",
   "uid": "validators-overall",
-  "version": 2,
+  "version": 14,
   "weekStart": ""
 }
