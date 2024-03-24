@@ -12,6 +12,11 @@ cosmovisor = { enabled = false }
 {% else %}
 cosmovisor = { chain-folder = "{{ fullnode_folder }}", chain-binary-name = "{{ binary_name }}", cosmovisor-path = "{{ ansible_user_dir }}/go/bin/cosmovisor" }
 {% endif %}
+{% if disable_grpc is defined and disable_grpc == true %}
+grpc = { enabled = false }
+{% else %}
+grpc = { address = "localhost:9090" }
+{% endif %}
 {% if github_repo_remote is defined and github_token is defined %}
 git = { repository = "{{ github_repo_remote }}", token = "{{ github_token }}" }
 {% elif github_repo_remote is defined %}
