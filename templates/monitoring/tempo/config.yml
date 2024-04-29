@@ -1,0 +1,30 @@
+stream_over_http_enabled: true
+server:
+  http_listen_port: 3200
+  log_level: info
+
+query_frontend:
+  search:
+    duration_slo: 5s
+  trace_by_id:
+    duration_slo: 5s
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        http:
+        grpc:
+    opencensus:
+
+compactor:
+  compaction:
+    block_retention: 168h
+
+storage:
+  trace:
+    backend: local                     # backend configuration to use
+    wal:
+      path: /etc/tempo/wal             # where to store the the wal locally
+    local:
+      path: /etc/tempo/blocks

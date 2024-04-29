@@ -40,3 +40,21 @@ datasources:
     version: 1
     editable: false
 {% endif %}
+
+{% if tempo_domain is defined %}
+  - name: Tempo
+    type: tempo
+    access: proxy
+    orgId: 1
+    uid: tempo
+    url: https//{{ tempo_domain }}
+    user: {{ tempo_username }}
+    basicAuth: true
+    basicAuthUser: {{ tempo_username }}
+    isDefault: false
+    secureJsonData:
+      password: {{ tempo_password }}
+      basicAuthPassword: {{ tempo_password }}
+    version: 1
+    editable: false
+{% endif %}

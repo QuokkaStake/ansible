@@ -1,0 +1,47 @@
+---
+- name: Set Tempo Nginx template
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  tasks:
+    - name: Install required packages
+      become: true
+      ansible.builtin.apt:
+        name: python3-passlib
+        state: latest
+        update_cache: true
+
+    - name: Add a user to a password file
+      become: true
+      community.general.htpasswd:
+        path: /etc/tempo/.htpasswd
+        name: "{{ tempo_username }}"
+        password: "{{ tempo_password }}"
+        owner: tempo
+        group: loki
+        mode: '0644'
+
+    - name: Generate RPC Nginx config
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/tempo/nginx.j2
+        dest: "/etc/nginx/sites-enabled/tempo"
+        mode: '0755'
+
+    - name: Generate Certbot template
+      become: true
+      ansible.builtin.shell: "sudo /snap/bin/certbot --nginx --agree-tos -m {{ certbot_email }} -n -d {{ tempo_domain }}"
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: false
+
+    - name: Verify Nginx config
+      become: true
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: (Re)start Nginx
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: nginx

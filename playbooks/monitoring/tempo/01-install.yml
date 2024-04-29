@@ -1,0 +1,104 @@
+---
+- name: Install Tempo
+  hosts: "{{ hosts | default('monitoring')  }}"
+
+  vars:
+    tempo_tar_file: /tmp/tempo.tar.gz
+    tempo_tmp_path: /tmp/tempo
+    tempo_config_path: /etc/tempo
+
+  tasks:
+    - name: Get latest release
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/grafana/tempo/releases/latest
+        return_content: true
+      register: release_info
+
+    - name: Get latest release JSON
+      ansible.builtin.set_fact:
+        release_info_json: "{{ release_info.content | from_json }}"
+
+    - name: Set Tempo version to {{ release_info_json.tag_name[1:] }}
+      ansible.builtin.set_fact:
+        version: "{{ release_info_json.tag_name[1:] }}"
+
+    - name: Download Tempo binary to local folder
+      ansible.builtin.get_url:
+        url: https://github.com/grafana/tempo/releases/download/v{{ version }}/tempo_{{ version }}_linux_amd64.tar.gz
+        dest: "{{ tempo_tar_file }}"
+        mode: '0755'
+
+    - name: Create Tempo tmp directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ tempo_tmp_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Unzip Tempo
+      ansible.builtin.unarchive:
+        src: "{{ tempo_tar_file }}"
+        dest: "{{ tempo_tmp_path }}"
+        remote_src: true
+        mode: '0755'
+
+    - name: Copy Tempo binary
+      become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /usr/bin
+        mode: '0755'
+        remote_src: true
+      loop:
+        - "{{ tempo_tmp_path }}/tempo"
+        - "{{ tempo_tmp_path }}/tempo-cli"
+        - "{{ tempo_tmp_path }}/tempo-query"
+
+    - name: Create tempo group
+      become: true
+      ansible.builtin.group:
+        name: tempo
+        state: present
+
+    - name: Add tempo user
+      ansible.builtin.user:
+        name: tempo
+        groups: tempo
+        shell: /sbin/nologin
+        create_home: false
+        append: true
+        state: present
+      become: true
+
+    - name: Create Tempo folders
+      become: true
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        group: tempo
+        owner: tempo
+      loop:
+        - /etc/tempo
+
+    - name: Set up Tempo config
+      become: true
+      ansible.builtin.copy:
+        src: ../../../templates/monitoring/tempo/config.yml
+        dest: /etc/tempo/config.yml
+        mode: '0755'
+        group: tempo
+        owner: tempo
+
+    - name: Set up Tempo systemd config
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/tempo/service.j2
+        dest: /etc/systemd/system/tempo.service
+        mode: '0644'
+
+    - name: Start Tempo and enable it on autostart
+      become: true
+      ansible.builtin.service:
+        name: tempo
+        state: restarted
+        enabled: true

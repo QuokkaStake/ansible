@@ -1,0 +1,12 @@
+[Unit]
+Description=Tempo
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=tempo
+Type=simple
+ExecStart=/usr/bin/tempo --config.file /etc/tempo/config.yml
+
+[Install]
+WantedBy=multi-user.target
