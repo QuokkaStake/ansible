@@ -85,7 +85,7 @@
     - name: Set up Loki config
       become: true
       ansible.builtin.copy:
-        src: ../../../templates/loki/config.yml
+        src: ../../../templates/monitoring/loki/config.yml
         dest: /etc/loki/config.yml
         mode: '0755'
         group: loki

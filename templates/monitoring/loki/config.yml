@@ -63,6 +63,7 @@ schema_config:
 limits_config:
   split_queries_by_interval: 0
   max_query_series: 10000000
+  allow_structured_metadata: false
 
 frontend:
   max_outstanding_per_tenant: 10000
