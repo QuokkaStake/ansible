@@ -73,7 +73,7 @@
         "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [Gitopia](https://ping.pub/gitopia/staking/gitopiavaloper1w52vzp25uj9zvd0rtt6s6stud3ff8n3pzklusg)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "title": "Info",
       "type": "text"
     },
@@ -142,7 +142,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -211,7 +211,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -280,7 +280,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -349,7 +349,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -418,7 +418,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -483,7 +483,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -548,7 +548,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -630,7 +630,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -794,7 +794,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -859,7 +859,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -924,7 +924,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -1069,7 +1069,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -1353,7 +1353,7 @@
           }
         ]
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -1541,7 +1541,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -1785,7 +1785,7 @@
           }
         ]
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -1948,12 +1948,461 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "All info on consumer chains.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, $"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active validators"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 131
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, tokens"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 137
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "chain"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 162
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, tokens "
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 215
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, tokens"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, tokens "
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #softOptOutThreshold"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "soft opt-out threshold %"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 192
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #optOutThreshold"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "soft out-threshold min tokens"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 233
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "need to sign?"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 129
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "need to sign?"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "red",
+                        "index": 0,
+                        "text": "No"
+                      },
+                      "1": {
+                        "color": "green",
+                        "index": 1,
+                        "text": "Yes"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 74
+      },
+      "id": 63,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_active_set_size) by (chain)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "activeSetSize"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    cosmos_validators_exporter_active_set_tokens\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "activeSetTokens"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    cosmos_validators_exporter_total_delegations\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "ourStake"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_validators_count) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "activeValidators"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_soft_opt_out_threshold) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "softOptOutThreshold"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    cosmos_validators_exporter_minimal_stake_to_require_signing\n    * on (chain) group_left(denom) cosmos_validators_exporter_base_denom\n    / on (chain, denom) cosmos_validators_exporter_denom_coefficient\n) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "optOutThreshold"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_needs_to_sign) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "needsToSign"
+        }
+      ],
+      "title": "consumer chain info",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "chain",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Time 6": true,
+              "Time 7": true,
+              "Value #D": true,
+              "__name__": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "address": true,
+              "denom": true,
+              "instance": true,
+              "instance 2": true,
+              "instance 3": true,
+              "job": true,
+              "job 1": true,
+              "job 2": true,
+              "job 3": true,
+              "moniker": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time 1": 1,
+              "Time 2": 6,
+              "Time 3": 7,
+              "Time 4": 8,
+              "Time 5": 9,
+              "Time 6": 10,
+              "Value #activeSetSize": 2,
+              "Value #activeSetTokens": 11,
+              "Value #activeSetUsd": 12,
+              "Value #activeValidators": 3,
+              "Value #ourStake": 4,
+              "Value #ourStakeUsd": 5,
+              "chain": 0
+            },
+            "renameByName": {
+              "Time 2": "",
+              "Value #A": "active set size",
+              "Value #B": "tokens needed for active set",
+              "Value #C": "our stake, tokens",
+              "Value #E": "active validators",
+              "Value #F": "$ needed for active set",
+              "Value #G": "our stake",
+              "Value #activeSetSize": "active set",
+              "Value #activeSetTokens": "active set threshold, tokens ",
+              "Value #activeSetUsd": "active set threshold, $",
+              "Value #activeValidators": "active validators",
+              "Value #needsToSign": "need to sign?",
+              "Value #optOutThreshold": "soft out-threshold min tokens",
+              "Value #ourStake": "our stake, tokens",
+              "Value #ourStakeUsd": "our stake, $",
+              "Value #softOptOutThreshold": "soft opt-out threshold %",
+              "display_denom": "denom"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 74
+        "y": 82
       },
       "id": 57,
       "panels": [],
@@ -1989,7 +2438,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 75
+        "y": 83
       },
       "id": 51,
       "options": {
@@ -2006,7 +2455,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -2060,7 +2509,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 75
+        "y": 83
       },
       "id": 58,
       "options": {
@@ -2079,7 +2528,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -2168,7 +2617,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 75
+        "y": 83
       },
       "id": 59,
       "options": {
@@ -2206,7 +2655,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 92
       },
       "id": 45,
       "panels": [],
@@ -2281,7 +2730,7 @@
         "h": 10,
         "w": 16,
         "x": 0,
-        "y": 85
+        "y": 93
       },
       "id": 47,
       "options": {
@@ -2341,7 +2790,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 85
+        "y": 93
       },
       "id": 52,
       "options": {
@@ -2360,7 +2809,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -2383,7 +2832,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 95
+        "y": 103
       },
       "id": 30,
       "panels": [],
@@ -2438,8 +2887,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2455,7 +2903,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 96
+        "y": 104
       },
       "id": 31,
       "options": {
@@ -2535,8 +2983,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2552,7 +2999,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 96
+        "y": 104
       },
       "id": 34,
       "options": {
@@ -2632,8 +3079,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2649,7 +3095,7 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 96
+        "y": 104
       },
       "id": 41,
       "options": {
@@ -2729,8 +3175,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2746,7 +3191,7 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 96
+        "y": 104
       },
       "id": 40,
       "options": {
@@ -2794,8 +3239,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2811,7 +3255,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 103
+        "y": 111
       },
       "id": 39,
       "options": {
@@ -2830,7 +3274,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -2879,8 +3323,7 @@
               }
             ]
           },
-          "unit": "none",
-          "unitScale": true
+          "unit": "none"
         },
         "overrides": [
           {
@@ -2913,7 +3356,7 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 110
+        "y": 118
       },
       "id": 55,
       "options": {
@@ -2929,7 +3372,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.3.3",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -3087,7 +3530,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 123
+        "y": 131
       },
       "id": 24,
       "panels": [],
@@ -3150,8 +3593,7 @@
               }
             ]
           },
-          "unit": "none",
-          "unitScale": true
+          "unit": "none"
         },
         "overrides": []
       },
@@ -3159,7 +3601,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 124
+        "y": 132
       },
       "id": 9,
       "options": {
@@ -3248,8 +3690,7 @@
               }
             ]
           },
-          "unit": "none",
-          "unitScale": true
+          "unit": "none"
         },
         "overrides": []
       },
@@ -3257,7 +3698,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 124
+        "y": 132
       },
       "id": 11,
       "options": {
@@ -3306,6 +3747,6 @@
   "timezone": "",
   "title": "validators overall",
   "uid": "validators-overall",
-  "version": 14,
+  "version": 17,
   "weekStart": ""
 }
