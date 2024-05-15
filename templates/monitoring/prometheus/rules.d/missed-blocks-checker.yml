@@ -11,13 +11,13 @@ groups:
           description: "No new events from WS node"
 
       - alert: MissedBlocksCheckerNoNewEventsFromChain
-        expr: sum(rate(missed_blocks_checker_events_total[1m])) by (chain) == 0
+        expr: sum(rate(missed_blocks_checker_events_total[1m])) by (chain, job, host, instance) == 0
         for: 5m
         labels:
           severity: critical
         annotations:
           summary: No new events from chain
-          description: "No new events from chain"
+          description: "No new events from chain {{ $labels.chain }}"
 
       - alert: MissedBlocksCheckerTimeSinceLatestEvent
         expr: time() - missed_blocks_checker_last_time > 600
