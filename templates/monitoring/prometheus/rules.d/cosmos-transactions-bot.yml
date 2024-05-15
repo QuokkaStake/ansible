@@ -11,7 +11,7 @@ groups:
           description: "No new events from WS node"
 
       - alert: CosmosTransactionsBotNoNewEventsFromChain
-        expr: sum(rate(cosmos_transactions_bot_events_total[5m])) by (chain) == 0
+        expr: sum(rate(cosmos_transactions_bot_events_total[5m])) by (chain, host, job, instance) == 0
         for: 60m
         labels:
           severity: critical
