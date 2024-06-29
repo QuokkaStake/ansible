@@ -1,0 +1,31 @@
+---
+- name: Update Hermes config
+  hosts: "{{ hosts | default('monitoring')  }}"
+
+  tasks:
+    - name: Copy Hermes config
+      ansible.builtin.copy:
+        src: "../../configs/hermes/{{ inventory_hostname }}.toml"
+        dest: "{{ ansible_user_dir }}/.hermes/config.toml"
+        mode: "0755"
+
+    - name: Verify Hermes config
+      ansible.builtin.command: hermes config validate
+      changed_when: false
+      register: hermes_config
+
+    - name: Print Hermes config validation result
+      ansible.builtin.debug:
+        msg:
+          - "Stdout:"
+          - "{{ (hermes_config.stdout).split('\n') }}"
+          - "Stderr:"
+          - "{{ (hermes_config.stderr).split('\n') }}"
+
+    - name: Restart Hermes
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: hermes
+        enabled: true
+        daemon_reload: true
