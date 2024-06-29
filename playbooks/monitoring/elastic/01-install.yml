@@ -1,0 +1,65 @@
+---
+- name: Install Elastic stack
+  hosts: "{{ hosts | default('monitoring')  }}"
+
+  tasks:
+    - name: Install required packages
+      become: true
+      ansible.builtin.package:
+        name:
+          - apt-transport-https
+          - software-properties-common
+          - wget
+        state: present
+
+    - name: Download repository GPG
+      become: true
+      ansible.builtin.shell: "wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg" # noqa: command-instead-of-module risky-shell-pipe
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Add apt entry
+      become: true
+      ansible.builtin.copy:
+        content: 'deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main'
+        dest: /etc/apt/sources.list.d/elastic.list
+        mode: '0644'
+
+    - name: Update package cache
+      become: true
+      ansible.builtin.package:
+        update_cache: true
+
+    - name: Install Elastic stack
+      become: true
+      ansible.builtin.package:
+        name:
+          - elasticsearch
+          - logstash
+          - kibana
+        state: present
+
+    - name: Generate Elasticsearch config
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/elastic/elasticsearch.yml.j2
+        dest: "/etc/elasticsearch/elasticsearch.yml"
+        mode: '0660'
+
+    - name: Generate Kibana config
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/elastic/kibana.yml.j2
+        dest: "/etc/kibana/kibana.yml"
+        mode: '0660'
+
+    - name: Start services and enable them on autostart
+      become: true
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: restarted
+        enabled: true
+      loop:
+        - elasticsearch
+        - kibana
