@@ -3,5 +3,5 @@ collections:
   - ansible.posix
 
 roles:
-  - name: cloudalchemy.blackbox-exporter
   - name: cloudalchemy.node_exporter
+  - name: prometheus.prometheus.blackbox_exporter
