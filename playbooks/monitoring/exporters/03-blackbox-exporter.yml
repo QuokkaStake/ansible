@@ -2,4 +2,14 @@
 - name: Install blackbox-exporter
   hosts: "{{ hosts | default('monitoring') }}"
   roles:
-    - cloudalchemy.blackbox-exporter
+    - prometheus.prometheus.blackbox_exporter
+  vars:
+    blackbox_exporter_configuration_modules:
+      http_2xx:
+        http:
+          method: GET
+          valid_status_codes: []
+          headers:
+            User-Agent: "blackbox_exporter"
+        prober: http
+        timeout: 5s
