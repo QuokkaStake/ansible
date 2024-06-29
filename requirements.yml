@@ -1,7 +1,8 @@
 collections:
   - community.general
   - ansible.posix
+  - prometheus.prometheus
+
 
 roles:
   - name: cloudalchemy.node_exporter
-  - name: prometheus.prometheus.blackbox_exporter
