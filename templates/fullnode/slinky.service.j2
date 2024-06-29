@@ -1,0 +1,13 @@
+[Unit]
+Description=Slinky
+After=network-online.target
+
+[Service]
+User={{ ansible_user }}
+ExecStart={{ ansible_user_dir }}/go/bin/slinky --log-disable-file-rotation
+Restart=always
+LimitNOFILE=infinity
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

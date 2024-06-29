@@ -1,0 +1,61 @@
+---
+- name: Install Slinky
+  hosts: "{{ hosts | default('fullnodes') }}"
+
+  environment:
+    GOROOT: /usr/lib/go
+    GOPATH: "{{ ansible_env.HOME }}/go"
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
+
+  vars:
+    slinky_version: v1.0.3
+    slinky_repo_local: "{{ ansible_user_dir }}/slinky"
+
+  tasks:
+    - name: Install required packages
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - build-essential
+        state: latest
+        update_cache: true
+
+    - name: Clone the repo and checkout to the latest version
+      ansible.builtin.git:
+        repo: https://github.com/skip-mev/slinky.git
+        dest: "{{ slinky_repo_local }}"
+        version: "{{ slinky_version }}"
+        update: true
+
+    - name: Install binary
+      community.general.make:
+        chdir: "{{ slinky_repo_local }}"
+        target: install
+
+    - name: Check version
+      ansible.builtin.shell: "slinky version"
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: false
+
+    - name: Display version
+      ansible.builtin.debug:
+        msg: "{{ result.stderr }}{{ result.stdout }}"
+
+    - name: Generate systemd file
+      become: true
+      ansible.builtin.template:
+        src: ../../templates/fullnode/slinky.service.j2
+        dest: /etc/systemd/system/slinky.service
+        mode: '0644'
+
+    - name: Start the service and put it to autostart
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: slinky
+        enabled: true
+        daemon_reload: true
