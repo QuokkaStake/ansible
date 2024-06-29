@@ -1,0 +1,30 @@
+---
+- name: Set Kibana Nginx template
+  hosts: "{{ hosts | default('monitoring') }}"
+
+  tasks:
+    - name: Generate RPC Nginx config
+      become: true
+      ansible.builtin.template:
+        src: ../../../templates/monitoring/elastic/kibana-nginx.j2
+        dest: "/etc/nginx/sites-enabled/kibana"
+        mode: '0755'
+
+    - name: Generate Certbot template
+      become: true
+      ansible.builtin.shell: "sudo /snap/bin/certbot --nginx --agree-tos -m {{ certbot_email }} -n -d {{ kibana_domain }}"
+      args:
+        executable: /bin/bash
+      register: result
+      changed_when: false
+
+    - name: Verify Nginx config
+      become: true
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: (Re)start Nginx
+      become: true
+      ansible.builtin.systemd:
+        state: restarted
+        name: nginx
