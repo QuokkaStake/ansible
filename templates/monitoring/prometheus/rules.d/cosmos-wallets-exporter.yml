@@ -18,3 +18,21 @@ groups:
         annotations:
           summary: The balance of ReStake wallet on {{ $labels.chain }} is below threshold (instance {{ $labels.instance }}, chain {{ $labels.chain }})
           description: "The balance of ReStake wallet on {{ $labels.chain }} is below threshold: {{ $value }}"
+
+      - alert: CosmosWalletExporteOracleBalanceTooLow
+        expr: cosmos_wallets_exporter_balance{group="oracle"} < 5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: The balance of oracle wallet on {{ $labels.chain }} is below threshold (instance {{ $labels.instance }}, chain {{ $labels.chain }})
+          description: "The balance of oracle wallet on {{ $labels.chain }} is below threshold: {{ $value }}"
+
+      - alert: CosmosWalletExportePigeonBalanceTooLow
+        expr: cosmos_wallets_exporter_balance{group="pigeon"} < 20
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: The balance of pigeon wallet on {{ $labels.chain }} is below threshold (instance {{ $labels.instance }}, chain {{ $labels.chain }})
+          description: "The balance of pigeon wallet on {{ $labels.chain }} is below threshold: {{ $value }}"
