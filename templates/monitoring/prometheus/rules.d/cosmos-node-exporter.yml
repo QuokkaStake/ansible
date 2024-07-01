@@ -39,7 +39,7 @@ groups:
           description: "Tendermint testnet node has 0 voting power"
 
       - alert: CosmosNodeTimeSinceLatestBlock
-        expr: cosmos_node_exporter_time_since_latest_block > 600
+        expr: time() - cosmos_node_exporter_latest_block_time > 600
         for: 1m
         labels:
           severity: critical
