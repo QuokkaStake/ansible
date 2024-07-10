@@ -1,0 +1,29 @@
+groups:
+  - name: SlinkyAlerts
+    rules:
+      - alert: SlinkyHealthcheckSystemUpdateFailed
+        expr: rate(side_car_health_check_system_updates_total[5m]) < 2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Slinky healthcheck system updates issue
+          description: "Slinky healthcheck system updates are below threshold (2) on {{ $labels.host }}: {{ $value }}"
+
+      - alert: SlinkyHealthcheckTickerUpdateFailed
+        expr: rate(side_car_health_check_ticker_updates_total[5m]) < 2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Slinky healthcheck ticker updates issue
+          description: "Slinky healthcheck ticker updates are below threshold (2) on {{ $labels.host }}: {{ $value }}"
+
+      - alert: SlinkyTimeSinceLatestUpdate
+        expr: time() - side_car_provider_last_updated_id > 60 * 60 * 1.5
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Slinky time since latest update issue
+          description: "Time since Slinky's last ticker ({{ $labels.id }}) update is probably stale {{ $labels.host }}: {{ $value | humanizeDuration }}"
