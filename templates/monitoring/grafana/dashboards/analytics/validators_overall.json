@@ -73,7 +73,7 @@
         "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [Gitopia](https://ping.pub/gitopia/staking/gitopiavaloper1w52vzp25uj9zvd0rtt6s6stud3ff8n3pzklusg)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "title": "Info",
       "type": "text"
     },
@@ -143,7 +143,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -213,7 +213,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -283,7 +283,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -353,7 +353,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -423,7 +423,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -489,7 +489,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -555,7 +555,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -638,7 +638,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -804,7 +804,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -870,7 +870,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -936,7 +936,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -1081,7 +1081,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -1090,12 +1090,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_commission",
+          "expr": "sum(cosmos_validators_exporter_commission) by (address, chain)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "A"
+          "refId": "commission"
         },
         {
           "datasource": {
@@ -1104,28 +1104,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_commission_max",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "{{address}} @ {{ chain }}",
-          "range": false,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "cosmos_validators_exporter_commission_max_change",
+          "expr": "sum(cosmos_validators_exporter_commission_max) by (address, chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "C"
+          "refId": "maxCommission"
         },
         {
           "datasource": {
@@ -1134,13 +1119,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_info",
+          "expr": "sum(cosmos_validators_exporter_commission_max_change) by (address, chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
           "range": false,
-          "refId": "D"
+          "refId": "maxCommissionChange"
         },
         {
           "datasource": {
@@ -1149,13 +1134,28 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cosmos_validators_exporter_active",
+          "expr": "sum(cosmos_validators_exporter_info) by (address, chain, details, identity, moniker, security_contact, website)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "validatorInfo"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_active) by (address, chain)",
           "format": "table",
           "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "E"
+          "refId": "isActive"
         }
       ],
       "title": "validators info",
@@ -1177,6 +1177,7 @@
               "Time 4": true,
               "Time 5": true,
               "Value #D": true,
+              "Value #validatorInfo": true,
               "__name__": true,
               "__name__ 1": true,
               "__name__ 2": true,
@@ -1205,46 +1206,39 @@
               "moniker 3": true,
               "moniker 4": true
             },
+            "includeByName": {},
             "indexByName": {
-              "Time 1": 1,
-              "Time 2": 7,
-              "Time 3": 15,
-              "Time 4": 21,
-              "Value #A": 30,
-              "Value #B": 31,
-              "Value #C": 32,
-              "Value #D": 29,
-              "__name__ 1": 2,
-              "__name__ 2": 8,
-              "__name__ 3": 16,
-              "__name__ 4": 22,
-              "address": 0,
-              "chain 1": 3,
-              "chain 2": 11,
-              "chain 3": 17,
-              "chain 4": 23,
-              "details": 24,
-              "identity": 25,
-              "instance 1": 4,
-              "instance 2": 12,
-              "instance 3": 18,
-              "instance 4": 26,
-              "job 1": 5,
-              "job 2": 13,
-              "job 3": 19,
-              "job 4": 27,
-              "moniker 1": 6,
-              "moniker 2": 14,
-              "moniker 3": 20,
-              "moniker 4": 28,
-              "security_contact": 10,
-              "website": 9
+              "Time 1": 0,
+              "Time 2": 4,
+              "Time 3": 8,
+              "Time 4": 10,
+              "Time 5": 18,
+              "Value #commission": 14,
+              "Value #isActive": 20,
+              "Value #maxCommission": 15,
+              "Value #maxCommissionChange": 16,
+              "Value #validatorInfo": 17,
+              "address": 2,
+              "chain 1": 1,
+              "chain 2": 7,
+              "chain 3": 9,
+              "chain 4": 11,
+              "chain 5": 19,
+              "details": 12,
+              "identity": 13,
+              "moniker": 3,
+              "security_contact": 6,
+              "website": 5
             },
             "renameByName": {
               "Value #A": "commission",
               "Value #B": "max commission",
               "Value #C": "max daily change commission",
               "Value #E": "active?",
+              "Value #commission": "commission",
+              "Value #isActive": "active?",
+              "Value #maxCommission": "max commission",
+              "Value #maxCommissionChange": "max daily change commission",
               "__name__": "",
               "chain 1": "chain",
               "moniker 1": "moniker"
@@ -1353,7 +1347,7 @@
           }
         ]
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -1517,7 +1511,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -1761,7 +1755,7 @@
           }
         ]
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -2021,42 +2015,6 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "tokens needed for active set"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 213
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "active set threshold, $"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 169
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "our stake, tokens"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 137
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "chain"
             },
             "properties": [
@@ -2069,18 +2027,6 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "active set threshold, tokens "
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 215
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "our stake, tokens"
             },
             "properties": [
@@ -2107,6 +2053,42 @@
               {
                 "id": "decimals",
                 "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "inflation"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #totalSupplyUsd"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-RdYlGr"
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               }
             ]
           }
@@ -2137,7 +2119,7 @@
           }
         ]
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -2153,10 +2135,47 @@
           "legendFormat": "__auto",
           "range": false,
           "refId": "chainInfo"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_inflation) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "inflation"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_supply * on (chain, denom) cosmos_validators_exporter_price) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "totalSupplyUsd"
         }
       ],
       "title": "chain info",
       "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "chain",
+            "mode": "outer"
+          }
+        },
         {
           "id": "organize",
           "options": {
@@ -2172,12 +2191,14 @@
               "Value": true,
               "Value #D": true,
               "Value #activeSetUsd": false,
+              "Value #chainInfo": true,
               "Value #ourStakeUsd": true,
               "__name__": true,
               "__name__ 2": true,
               "__name__ 3": true,
               "address": true,
               "denom": true,
+              "host": true,
               "instance": true,
               "instance 2": true,
               "instance 3": true,
@@ -2214,6 +2235,7 @@
               "Value #activeSetTokens": "active set threshold, tokens ",
               "Value #activeSetUsd": "active set threshold, $",
               "Value #activeValidators": "active validators",
+              "Value #inflation": "inflation",
               "Value #ourStake": "our stake, tokens",
               "Value #ourStakeUsd": "our stake, $",
               "display_denom": "denom"
@@ -2483,7 +2505,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -2793,7 +2815,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -2959,7 +2981,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -3033,7 +3055,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -3316,7 +3338,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -3743,11 +3765,18 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Validators' rewards (self-delegated rewards + commission) + validators' wallet balance + collateral (self-delegated tokens).",
+      "description": "All info on our rewards, everything specified is in $.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -3763,35 +3792,214 @@
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "none"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "self-delegated rewards"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 176
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "commission"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 134
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "chain"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 131
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "address"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 462
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*\\$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "continuous-RdYlGr"
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text",
+                  "wrapText": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total revenue + collateral, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 209
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "daily, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 76
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "monthly, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 95
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total revenue, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "weekly, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 91
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "denom"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 77
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "revenue + collateral, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 173
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "collateral, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "revenue, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 102
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 133
       },
-      "id": 39,
+      "id": 55,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
           "fields": "",
-          "values": false
+          "reducer": [
+            "sum"
+          ],
+          "show": false
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "showHeader": true,
+        "sortBy": []
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -3799,15 +4007,195 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(\n    cosmos_validators_exporter_unclaimed_commission\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain)\n+ sum(\n    cosmos_validators_exporter_wallet_balance\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain)\n+ sum(\n    cosmos_validators_exporter_self_delegation_rewards\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain)\n+ sum(\n    cosmos_validators_exporter_self_delegated\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain)",
+          "exemplar": false,
+          "expr": "cosmos_validators_exporter_supply\n* on (chain) group_left () cosmos_validators_exporter_inflation\n* on (chain, denom) group_left(address) cosmos_validators_exporter_total_delegations\n/ on (chain, denom) group_left() cosmos_validators_exporter_tokens_bonded_total\n* on (chain, address) group_left() cosmos_validators_exporter_commission\n* on (chain, denom) group_left() cosmos_validators_exporter_price\n/ 365",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "dailyCommission"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "cosmos_validators_exporter_supply\n* on (chain) group_left () cosmos_validators_exporter_inflation\n* on (chain, denom) group_left(address) cosmos_validators_exporter_total_delegations\n/ on (chain, denom) group_left() cosmos_validators_exporter_tokens_bonded_total\n* on (chain, address) group_left() cosmos_validators_exporter_commission\n* on (chain, denom) group_left() cosmos_validators_exporter_price\n/ 365 * 7",
+          "format": "table",
           "hide": false,
-          "legendFormat": "{{chain}}",
-          "range": true,
-          "refId": "B"
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "weeklyCommission"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "cosmos_validators_exporter_supply\n* on (chain) group_left () cosmos_validators_exporter_inflation\n* on (chain, denom) group_left(address) cosmos_validators_exporter_total_delegations\n/ on (chain, denom) group_left() cosmos_validators_exporter_tokens_bonded_total\n* on (chain, address) group_left() cosmos_validators_exporter_commission\n* on (chain, denom) group_left() cosmos_validators_exporter_price\n/ 365 * 30",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "{{address}} @ {{ chain }}",
+          "range": false,
+          "refId": "monthlyCommission"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    cosmos_validators_exporter_unclaimed_commission\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)\n+ sum(\n    cosmos_validators_exporter_wallet_balance\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)\n+ sum(\n    cosmos_validators_exporter_self_delegation_rewards\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)\n+ sum(\n    cosmos_validators_exporter_self_delegated\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "totalRevenuePlusCollateral"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    cosmos_validators_exporter_unclaimed_commission\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)\n+ sum(\n    cosmos_validators_exporter_wallet_balance\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)\n+ sum(\n    cosmos_validators_exporter_self_delegation_rewards\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "totalRevenue"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    cosmos_validators_exporter_self_delegated\n    * on (chain, denom) group_left cosmos_validators_exporter_price\n) by (chain, address, denom)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "collateral"
         }
       ],
-      "title": "total revenue + collateral current, $",
-      "type": "stat"
+      "title": "rewards info, $",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Value #B": true,
+              "Value #D": false,
+              "Value #denom": true,
+              "__name__": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "__name__ 4": true,
+              "address": false,
+              "address 1": true,
+              "address 2": false,
+              "address 3": true,
+              "address 4": true,
+              "address 5": true,
+              "chain 2": true,
+              "chain 3": true,
+              "chain 4": true,
+              "denom": false,
+              "denom 1": false,
+              "denom 2": true,
+              "denom 3": true,
+              "denom 4": true,
+              "denom 5": true,
+              "details": true,
+              "host": true,
+              "host 1": true,
+              "host 2": true,
+              "host 3": true,
+              "identity": true,
+              "instance": true,
+              "instance 1": true,
+              "instance 2": true,
+              "instance 3": true,
+              "instance 4": true,
+              "job": true,
+              "job 1": true,
+              "job 2": true,
+              "job 3": true,
+              "job 4": true,
+              "moniker": true,
+              "moniker 2": true,
+              "moniker 3": true,
+              "moniker 4": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 9,
+              "Value #collateral": 7,
+              "Value #dailyCommission": 3,
+              "Value #monthlyCommission": 5,
+              "Value #totalRevenue": 6,
+              "Value #totalRevenuePlusCollateral": 8,
+              "Value #weeklyCommission": 4,
+              "address": 1,
+              "chain": 0,
+              "denom": 2,
+              "host": 10,
+              "instance": 11,
+              "job": 12
+            },
+            "renameByName": {
+              "Value #A": "unclaimed commission",
+              "Value #B": "asd",
+              "Value #C": "unclaimed rewards",
+              "Value #D": "wallet balance",
+              "Value #E": "",
+              "Value #collateral": "collateral, $",
+              "Value #commission": "commission",
+              "Value #dailyCommission": "daily, $",
+              "Value #monthlyCommission": "monthly, $",
+              "Value #selfDelegatedRewards": "self-delegated rewards",
+              "Value #totalRevenue": "revenue, $",
+              "Value #totalRevenuePlusCollateral": "revenue + collateral, $",
+              "Value #walletBalance": "wallet balance",
+              "Value #weeklyCommission": "weekly, $",
+              "__name__": "",
+              "address 1": "",
+              "address 2": "address",
+              "chain": "",
+              "chain 1": "chain",
+              "denom 1": "denom",
+              "denom 4": "",
+              "display_denom": "denom",
+              "moniker 1": "moniker"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": {
@@ -3898,9 +4286,9 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 140
+        "y": 141
       },
-      "id": 55,
+      "id": 67,
       "options": {
         "cellHeight": "sm",
         "footer": {
@@ -3914,7 +4302,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.0",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -3923,7 +4311,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_unclaimed_commission) by (chain, address)",
+          "expr": "sum(cosmos_validators_exporter_unclaimed_commission) by (chain, address, denom)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{address}} @ {{ chain }}",
@@ -3937,7 +4325,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_self_delegation_rewards) by (chain, address)",
+          "expr": "sum(cosmos_validators_exporter_self_delegation_rewards) by (chain, address, denom)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3952,7 +4340,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_wallet_balance) by (chain)",
+          "expr": "sum(cosmos_validators_exporter_wallet_balance) by (chain, address, denom)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3961,14 +4349,19 @@
           "refId": "walletBalance"
         }
       ],
-      "title": "rewards info",
+      "title": "rewards info, tokens",
       "transformations": [
         {
+          "disabled": true,
           "id": "seriesToColumns",
           "options": {
-            "byField": "chain",
+            "byField": "denom",
             "mode": "outer"
           }
+        },
+        {
+          "id": "merge",
+          "options": {}
         },
         {
           "id": "organize",
@@ -3990,10 +4383,12 @@
               "address": false,
               "address 1": true,
               "address 2": false,
+              "address 3": true,
               "chain 2": true,
               "chain 3": true,
               "chain 4": true,
-              "denom": true,
+              "denom": false,
+              "denom 2": true,
               "denom 3": true,
               "details": true,
               "identity": true,
@@ -4014,15 +4409,13 @@
             },
             "includeByName": {},
             "indexByName": {
-              "Time 1": 4,
-              "Time 2": 5,
-              "Time 3": 6,
-              "Value #commission": 2,
-              "Value #selfDelegatedRewards": 3,
-              "Value #walletBalance": 7,
-              "address 1": 8,
-              "address 2": 1,
-              "chain": 0
+              "Time": 6,
+              "Value #commission": 3,
+              "Value #selfDelegatedRewards": 4,
+              "Value #walletBalance": 5,
+              "address": 1,
+              "chain": 0,
+              "denom": 2
             },
             "renameByName": {
               "Value #A": "unclaimed commission",
@@ -4038,6 +4431,7 @@
               "address 2": "address",
               "chain": "",
               "chain 1": "chain",
+              "denom 1": "denom",
               "display_denom": "denom",
               "moniker 1": "moniker"
             }
@@ -4052,7 +4446,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 153
+        "y": 154
       },
       "id": 24,
       "panels": [],
@@ -4124,7 +4518,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 154
+        "y": 155
       },
       "id": 9,
       "options": {
@@ -4223,7 +4617,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 154
+        "y": 155
       },
       "id": 11,
       "options": {
@@ -4266,13 +4660,13 @@
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "validators overall",
   "uid": "validators-overall",
-  "version": 28,
+  "version": 30,
   "weekStart": ""
 }
