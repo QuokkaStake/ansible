@@ -279,7 +279,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "time() - cosmos_node_exporter_latest_block_time",
+          "expr": "time() - (cosmos_node_exporter_latest_block_time > 0)",
           "interval": "",
           "legendFormat": "{{ host }}",
           "range": true,
@@ -2370,6 +2370,6 @@
   "timezone": "",
   "title": "Cosmos Node Stats",
   "uid": "cosmos-node-stats",
-  "version": 19,
+  "version": 21,
   "weekStart": ""
 }
