@@ -9,7 +9,7 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   vars:
-    slinky_version: v1.0.3
+    slinky_version: v1.0.9
     slinky_repo_local: "{{ ansible_user_dir }}/slinky"
 
   tasks:
