@@ -24,6 +24,7 @@
         dest: "{{ ansible_user_dir }}/cosmos-node-exporter"
         version: main
         update: true
+        force: true
 
     - name: Install binary
       community.general.make:
