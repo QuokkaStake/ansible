@@ -27,7 +27,7 @@ groups:
           description: "Hermes wallet {{ $labels.account }} has less than 5,000,000 tokens: {{ $value | humanize }} {{ $labels.denom }}"
 
       - alert: HermesNoRPCQueriesOnChain
-        expr: sum(rate(queries_total[1m])) by(chain) == 0
+        expr: sum(rate(queries_total[1m])) without (otel_scope_name, query_type, service_name) == 0
         for: 20m
         labels:
           severity: warning
