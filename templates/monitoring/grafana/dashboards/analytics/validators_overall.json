@@ -73,7 +73,7 @@
         "content": "This is a basic overview of all our validators.  \nWe aim to be 100% transparent, and this is a nice way to have an overview for out delegators and those who are curious.\n\nConsider staking with us!\n\n- [Sentinel](https://www.mintscan.io/sentinel/validators/sentvaloper1rw9wtyhsus7jvx55v3qv5nzun054ma6kz4237k)\n- [Gitopia](https://ping.pub/gitopia/staking/gitopiavaloper1w52vzp25uj9zvd0rtt6s6stud3ff8n3pzklusg)\n- [Bitsong](https://www.mintscan.io/bitsong/validators/bitsongvaloper14rvn7anf22e00vj5x3al4w50ns78s7n42rc0ge)\n- [Decentr](https://explorer.decentr.net/validators/decentrvaloper1nuhk7uke8ux2h7zpg44u7gyksgkz0fcjpf2074?networkId=mainnet)\n- [Nomic](https://app.nomic.io/#/staking?validator=nomic1cugv7uxm0qw749jpjag5tw64k9wj0n3fe8vss5&modal=info)\n- [Jackal](https://ping.pub/jackal/staking/jklvaloper1ramqkapjkg0f58vypc43szaqp5juq0ly93t3hm)\n- [Cosmos Hub](https://www.mintscan.io/cosmos/validators/cosmosvaloper1xqz9pemz5e5zycaa89kys5aw6m8rhgsvw4328e)",
         "mode": "markdown"
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "title": "Info",
       "type": "text"
     },
@@ -143,7 +143,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -213,7 +213,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -283,7 +283,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -353,7 +353,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -423,7 +423,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -489,7 +489,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -555,7 +555,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -638,7 +638,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -673,8 +673,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -804,7 +805,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -870,7 +871,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -936,7 +937,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -1081,7 +1082,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -1347,7 +1348,7 @@
           }
         ]
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -1511,7 +1512,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -1755,7 +1756,7 @@
           }
         ]
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -1919,6 +1920,7 @@
     },
     {
       "datasource": {
+        "default": true,
         "type": "prometheus",
         "uid": "prometheus"
       },
@@ -2015,12 +2017,60 @@
           {
             "matcher": {
               "id": "byName",
+              "options": "tokens needed for active set"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 213
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, $"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 169
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "our stake, tokens"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 137
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
               "options": "chain"
             },
             "properties": [
               {
                 "id": "custom.width",
                 "value": 162
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "active set threshold, tokens "
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 215
               }
             ]
           },
@@ -2055,42 +2105,6 @@
                 "value": 2
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "inflation"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "percentunit"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #totalSupplyUsd"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "continuous-RdYlGr"
-                }
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-text"
-                }
-              }
-            ]
           }
         ]
       },
@@ -2119,7 +2133,7 @@
           }
         ]
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -2135,47 +2149,10 @@
           "legendFormat": "__auto",
           "range": false,
           "refId": "chainInfo"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_inflation) by (chain)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "inflation"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(cosmos_validators_exporter_supply * on (chain, denom) cosmos_validators_exporter_price) by (chain)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "totalSupplyUsd"
         }
       ],
       "title": "chain info",
       "transformations": [
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "chain",
-            "mode": "outer"
-          }
-        },
         {
           "id": "organize",
           "options": {
@@ -2192,6 +2169,7 @@
               "Value #D": true,
               "Value #activeSetUsd": false,
               "Value #chainInfo": true,
+              "Value #inflation": false,
               "Value #ourStakeUsd": true,
               "__name__": true,
               "__name__ 2": true,
@@ -2238,6 +2216,207 @@
               "Value #inflation": "inflation",
               "Value #ourStake": "our stake, tokens",
               "Value #ourStakeUsd": "our stake, $",
+              "Value #totalSupplyUsd": "total supply, $",
+              "display_denom": "denom"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "All info about the chains we're validating.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total supply, $"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "inflation"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "id": 68,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "our stake, $"
+          }
+        ]
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_inflation) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "inflation"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(cosmos_validators_exporter_supply * on (chain, denom) cosmos_validators_exporter_price) by (chain)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "totalSupplyUsd"
+        }
+      ],
+      "title": "chain tokenomics",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Time 6": true,
+              "Time 7": true,
+              "Value": true,
+              "Value #D": true,
+              "Value #activeSetUsd": false,
+              "Value #chainInfo": true,
+              "Value #inflation": false,
+              "Value #ourStakeUsd": true,
+              "__name__": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "address": true,
+              "denom": true,
+              "instance": true,
+              "instance 2": true,
+              "instance 3": true,
+              "job": true,
+              "job 1": true,
+              "job 2": true,
+              "job 3": true,
+              "moniker": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 1,
+              "Value": 11,
+              "__name__": 2,
+              "app_name": 3,
+              "app_version": 5,
+              "chain": 0,
+              "chain_id": 4,
+              "cosmos_sdk_version": 6,
+              "instance": 7,
+              "job": 8,
+              "name": 9,
+              "tendermint_version": 10
+            },
+            "renameByName": {
+              "Time 2": "",
+              "Value #A": "active set size",
+              "Value #B": "tokens needed for active set",
+              "Value #C": "our stake, tokens",
+              "Value #E": "active validators",
+              "Value #F": "$ needed for active set",
+              "Value #G": "our stake",
+              "Value #activeSetSize": "active set",
+              "Value #activeSetTokens": "active set threshold, tokens ",
+              "Value #activeSetUsd": "active set threshold, $",
+              "Value #activeValidators": "active validators",
+              "Value #inflation": "inflation",
+              "Value #ourStake": "our stake, tokens",
+              "Value #ourStakeUsd": "our stake, $",
+              "Value #totalSupplyUsd": "total supply, $",
               "display_denom": "denom"
             }
           }
@@ -2251,7 +2430,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 87
+        "y": 100
       },
       "id": 65,
       "panels": [],
@@ -2489,7 +2668,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 88
+        "y": 101
       },
       "id": 63,
       "options": {
@@ -2505,7 +2684,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -2799,7 +2978,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 96
+        "y": 109
       },
       "id": 66,
       "options": {
@@ -2815,7 +2994,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -2927,7 +3106,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 104
+        "y": 117
       },
       "id": 57,
       "panels": [],
@@ -2963,7 +3142,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 105
+        "y": 118
       },
       "id": 51,
       "options": {
@@ -2981,7 +3160,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -3035,7 +3214,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 105
+        "y": 118
       },
       "id": 58,
       "options": {
@@ -3055,7 +3234,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -3093,8 +3272,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -3144,7 +3324,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 105
+        "y": 118
       },
       "id": 59,
       "options": {
@@ -3183,7 +3363,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 114
+        "y": 127
       },
       "id": 45,
       "panels": [],
@@ -3192,6 +3372,7 @@
     },
     {
       "datasource": {
+        "default": true,
         "type": "prometheus",
         "uid": "prometheus"
       },
@@ -3208,8 +3389,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -3258,7 +3440,7 @@
         "h": 10,
         "w": 16,
         "x": 0,
-        "y": 115
+        "y": 128
       },
       "id": 47,
       "options": {
@@ -3280,13 +3462,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "1 - (avg(cosmos_validators_exporter_missed_blocks) by (chain, address) / on (chain) cosmos_validators_exporter_missed_blocks_window)",
+          "expr": "avg(cosmos_validators_exporter_missed_blocks) by (chain, address) / on (chain) cosmos_validators_exporter_missed_blocks_window",
           "legendFormat": "{{chain}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "missed blocks",
+      "title": "missed blocks %",
       "type": "timeseries"
     },
     {
@@ -3318,7 +3500,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 115
+        "y": 128
       },
       "id": 52,
       "options": {
@@ -3338,7 +3520,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -3361,7 +3543,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 125
+        "y": 138
       },
       "id": 30,
       "panels": [],
@@ -3386,8 +3568,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -3433,7 +3616,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 126
+        "y": 139
       },
       "id": 31,
       "options": {
@@ -3484,8 +3667,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -3531,7 +3715,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 126
+        "y": 139
       },
       "id": 34,
       "options": {
@@ -3582,8 +3766,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -3629,7 +3814,7 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 126
+        "y": 139
       },
       "id": 41,
       "options": {
@@ -3680,8 +3865,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -3727,7 +3913,7 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 126
+        "y": 139
       },
       "id": 40,
       "options": {
@@ -3980,10 +4166,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 24,
         "x": 0,
-        "y": 133
+        "y": 146
       },
       "id": 55,
       "options": {
@@ -3994,12 +4180,12 @@
           "reducer": [
             "sum"
           ],
-          "show": false
+          "show": true
         },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -4286,7 +4472,7 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 141
+        "y": 155
       },
       "id": 67,
       "options": {
@@ -4302,7 +4488,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.1.3",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -4446,7 +4632,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 154
+        "y": 168
       },
       "id": 24,
       "panels": [],
@@ -4471,8 +4657,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -4518,7 +4705,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 155
+        "y": 169
       },
       "id": 9,
       "options": {
@@ -4570,8 +4757,9 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -4617,7 +4805,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 155
+        "y": 169
       },
       "id": 11,
       "options": {
@@ -4667,6 +4855,6 @@
   "timezone": "",
   "title": "validators overall",
   "uid": "validators-overall",
-  "version": 30,
+  "version": 35,
   "weekStart": ""
 }
