@@ -1,0 +1,27 @@
+groups:
+  - name: RlyAlerts
+    rules:
+      - alert: RlyWalletBalanceTooLow
+        expr: cosmos_relayer_wallet_balance < 5000000
+        labels:
+          severity: warning
+        annotations:
+          summary: "Rly wallet {{ $labels.address }}: balance is getting low"
+          description: "Rly wallet {{ $labels.address }} has less than 5,000,000 tokens: {{ $value | humanize }} {{ $labels.denom }}"
+
+      - alert: RlyIBCClientExpireSoon
+        expr: cosmos_relayer_client_expiration_seconds < 60 * 60 * 24 * 3
+        labels:
+          severity: critical
+        annotations:
+          summary: "Rly IBC client will expire soon"
+          description: "Rly IBC client {{ $labels.client_id }} on chain {{ $labels.chain }} (path {{ $labels.path_name }}) will expire in less than 3 days: {{ $value | humanizeDuration }}"
+
+      - alert: RlyNoNewBlocksFromChain
+        expr: rate(cosmos_relayer_chain_latest_height[5m]) == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Rly has no new blocks on chain"
+          description: "Rly has no new blocks on chain {{ $labels.chain }}"
