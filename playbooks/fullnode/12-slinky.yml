@@ -9,7 +9,7 @@
     PATH: "{{ ansible_env.PATH }}:/usr/lib/go/bin:{{ ansible_env.HOME }}/go/bin"
 
   vars:
-    slinky_version: v1.0.9
+    slinky_version: v1.0.13
     slinky_repo_local: "{{ ansible_user_dir }}/slinky"
 
   tasks:
@@ -24,7 +24,7 @@
 
     - name: Clone the repo and checkout to the latest version
       ansible.builtin.git:
-        repo: https://github.com/skip-mev/slinky.git
+        repo: https://github.com/skip-mev/connect.git
         dest: "{{ slinky_repo_local }}"
         version: "{{ slinky_version }}"
         update: true

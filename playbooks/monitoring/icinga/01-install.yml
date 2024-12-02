@@ -75,7 +75,7 @@
         - name: Start redis and enable it on autostart
           become: true
           ansible.builtin.service:
-            name: redis
+            name: redis-server
             state: restarted
             enabled: true
 

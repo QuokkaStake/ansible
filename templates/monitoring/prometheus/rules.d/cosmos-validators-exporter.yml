@@ -8,7 +8,7 @@ groups:
           severity: warning
         annotations:
           summary: cosmos-validators-exporter has some errors
-          description: "cosmos-validators-exporter has some errors from chain  from chain (instance {{ $labels.instance }}, chain {{ $labels.chain }}): {{ $value }}"
+          description: "cosmos-validators-exporter has some errors from chain (instance {{ $labels.instance }}, chain {{ $labels.chain }}): {{ $value }}"
 
       - alert: CosmosValidatorsExporterValidatorAtLastPlace
         expr: cosmos_validators_exporter_validators_count - cosmos_validators_exporter_rank <= 0
