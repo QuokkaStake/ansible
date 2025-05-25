@@ -1,8 +1,18 @@
+# Inventory and host-specific variables
 hosts.txt
-host_vars
-group_vars
-configs
-.idea
+host_vars/
+group_vars/
+
+# Configuration files
+configs/
+backups/
+
+# IDE/editor-specific files
+.idea/
+.vscode/
 **/.DS_Store
-backups
-.vscode
+
+# ignore temporary and system files
+*.log
+*.bak
+*.swp
